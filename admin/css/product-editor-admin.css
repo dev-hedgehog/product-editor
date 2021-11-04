@@ -1,0 +1,139 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+.product-editor .tablenav-pages .current {
+    font-size: 16px;
+}
+.product-editor .widefat tr {
+    height: 60px;
+}
+.product-editor .widefat .check-column-t {
+    width: 5em;
+    text-align: center;
+    padding: 2px;
+}
+.product-editor .widefat .col-id,
+.product-editor .widefat .col-status {
+    width: 4em;
+}
+.product-editor .widefat td {
+    border-bottom: 1px solid #adc1ff;
+}
+
+.product-editor .widefat .editable {
+    border: 1px dashed #b5c1fd;
+    cursor: pointer;
+}
+
+.product-editor .widefat .editable .button {
+    margin-top: 2px;
+}
+.product-editor .widefat input[type="checkbox"] {
+    margin: 0;
+}
+.product-editor .widefat tr > :nth-child(1),
+.product-editor .widefat tr > :nth-child(2) {
+    text-align: center;
+}
+
+.product-editor table .variable-product {
+    background-color: #e2e6ff;
+    font-weight: bold;
+}
+
+.product-editor table .simple-product {
+    background-color: #d2eafd;
+    font-weight: bold;
+}
+
+.product-editor .variation-product {
+    background-color: #edeff7;
+}
+
+.product-editor input[type="search"] {
+    min-width: 400px;
+}
+
+.product-editor .form-group {
+    display: flex;
+    align-items: center;
+    margin: 3px auto;
+}
+
+span.title {
+    font-weight: bold;
+    display: inline-block;
+    min-width: 150px;
+}
+
+/** loader */
+.lds-dual-ring {
+
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    border-radius: 10px;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #5c1bdd;
+    border-color: #006ef7 transparent #006ef7 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/** end loader */
+
+/** expand triangle */
+.lbl-toggle {
+    display: block;
+
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #000;
+    cursor: pointer;
+    border-radius: 7px;
+    transition: all 0.25s ease-out;
+}
+
+.lbl-toggle:hover {
+    color: #0008ff;
+}
+.lbl-toggle::before {
+    content: ' ';
+    display: inline-block;
+
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid currentColor;
+
+    vertical-align: sub;
+    transform: translateY(-2px);
+
+    transition: transform .2s ease-out;
+}
+.expand+.lbl-toggle::before {
+    transform: rotate(90deg) translateX(-3px);
+}
+
+.expand.lbl-toggle {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+/** end expand triangle */
