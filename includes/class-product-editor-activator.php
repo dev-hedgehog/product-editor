@@ -30,7 +30,22 @@ class Product_Editor_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+    $version = get_option( 'PRODUCT_EDITOR_VERSION', PRODUCT_EDITOR_VERSION );
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $table_name = $wpdb->prefix . REVERSE_TABLE;
 
+    $sql = "CREATE TABLE $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		name varchar(191),
+		data longtext,
+		UNIQUE KEY id (id)
+	) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+    update_option('PRODUCT_EDITOR_VERSION', $version, false);
 	}
 
 }

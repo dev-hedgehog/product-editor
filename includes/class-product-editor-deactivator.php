@@ -30,7 +30,12 @@ class Product_Editor_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+    global $wpdb;
+    $table_name = $wpdb->prefix . REVERSE_TABLE;
+    $sql = "DROP TABLE IF EXISTS $table_name";
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+    delete_option('PRODUCT_EDITOR_VERSION');
 	}
 
 }

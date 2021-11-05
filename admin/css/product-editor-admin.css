@@ -2,12 +2,19 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+.wrap.product-editor {
+    position: relative;
+}
 .product-editor .tablenav-pages .current {
     font-size: 16px;
 }
 .product-editor .widefat tr {
     height: 60px;
 }
+.product-editor .widefat tbody tr:hover {
+    background: #effbee!important;
+}
+
 .product-editor .widefat .check-column-t {
     width: 5em;
     text-align: center;
@@ -137,3 +144,31 @@ span.title {
     border-bottom-left-radius: 0;
 }
 /** end expand triangle */
+
+.ajax-info {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: calc(50% - 120px);
+    background: #ffffffd4;
+    font-size: 19px;
+    min-width: 250px;
+    min-height: 100px;
+    border-radius: 6px;
+
+    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+}
+.ajax-info .inner {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    min-height: inherit;
+}
+
+.info-box {
+    width: 500px;
+    position: absolute;
+    right: 0px;
+    color: #7e7e7e;
+}

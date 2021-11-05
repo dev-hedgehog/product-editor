@@ -33,8 +33,12 @@
   </form>
 </template>
 
-<div class="wrap product-editor <?= $show_variations == 1 ? 'with-variations' : ''?>">
+<div class="wrap product-editor">
   <h1 class="wp-heading-inline">Редактор продуктов</h1>
+  <div class="ajax-info">
+    <div class="inner"></div>
+  </div>
+  <div class="lds-dual-ring"></div>
   <fieldset>
     <h2>Параметры поиска</h2>
   <form method="get">
@@ -73,6 +77,14 @@
     <input type="hidden" name="action" value="bulk_changes">
     <fieldset>
       <h2>Массовое изменение</h2>
+      <div class="info-box">
+        Вычисляемая цена - цена которою увидит пользователь.<br/>
+        Вариативные товары не имеют собственной цены и цены расспродажи.<br/>
+        Чтобы изменить цену у вариативных товаров, изменяйте цену у её вариаций.<br/>
+        Галочку "Товар по акции" можно поставить только на основной товар.<br/>
+        Цена расспродажи не может быть выше обычной цены, если задаётся цена выше,
+        то расспродажа отменяется.
+      </div>
       <div class="form-group">
         <label>
           <span class="title">Цена:</span>&nbsp;
@@ -83,7 +95,7 @@
             <option value="3">Уменьшить базовую цену на (фиксированное значение или %):</option>
           </select>
         </label>
-        <input type="text" name="_regular_price">
+        <input type="text" name="_regular_price" pattern="^[0-9 ]+%?₽?$">
       </div>
       <div class="form-group">
         <label>
@@ -96,7 +108,7 @@
             <option value="4">Задать на уровне обычной цены, пониженной на (фиксированную сумму или %):</option>
           </select>
         </label>
-        <input type="text" name="_sale_price">
+        <input type="text" name="_sale_price" pattern="^[0-9 ]+%?₽?$">
       </div>
       <div class="form-group">
         <label>
@@ -111,11 +123,16 @@
       </div>
 
       <br>
-      <input type="submit" class="button" value="Изменить выбранное">
-      <div class="lds-dual-ring"></div>
+      <div class="form-group">
+        <input type="submit" class="button" value="Изменить выбранное">&nbsp;&nbsp;
+        <a href="javascript://" class="do_reverse"
+          <?= !empty($_SESSION['reverse_steps']) ? '':'style="display: none;"'?>
+        >Отменить последнее изменение</a>
+
+      </div>
     </fieldset>
   </form>
-
+  <br><br>
   <div class="tablenav">
     <?php
     $page_links = paginate_links( array(

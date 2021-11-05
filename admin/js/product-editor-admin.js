@@ -40,16 +40,14 @@
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
 				data.append("ids[]", $(this).val());
 			});
-			if (!$('.product-editor.with-variations').length) {
-				$('.cb-vr-all-parent:checked').map(function () {
-					$(this).data('children_ids').forEach((el) =>
-						data.append("ids[]", el)
-					)
-
-				});
-			}
+			$('.cb-vr-all-parent.collapse:checked').map(function () {
+				$(this).data('children_ids').forEach((el) =>
+					data.append("ids[]", el)
+				)
+			});
 
 			form.find('input[type="submit"]').prop('disabled', true);
+			hideInfo();
 			$('.lds-dual-ring').show();
 			fetch(form.attr('action'), {
 				method: 'POST',
@@ -62,7 +60,8 @@
 				return Promise.reject(response);
 			}).then(function (data) {
 				console.log(data);
-				data.forEach((el) => {
+				showInfo(data.message);
+				data.content.forEach((el) => {
 					let $tr = $('tr[data-id="'+el.id+'"]');
 					$tr.find('.td-price').html(el.price);
 					$tr.find('.td-regular-price').html(el.regular_price);
@@ -72,7 +71,9 @@
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 				form[0].reset();
-				alert('Успешно изменено.');
+				if (data.reverse) {
+					$('.do_reverse').show();
+				}
 			}).catch(function (error) {
 				if (error.json) {
 					error.json().then( error => {
@@ -86,45 +87,55 @@
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 			});
-			/*
-			$.ajax({
-				enctype: 'multipart/form-data',
-				type: "POST",
-				url: form.attr('action'),
-				data: data,
-
-			}).done(function(data) {
-				alert(data)
-			}).fail(function(data) {
-				// Optionally alert the user of an error here...
-			});
-*/
-
 		});
 
-
-		$('.cb-pr-all').change(function () {
+		/** Apply checkboxes */
+		function check_checkboxes(selector) {
+			let checked_all = true;
+			$(selector).each((ind,el) => {
+				if (!$(el).prop('checked')) {
+					checked_all = false;
+					return false;
+				}
+			});
+			return checked_all;
+		}
+		$('.cb-pr-all').click(function () {
 			if (this.checked) {
 				$('.cb-pr').prop('checked', true);
 			} else {
 				$('.cb-pr').prop('checked', false);
 			}
 		});
-		$('.cb-vr-all').change(function () {
+		$('.cb-vr-all').click(function () {
 			if (this.checked) {
 				$('.cb-vr,.cb-vr-all-parent').prop('checked', true);
 			} else {
 				$('.cb-vr,.cb-vr-all-parent').prop('checked', false);
 			}
 		});
-		$('.cb-vr-all-parent').change(function () {
+		$('table.widefat').on('change', '.cb-vr-all-parent', function () {
 			let parent_id = $(this).data('id');
 			if (this.checked) {
 				$('.cb-vr[data-parent="'+parent_id+'"]').prop('checked', true);
 			} else {
 				$('.cb-vr[data-parent="'+parent_id+'"]').prop('checked', false);
 			}
+			$('.cb-vr-all').prop('checked',check_checkboxes('.cb-vr, .cb-vr-all-parent'));
 		});
+		$('table.widefat').on('click','.cb-vr', function () {
+			let parent_id = $(this).data('parent');
+			$('.cb-vr-all-parent[data-id="'+parent_id+'"]').prop('checked', check_checkboxes('.cb-vr[data-parent="'+parent_id+'"]'));
+			$('.cb-vr-all').prop('checked', check_checkboxes('.cb-vr, .cb-vr-all-parent'));
+		});
+		$('table.widefat').on('click','.cb-pr', function () {
+			if (!this.checked) {
+				$('.cb-pr-all').prop('checked',false);
+			} else {
+				$('.cb-pr-all').prop('checked', check_checkboxes('.cb-pr'));
+			}
+		});
+		/** End applying checkboxes */
 
 		$('table.widefat').on('click', '.editable', function (e) {
 			if ($(this).find('form').length)
@@ -157,57 +168,6 @@
 			$el.find('.focus').focus();
 		});
 
-		$(document).keyup(function(e) {
-			if (e.key === "Escape") {
-				discardEditBoxes();
-			}
-		});
-
-
-		function discardEditBoxes() {
-			$('table .pe-edit-box').each((i, el)=> $(el).parents('td').html($(el).data('old_value')))
-		}
-
-		function onSubmitSingleValue(e) {
-			e.preventDefault();
-
-			let form = $(this),
-				data = new FormData(this);
-			form.find('input[type="submit"]').prop('disabled', true);
-			$('.lds-dual-ring').show();
-			fetch(form.attr('action'), {
-				method: 'POST',
-				body: data,
-			}).then(function (response) {
-				if (response.ok) {
-					return response.json();
-				}
-				return Promise.reject(response);
-			}).then(function (data) {
-				console.log(data);
-				data.forEach((el) => {
-					let $tr = $('tr[data-id="'+el.id+'"]');
-					$tr.find('.td-price').html(el.price);
-					$tr.find('.td-regular-price').html(el.regular_price);
-					$tr.find('.td-sale-price').html(el.sale_price);
-					$tr.find('.td-akciya').html(el.akciya);
-				});
-				form.find('input[type="submit"]').prop('disabled', false);
-				$('.lds-dual-ring').hide();
-			}).catch(function (error) {
-				if (error.json) {
-					error.json().then( error => {
-						alert(error.message);
-						console.warn(error.message);
-					})
-				} else {
-					alert(error);
-					console.warn(error);
-				}
-				form.find('input[type="submit"]').prop('disabled', false);
-				$('.lds-dual-ring').hide();
-			});
-		}
 
 		$('table.widefat').on('click', '.lbl-toggle', function (e) {
 			if (isRequested) return;
@@ -237,5 +197,93 @@
 			}
 		});
 
+		$('.do_reverse').click(function () {
+			if (isRequested) return;
+			isRequested = true;
+			$('.lds-dual-ring').show();
+			$.get('/wp-admin/admin-post.php', {action: 'reverse_products_data'})
+				.done(function(data) {
+					document.location.reload();
+				})
+				.fail(function(error) {
+					$('.lds-dual-ring').hide();
+					isRequested = false;
+					alert(error.responseText);
+				})
+				.always(function() {
+				});
+		});
+
+
+
 	});
+
+	$(document).keyup(function(e) {
+		if (e.key === "Escape") {
+			discardEditBoxes();
+		}
+	});
+
+
+	function discardEditBoxes() {
+		$('table .pe-edit-box').each((i, el)=> $(el).parents('td').html($(el).data('old_value')))
+	}
+
+	function showInfo(message) {
+		let $box = $('.ajax-info');
+		$box.children('.inner').html(message);
+		$box.fadeIn(500)
+			.delay(1300)
+			.fadeOut(1000);
+	}
+	function hideInfo() {
+		$('.ajax-info').hide();
+	}
+
+	function onSubmitSingleValue(e) {
+		e.preventDefault();
+
+		let form = $(this),
+			data = new FormData(this);
+		form.find('input[type="submit"]').prop('disabled', true);
+		hideInfo();
+		$('.lds-dual-ring').show();
+
+		fetch(form.attr('action'), {
+			method: 'POST',
+			body: data,
+		}).then(function (response) {
+			if (response.ok) {
+				return response.json();
+			}
+			return Promise.reject(response);
+		}).then(function (data) {
+			console.log(data);
+			showInfo(data.message);
+			data.content.forEach((el) => {
+				let $tr = $('tr[data-id="'+el.id+'"]');
+				$tr.find('.td-price').html(el.price);
+				$tr.find('.td-regular-price').html(el.regular_price);
+				$tr.find('.td-sale-price').html(el.sale_price);
+				$tr.find('.td-akciya').html(el.akciya);
+			});
+			form.find('input[type="submit"]').prop('disabled', false);
+			$('.lds-dual-ring').hide();
+			if (data.reverse) {
+				$('.do_reverse').show();
+			}
+		}).catch(function (error) {
+			if (error.json) {
+				error.json().then( error => {
+					alert(error.message);
+					console.warn(error.message);
+				})
+			} else {
+				alert(error);
+				console.warn(error);
+			}
+			form.find('input[type="submit"]').prop('disabled', false);
+			$('.lds-dual-ring').hide();
+		});
+	}
 })( jQuery );

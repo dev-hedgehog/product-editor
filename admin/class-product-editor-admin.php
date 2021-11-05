@@ -40,6 +40,8 @@ class Product_Editor_Admin {
 	 */
 	private $version;
 
+	private $reverse_steps;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -100,13 +102,17 @@ class Product_Editor_Admin {
 
 	}
 
+	public function start_session() {
+    if(!session_id()) {
+      session_start();
+    }
+  }
+
 
 	public function admin_menu() {
     add_submenu_page('edit.php?post_type=product', 'Редактор продуктов', 'Редактор продуктов',
       'manage_options', 'product-editor', [$this, 'main_page']);
-    /*add_menu_page('My Custom Page', 'My Custom Page', 'manage_options', 'my-top-level-slug');
-    add_submenu_page( 'my-top-level-slug', 'My Custom Page', 'My Custom Page',
-      'manage_options', 'my-top-level-slug', [$this, 'main_page']);*/
+
   }
 
   public function main_page() {
@@ -116,28 +122,9 @@ class Product_Editor_Admin {
     $html = '';
     $product_categories = get_terms(['taxonomy'   => 'product_cat',]);
 
-
-    //$wpdb->query( "START TRANSACTION" );
-/*
-    $p = wc_get_product(14614);
-    echo '<b>'.$p->get_name().' price: '.$p->get_price().' regular_price: '.$p->get_regular_price().' sale_price: '.$p->get_sale_price()."</b>\n\n\n";
-    print_r($p->get_meta('sale'));
-    //print_r($p->get_meta_data());
-    //$p->set_meta_data(['sale' => ' ']);
-    $p->update_meta_data('sale', ['Товар по акции']);
-    $p->set_price('19903');
-    $p->set_regular_price('19903');
-    $p->set_sale_price('19901');
-    $p->save();
-
-    $p = wc_get_product(14614);
-    echo '<b>'.$p->get_name().' price: '.$p->get_price().' regular_price: '.$p->get_regular_price().' sale_price: '.$p->get_sale_price()."</b>\n\n\n";
-*/
     $args = [
       'paginate' => true,
-      //  'type' => 'simple'
-      //  'category' => ['']
-      //  's' => 'KAWS'
+       'type' => ['simple','variable']
     ];
     $args['limit'] = General_Helper::getVar('limit', 10);
     $args['offset'] = (General_Helper::getVar('paged', 1)-1) * $args['limit'];
@@ -165,6 +152,36 @@ class Product_Editor_Admin {
     'change_akciya'  => 'change_akciya',
   ];
 
+	public function action_reverse_products_data() {
+	  if (empty($_SESSION['reverse_steps'])) {
+      self::sendResponse('Нет данных для востановления', 409, 'raw');
+    }
+    global $wpdb;
+	  $products = [];
+    $wpdb->query("START TRANSACTION");
+	  foreach ($_SESSION['reverse_steps'] as $record) {
+	    if (!empty($products[$record['id']])) {
+        $product = $products[$record['id']];
+      } else {
+        $product = $products[$record['id']] = wc_get_product($record['id']);
+        if (!$product) continue;
+      }
+
+	    switch ($record['action']) {
+        case 'change_akciya': $product->update_meta_data('sale', $record['value']);
+        break;
+        case 'change_sale_price': $product->set_sale_price($record['value']);
+        break;
+        case 'change_regular_price': $product->set_regular_price($record['value']);
+        break;
+      }
+	    $product->save();
+    }
+    $wpdb->query("COMMIT");
+    $_SESSION['reverse_steps'] = null;
+    self::sendResponse('ok', 200, 'raw');
+  }
+
 	public function action_expand_product_variable() {
     if (!($id = General_Helper::getVar('id')) || !($product = wc_get_product($id)) || !is_a($product, 'WC_Product_Variable')) {
       self::sendResponse('', 200, 'raw');
@@ -182,7 +199,7 @@ class Product_Editor_Admin {
       }
     }
     if ($isEmpty || empty($ids)) {
-      self::sendResponse();
+      self::sendResponse(['message' => 'Нечего изменять', 'content'=>[]]);
     }
 
     global $wpdb;
@@ -193,18 +210,33 @@ class Product_Editor_Admin {
       if (!$product) {
         self::sendResponse(['message' => 'Продукт с id:'.$id.' не найден. Операции отменены.'], 500);
       }
-      self::process_change_product($product);
+      $this->process_change_product($product);
+    }
+    if ($this->reverse_steps) {
+      $table_name = $wpdb->prefix . REVERSE_TABLE;
+      $wpdb->insert(
+        $table_name,
+        array(
+          'time' => current_time('mysql'),
+          'name' => current_time('mysql'),
+          'data' => json_encode($this->reverse_steps),
+        )
+      );
     }
     $wpdb->query("COMMIT");
-
+    $_SESSION['reverse_steps'] = $this->reverse_steps;
     // reload products data
-    self::sendResponse(self::response_data_for_ids($ids));
+    self::sendResponse([
+      'message' => 'Применено операций: '.sizeof($this->reverse_steps),
+      'content' => self::response_data_for_ids($ids),
+      'reverse' => !empty($this->reverse_steps)
+    ]);
   }
 
-  private static function process_change_product($product) {
+  private function process_change_product($product) {
     foreach (self::$changeActions as $action_name => $func_name) {
       if (General_Helper::postVar($action_name)) {
-        self::$func_name($product);
+        $this->$func_name($product);
       }
     }
     $product->save();
@@ -236,12 +268,16 @@ class Product_Editor_Admin {
     ];// is_a($product, 'WC_Product_Variation') ? '' :
   }
 
-  private static function change_akciya($product) {
+  private function change_akciya($product) {
     $action = General_Helper::postVar('change_akciya');
     if (empty($action) || is_a($product, 'WC_Product_Variation')) {
       return;
     }
-
+    $this->reverse_steps[] = [
+      'id' => $product->get_id(),
+      'action' => 'change_akciya',
+      'value' => $product->get_meta('sale')
+    ];
     switch ((int)$action) {
       case 1: $product->update_meta_data('sale', ['Товар по акции']);
       break;
@@ -249,12 +285,17 @@ class Product_Editor_Admin {
     }
   }
 
-  private static function change_sale_price($product) {
+  private function change_sale_price($product) {
     $arg_sale_price = trim(General_Helper::postVar('_sale_price', 0));
     $action = General_Helper::postVar('change_sale_price');
     if (empty($action)) {
       return;
     }
+    $this->reverse_steps[] = [
+      'id' => $product->get_id(),
+      'action' => 'change_sale_price',
+      'value' => $product->get_sale_price()
+    ];
     $isPercentage = stripos($arg_sale_price, '%') !== false;
     $arg_sale_price = preg_replace('/[^\d\.\-]/', '', $arg_sale_price);
     $regular_price = $product->get_regular_price();
@@ -281,12 +322,17 @@ class Product_Editor_Admin {
     $product->set_sale_price($new_sale_price);
   }
 
-  private static function change_regular_price($product) {
+  private function change_regular_price($product) {
     $arg_regular_price = trim(General_Helper::postVar('_regular_price'));
     $action = General_Helper::postVar('change_regular_price');
     if (empty($action)) {
       return;
     }
+    $this->reverse_steps[] = [
+      'id' => $product->get_id(),
+      'action' => 'change_regular_price',
+      'value' => $product->get_regular_price()
+    ];
     $isPercentage = stripos($arg_regular_price, '%') !== false;
     $arg_regular_price = preg_replace('/[^\d\.\-]/', '', $arg_regular_price);
     $old_regular_price = $product->get_regular_price();

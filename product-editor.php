@@ -36,6 +36,8 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'PRODUCT_EDITOR_VERSION', '1.0.0' );
+define( 'REVERSE_TABLE', 'pe_reverse_steps');
+
 require plugin_dir_path( __FILE__ ) . 'helpers/class-general-helper.php';
 /**
  * The code that runs during plugin activation.
