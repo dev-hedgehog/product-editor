@@ -112,7 +112,51 @@ class Product_Editor_Admin {
 	public function admin_menu() {
     add_submenu_page('edit.php?post_type=product', 'Редактор продуктов', 'Редактор продуктов',
       'manage_options', 'product-editor', [$this, 'main_page']);
+    add_submenu_page('edit.php?post_type=product', 'Fix attrs', 'Fix attributes',
+      'manage_options', 'product-editor-fix-variations', [$this, 'sub_page']);
 
+  }
+
+  public function sub_page() {
+    $args = [
+      'type' => ['variable'],
+      //'limit' => 2
+    ];
+    $products = wc_get_products($args);
+    $bad_products = [];
+    $bad_terms = [];
+    $all_terms = [];
+    foreach ($products as $product) {
+      $vars = $product->get_available_variations('object');
+      $prod_terms = [];
+      foreach ($vars as $var) {
+        $at = wc_get_product_variation_attributes($var->get_id());
+        foreach ($at as $att_name => $value) {
+          if (!$value) continue;
+          $term_name = str_replace('attribute_', '', $att_name);
+          if (!isset($prod_terms[$term_name])) {
+            $prod_terms[$term_name] = wp_get_post_terms($product->get_id(), $term_name, array('fields' => 'slugs'));
+          }
+          if (!in_array($value, $prod_terms[$term_name])) {
+            $bad_products[$product->get_id()][$var->get_id()][] = $term_name.':'.$value;
+            if (!isset($all_terms[$term_name])) {
+              $all_terms[$term_name] = get_terms(['taxonomy' => $term_name, 'hide_empty' => false, 'fields' => 'slugs']);
+            }
+            if (!in_array($value, $all_terms[$term_name])) {
+              $bad_terms[$term_name][$value] = 1;
+            } elseif (!empty($_GET['doitg'])) {
+              wp_set_object_terms($product->get_id(), $value, $term_name, true);
+            }
+          }
+        }
+
+      }
+      //break;
+    }
+    echo '<pre>';
+    print_r($bad_products);
+    echo "\n====================\n";
+    print_r($bad_terms);
   }
 
   public function main_page() {
