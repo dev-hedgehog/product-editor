@@ -95,7 +95,7 @@
             <option value="3">Уменьшить базовую цену на (фиксированное значение или %):</option>
           </select>
         </label>
-        <input type="text" name="_regular_price" pattern="^[0-9 ]+%?₽?$">
+        <input type="text" name="_regular_price" pattern="^[0-9 ]*%?₽?$">
       </div>
       <div class="form-group">
         <label>
@@ -108,7 +108,7 @@
             <option value="4">Задать на уровне обычной цены, пониженной на (фиксированную сумму или %):</option>
           </select>
         </label>
-        <input type="text" name="_sale_price" pattern="^[0-9 ]+%?₽?$">
+        <input type="text" name="_sale_price" pattern="^[0-9 ]*%?₽?$">
       </div>
       <div class="form-group">
         <label>

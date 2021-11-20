@@ -268,6 +268,9 @@ class Product_Editor_Admin {
       );
     }
     $wpdb->query("COMMIT");
+    if (!$this->reverse_steps) {
+      $this->reverse_steps = [];
+    }
     $_SESSION['reverse_steps'] = $this->reverse_steps;
     // reload products data
     self::sendResponse([
