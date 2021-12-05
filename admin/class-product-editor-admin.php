@@ -181,6 +181,9 @@ class Product_Editor_Admin {
 	  if (empty($_SESSION['reverse_steps'])) {
       self::sendResponse('Нет данных для востановления', 409, 'raw');
     }
+	  if (!wp_verify_nonce(General_Helper::getVar('nonce'), 'pe_changes' ) ) {
+      self::sendResponse('Некоректный авторизационный ключ. Обновите страницу.', 401, 'raw');
+    }
     global $wpdb;
 	  $products = [];
     $wpdb->query("START TRANSACTION");
@@ -216,6 +219,9 @@ class Product_Editor_Admin {
 	}
 
   public function action_bulk_changes() {
+    if (!wp_verify_nonce(General_Helper::postVar('nonce'), 'pe_changes' ) ) {
+      self::sendResponse(['message' => 'Некоректный авторизационный ключ. Обновите страницу.'], 401);
+    }
     $isEmpty = true;
     $ids = General_Helper::postVar('ids');
     foreach (self::$changeActions as $action_name => $func_name) {
@@ -326,7 +332,7 @@ class Product_Editor_Admin {
     ];
     $isPercentage = stripos($arg_sale_price, '%') !== false;
     $arg_sale_price = preg_replace('/[^\d\.\-]/', '', $arg_sale_price);
-    $regular_price = $product->get_regular_price();
+    $regular_price = (float)$product->get_regular_price();
     $old_sale_price = (float)$product->get_sale_price();
     $new_sale_price = $old_sale_price;
     $number = (float) wc_format_decimal($arg_sale_price);

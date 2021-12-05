@@ -32,7 +32,9 @@
     </div>
   </form>
 </template>
-
+<script>
+  var pe_nonce = '<?= wp_create_nonce( 'pe_changes' )?>';
+</script>
 <div class="wrap product-editor">
   <h1 class="wp-heading-inline">Редактор продуктов</h1>
   <div class="ajax-info">
@@ -75,6 +77,7 @@
   <hr/>
   <form method="post" action="/wp-admin/admin-post.php" id="bulk-changes">
     <input type="hidden" name="action" value="bulk_changes">
+    <input type="hidden" name="nonce" value="<?= wp_create_nonce( 'pe_bulk_changes' )?>">
     <fieldset>
       <h2>Массовое изменение</h2>
       <div class="info-box">

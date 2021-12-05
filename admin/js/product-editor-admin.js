@@ -10,6 +10,7 @@
 			let form = $(this);
 			//e.originalEvent.target
 			let data = new FormData(this);
+			data.append('nonce', window.pe_nonce);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
 				data.append("ids[]", $(this).val());
 			});
@@ -174,7 +175,7 @@
 			if (isRequested) return;
 			isRequested = true;
 			$('.lds-dual-ring').show();
-			$.get('/wp-admin/admin-post.php', {action: 'reverse_products_data'})
+			$.get('/wp-admin/admin-post.php', {action: 'reverse_products_data', nonce: window.pe_nonce})
 				.done(function(data) {
 					document.location.reload();
 				})
@@ -218,6 +219,7 @@
 
 		let form = $(this),
 			data = new FormData(this);
+		data.append('nonce', window.pe_nonce);
 		form.find('input[type="submit"]').prop('disabled', true);
 		hideInfo();
 		$('.lds-dual-ring').show();
