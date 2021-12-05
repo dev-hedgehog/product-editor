@@ -3,13 +3,10 @@
 /**
  * The file that defines the core plugin class
  *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
  */
 
@@ -23,9 +20,9 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
- * @author     Your Name <email@example.com>
+ * @author     dev-hedgehog <aetw.core@gmail.com>
  */
 class Product_Editor {
 
@@ -61,8 +58,7 @@ class Product_Editor {
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
+	 * Load the dependencies, define the locale, and set the hooks for the admin area
 	 *
 	 * @since    1.0.0
 	 */
@@ -77,7 +73,6 @@ class Product_Editor {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
-		$this->define_public_hooks();
 
 	}
 
@@ -89,7 +84,6 @@ class Product_Editor {
 	 * - Product_Editor_Loader. Orchestrates the hooks of the plugin.
 	 * - Product_Editor_i18n. Defines internationalization functionality.
 	 * - Product_Editor_Admin. Defines all hooks for the admin area.
-	 * - Product_Editor_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -115,12 +109,6 @@ class Product_Editor {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-product-editor-admin.php';
-
-		/**
-		 * The class responsible for defining all actions that occur in the public-facing
-		 * side of the site.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-product-editor-public.php';
 
 		$this->loader = new Product_Editor_Loader();
 
@@ -152,7 +140,7 @@ class Product_Editor {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Product_Editor_Admin( $this->get_product_editor(), $this->get_version() );
+		$plugin_admin = new Product_Editor_Admin( $this->get_plugin_name(), $this->get_version() );
 
     $this->loader->add_action( 'init', $plugin_admin, 'start_session' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
@@ -168,28 +156,12 @@ class Product_Editor {
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_public_hooks() {
-
-		$plugin_public = new Product_Editor_Public( $this->get_product_editor(), $this->get_version() );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-	}
-
-	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 *
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->loader->run();
+      $this->loader->run();
 	}
 
 	/**
@@ -199,7 +171,7 @@ class Product_Editor {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_product_editor() {
+	public function get_plugin_name() {
 		return $this->plugin_name;
 	}
 

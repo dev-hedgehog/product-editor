@@ -6,10 +6,10 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
  */
 
@@ -20,9 +20,9 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
- * @author     Your Name <email@example.com>
+ 
  */
 class Product_Editor_i18n {
 

@@ -5,10 +5,10 @@
  *
  * This file is used to markup the admin-facing aspects of the plugin.
  *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/admin/partials
  */
 

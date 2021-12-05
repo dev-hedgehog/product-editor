@@ -3,10 +3,10 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
  */
 
@@ -17,9 +17,9 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
- * @author     Your Name <email@example.com>
+ 
  */
 class Product_Editor_Loader {
 

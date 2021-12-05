@@ -3,22 +3,20 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/admin
  */
 
 /**
  * The admin-specific functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/admin
- * @author     Your Name <email@example.com>
+ 
  */
 class Product_Editor_Admin {
 
@@ -40,6 +38,13 @@ class Product_Editor_Admin {
 	 */
 	private $version;
 
+  /**
+   * The version of this plugin.
+   *
+   * @since    1.0.0
+   * @access   private
+   * @var      array|null    $reverse_steps    The current version of this plugin.
+   */
 	private $reverse_steps;
 
 	/**
@@ -63,18 +68,6 @@ class Product_Editor_Admin {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Product_Editor_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Product_Editor_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
-
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -85,18 +78,6 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Product_Editor_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Product_Editor_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery' ), $this->version, false );
 

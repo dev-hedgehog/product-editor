@@ -1,4 +1,12 @@
 <?php
+/**
+ *
+ * @link       https://github.com/dev-hedgehog/product-editor
+ * @since      1.0.0
+ *
+ * @package    Product-Editor
+ * @subpackage Product_Editor/admin/partials
+ */
 /** @var WC_Product_Variable $product */
 
 $vars = $product->get_available_variations('object');

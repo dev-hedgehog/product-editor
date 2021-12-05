@@ -3,10 +3,10 @@
 /**
  * Fired during plugin activation
  *
- * @link       http://example.com
+ * @link       https://github.com/dev-hedgehog/product-editor
  * @since      1.0.0
  *
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
  */
 
@@ -16,17 +16,14 @@
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Product_Editor
+ * @package    Product-Editor
  * @subpackage Product_Editor/includes
- * @author     Your Name <email@example.com>
  */
 class Product_Editor_Activator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
+   * Activate the plugin.
+   * crate table for storing old values of changed attributes
 	 * @since    1.0.0
 	 */
 	public static function activate() {

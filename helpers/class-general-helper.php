@@ -1,4 +1,14 @@
 <?php
+/**
+ * The file that defines the helper plugin class
+ *
+ *
+ * @link       https://github.com/dev-hedgehog/product-editor
+ * @since      1.0.0
+ *
+ * @package    Product-Editor
+ * @subpackage Product_Editor/helpers
+ */
 
 class General_Helper {
 
