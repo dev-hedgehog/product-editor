@@ -91,14 +91,17 @@ class Product_Editor_Admin {
 
 
 	public function admin_menu() {
+    if (!current_user_can('manage_woocommerce')) {
+      return;
+    }
     add_submenu_page('edit.php?post_type=product', 'Редактор продуктов', 'Редактор продуктов',
       'manage_options', 'product-editor', [$this, 'main_page']);
     add_submenu_page('edit.php?post_type=product', 'Fix attrs', 'Fix attributes',
       'manage_options', 'product-editor-fix-variations', [$this, 'sub_page']);
-
   }
 
   public function sub_page() {
+    self::securityCheck(true);
     $args = [
       'type' => ['variable'],
       //'limit' => 2
@@ -141,32 +144,31 @@ class Product_Editor_Admin {
   }
 
   public function main_page() {
-
+    self::securityCheck(true);
     global $wpdb;
     global $wp_query;
-    $html = '';
-    $product_categories = get_terms(['taxonomy'   => 'product_cat',]);
 
     $args = [
       'paginate' => true,
        'type' => ['simple','variable']
     ];
-    $args['limit'] = General_Helper::getVar('limit', 10);
+    $args['limit'] = (int) General_Helper::getVar('limit', 10);
     $args['offset'] = (General_Helper::getVar('paged', 1)-1) * $args['limit'];
-    General_Helper::getVar('product_cat', false) && $args['category'] = [General_Helper::getVar('product_cat')];
-    General_Helper::getVar('s', false) && $args['name'] = General_Helper::getVar('s');
+    General_Helper::getVar('product_cat', false) && $args['category'] = [sanitize_title_for_query(General_Helper::getVar('product_cat'))];
+    General_Helper::getVar('s', false) && $args['name'] = sanitize_title_for_query(General_Helper::getVar('s'));
     $results = wc_get_products($args);
     if ($results->total === 0 && $args['name']) {
       $args['s'] = $args['name'];
       unset($args['name']);
       $results = wc_get_products($args);
     }
+    // vars for template
     $total = $results->total;
     $num_of_pages = $results->max_num_pages;
     $products = $results->products;
     $num_on_page = sizeof($products);
-    $show_variations = General_Helper::getVar('show_variations');
-
+    $show_variations = (int)General_Helper::getVar('show_variations');
+    $product_categories = get_terms(['taxonomy' => 'product_cat',]);
 
     include ('partials/product-editor-admin-display.php');
   }
@@ -178,11 +180,9 @@ class Product_Editor_Admin {
   ];
 
 	public function action_reverse_products_data() {
+    self::securityCheck(true, true);
 	  if (empty($_SESSION['reverse_steps'])) {
-      self::sendResponse('Нет данных для востановления', 409, 'raw');
-    }
-	  if (!wp_verify_nonce(General_Helper::getVar('nonce'), 'pe_changes' ) ) {
-      self::sendResponse('Некоректный авторизационный ключ. Обновите страницу.', 401, 'raw');
+      self::sendResponse(['message' => 'Нет данных для востановления'], 409);
     }
     global $wpdb;
 	  $products = [];
@@ -211,7 +211,8 @@ class Product_Editor_Admin {
   }
 
 	public function action_expand_product_variable() {
-    if (!($id = General_Helper::getVar('id')) || !($product = wc_get_product($id)) || !is_a($product, 'WC_Product_Variable')) {
+    self::securityCheck(true);
+    if (!($id = sanitize_key(General_Helper::getVar('id'))) || !($product = wc_get_product($id)) || !is_a($product, 'WC_Product_Variable')) {
       self::sendResponse('', 200, 'raw');
     }
 
@@ -219,11 +220,9 @@ class Product_Editor_Admin {
 	}
 
   public function action_bulk_changes() {
-    if (!wp_verify_nonce(General_Helper::postVar('nonce'), 'pe_changes' ) ) {
-      self::sendResponse(['message' => 'Некоректный авторизационный ключ. Обновите страницу.'], 401);
-    }
+    self::securityCheck(true, true);
     $isEmpty = true;
-    $ids = General_Helper::postVar('ids');
+    $ids = (array)General_Helper::postVar('ids');
     foreach (self::$changeActions as $action_name => $func_name) {
       if (General_Helper::postVar($action_name)) {
         $isEmpty = false;
@@ -237,6 +236,7 @@ class Product_Editor_Admin {
     $wpdb->query("START TRANSACTION");
 
     foreach ($ids as $id) {
+      $id = sanitize_key($id);
       $product = wc_get_product($id);
       if (!$product) {
         self::sendResponse(['message' => 'Продукт с id:'.$id.' не найден. Операции отменены.'], 500);
@@ -299,7 +299,7 @@ class Product_Editor_Admin {
       'regular_price' => $product->get_regular_price(),
       'sale_price' => $product->get_sale_price(),
       'akciya' => is_a($product, 'WC_Product_Variation') ? '' : (!$product->get_meta('sale')? 'Нет': 'Да'),
-    ];// is_a($product, 'WC_Product_Variation') ? '' :
+    ];
   }
 
   private function change_akciya($product) {
@@ -393,5 +393,18 @@ class Product_Editor_Admin {
   private static function sendResponse($body = [], $code = 200, $format='json') {
     status_header($code);
     exit($format=='json'? json_encode($body) : $body);
+  }
+
+  private static function securityCheck($check_read = true, $check_change = false) {
+    if ($check_read) {
+      if (!current_user_can('manage_woocommerce')) {
+        self::sendResponse(['message' => 'У вас нет прав на редактирование товаров'], 403);
+      }
+    }
+    if ($check_change) {
+      if (!wp_verify_nonce(General_Helper::postVar('nonce'), 'pe_changes' ) ) {
+        self::sendResponse(['message' => 'Некорректный авторизационный ключ. Обновите страницу.'], 401);
+      }
+    }
   }
 }

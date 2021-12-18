@@ -8,7 +8,6 @@
 			e.preventDefault();
 
 			let form = $(this);
-			//e.originalEvent.target
 			let data = new FormData(this);
 			data.append('nonce', window.pe_nonce);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
@@ -49,13 +48,16 @@
 					$('.do_reverse').show();
 				}
 			}).catch(function (error) {
-				if (error.json) {
-					error.json().then( error => {
-						alert(error.message);
-						console.warn(error.message);
-					})
+				if (typeof error.json === "function") {
+					error.json().then(jsonError => {
+						alert(jsonError.message);
+						console.warn(jsonError);
+					}).catch(genericError => {
+						console.warn("Generic error from API");
+						alert(error.statusText);
+					});
 				} else {
-					alert(error);
+					console.warn("Fetch error");
 					console.warn(error);
 				}
 				form.find('input[type="submit"]').prop('disabled', false);
@@ -159,7 +161,7 @@
 						}
 					})
 					.fail(function(error) {
-						alert(error);
+						alert($getTextError(error));
 					})
 					.always(function() {
 						$('.lds-dual-ring').hide();
@@ -182,7 +184,7 @@
 				.fail(function(error) {
 					$('.lds-dual-ring').hide();
 					isRequested = false;
-					alert(error.responseText);
+					alert($getTextError(error));
 				})
 				.always(function() {
 				});
@@ -191,6 +193,14 @@
 
 
 	});
+
+	function $getTextError (error) {
+		try {
+			return (JSON.parse(error.responseText)).message;
+		} catch (e) {
+			return error.statusText;
+		}
+	}
 
 	$(document).keyup(function(e) {
 		if (e.key === "Escape") {
@@ -248,13 +258,16 @@
 				$('.do_reverse').show();
 			}
 		}).catch(function (error) {
-			if (error.json) {
-				error.json().then( error => {
-					alert(error.message);
-					console.warn(error.message);
-				})
+			if (typeof error.json === "function") {
+				error.json().then(jsonError => {
+					alert(jsonError.message);
+					console.warn(jsonError);
+				}).catch(genericError => {
+					console.warn("Generic error from API");
+					alert(error.statusText);
+				});
 			} else {
-				alert(error);
+				console.warn("Fetch error");
 				console.warn(error);
 			}
 			form.find('input[type="submit"]').prop('disabled', false);
