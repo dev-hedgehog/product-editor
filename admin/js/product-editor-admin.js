@@ -59,6 +59,7 @@
 				} else {
 					console.warn("Fetch error");
 					console.warn(error);
+					alert('Error! '+error);
 				}
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
@@ -269,6 +270,7 @@
 			} else {
 				console.warn("Fetch error");
 				console.warn(error);
+				alert('Error! '+error);
 			}
 			form.find('input[type="submit"]').prop('disabled', false);
 			$('.lds-dual-ring').hide();
