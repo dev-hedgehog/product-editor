@@ -47,7 +47,7 @@
     <input type="hidden" name="post_type" value="product" />
     <input type="hidden" name="page" value="product-editor" />
     <div class="form-group">
-      <label><?=__('Number of items per page:', 'product-editor')?></label>&nbsp;<input type="number" min="1" max="1000" name="limit" value="<?=General_Helper::getVar('limit', 10)?>">
+      <label><?=__('Number of items per page:', 'product-editor')?></label>&nbsp;<input type="number" min="1" max="1000" name="limit" value="<?=esc_attr(General_Helper::getVar('limit', 10))?>">
       &nbsp;&nbsp;<label><input type="checkbox" value="1" name="show_variations" <?= $show_variations == 1 ? 'checked' : ''?>><?=__('Show variations', 'product-editor')?></label>
     </div>
     <div class="form-group">
@@ -59,15 +59,15 @@
         <option value=""><?=__('All', 'product-editor')?></option>
         <?php
         foreach ($product_categories as $category) {
-          echo '<option value="'.$category->slug.'" '
+          echo '<option value="'.esc_attr($category->slug).'" '
             .(General_Helper::getVar('product_cat') == $category->slug ? 'selected' : '')
-            .'>'.$category->name.'</option>';
+            .'>'.esc_html($category->name).'</option>';
         }
         ?>
         </select>
     </label>
     &nbsp;&nbsp;
-    <label><?=__('Name:', 'product-editor')?>&nbsp;<input type="search" name="s" value="<?= General_Helper::getVar('s', '')?>"/></label>
+    <label><?=__('Name:', 'product-editor')?>&nbsp;<input type="search" name="s" value="<?= esc_attr(General_Helper::getVar('s', ''))?>"/></label>
     </div>
     <input type="submit" value="<?=__('Search', 'product-editor')?>" class="button">
   </form>
@@ -139,7 +139,7 @@
       'prev_text' => __( '&laquo;', 'text-domain' ),
       'next_text' => __( '&raquo;', 'text-domain' ),
       'total' => $num_of_pages,
-      'current' => General_Helper::getVar('paged', 1)
+      'current' => sanitize_text_field(General_Helper::getVar('paged', 1))
     ) );
 
     if ( $page_links ) {
@@ -149,8 +149,8 @@
     }
     ?>
     <ul class="subsubsub">
-      <li><b><?=__('Total found:', 'product-editor')?> <?= $total?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-      <li><b><?=__('Items per page:', 'product-editor')?> <?= $num_on_page ?></b></li>
+      <li><b><?=__('Total found:', 'product-editor')?> <?= esc_html($total) ?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+      <li><b><?=__('Items per page:', 'product-editor')?> <?= esc_html($num_on_page) ?></b></li>
     </ul>
     <div class="tablenav-pages"><?= $page_links ?></div>
   </div>

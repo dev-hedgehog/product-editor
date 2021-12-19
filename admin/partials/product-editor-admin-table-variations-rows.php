@@ -18,16 +18,16 @@ foreach ( $variation_ids as $variation_id ) {
     $var_atts .= str_replace('attribute_pa_', '', $ind).':'.$val.' ';
   });
   ?>
-  <tr class="variation-product" data-id="<?=$variation_id?>" data-parent_id="<?=$product->get_id()?>">
+  <tr class="variation-product" data-id="<?=esc_attr($variation_id)?>" data-parent_id="<?=esc_attr($product->get_id())?>">
     <td></td>
-    <td><input class="cb-vr" name="ids[]" data-parent="<?=$product->get_id()?>" value="<?=$variation_id?>" type="checkbox"></td>
-    <td><?=$variation_id?></td>
-    <td><?=$var->get_name()?></td>
+    <td><input class="cb-vr" name="ids[]" data-parent="<?=esc_attr($product->get_id())?>" value="<?=esc_attr($variation_id)?>" type="checkbox"></td>
+    <td><?=esc_html($variation_id)?></td>
+    <td><?=esc_html($var->get_name())?></td>
     <td></td>
-    <td><?=__('Variation:', 'product-editor')?> <?=$var_atts?></td>
+    <td><?=__('Variation:', 'product-editor')?> <?=esc_html($var_atts)?></td>
     <td class="td-price"><?=$var->get_price_html()?></td>
-    <td class="td-regular-price editable"><?=$var->get_regular_price()?></td>
-    <td class="td-sale-price editable"><?=$var->get_sale_price()?></td>
+    <td class="td-regular-price editable"><?=esc_html($var->get_regular_price())?></td>
+    <td class="td-sale-price editable"><?=esc_html($var->get_sale_price())?></td>
     <td class="td-akciya"></td>
   </tr>
 
