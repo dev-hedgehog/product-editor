@@ -24,7 +24,7 @@ foreach ( $variation_ids as $variation_id ) {
     <td><?=$variation_id?></td>
     <td><?=$var->get_name()?></td>
     <td></td>
-    <td>Вариация: <?=$var_atts?></td>
+    <td><?=__('Variation:', 'product-editor')?> <?=$var_atts?></td>
     <td class="td-price"><?=$var->get_price_html()?></td>
     <td class="td-regular-price editable"><?=$var->get_regular_price()?></td>
     <td class="td-sale-price editable"><?=$var->get_sale_price()?></td>

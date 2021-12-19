@@ -27,8 +27,8 @@
     <input type="hidden" name="ids[]" value="">
     <div class="pe-edit-box" data-old_value="">
       <br/>
-      <input type="submit" class="button" value="Сохранить"/>
-      <a class="button discard" tabindex="0">Отменить</a>
+      <input type="submit" class="button" value="<?=__('Save', 'product-editor')?>"/>
+      <a class="button discard" tabindex="0"><?=__('Cancel', 'product-editor')?></a>
     </div>
   </form>
 </template>
@@ -36,27 +36,27 @@
   var pe_nonce = '<?= wp_create_nonce( 'pe_changes' )?>';
 </script>
 <div class="wrap product-editor">
-  <h1 class="wp-heading-inline">Редактор продуктов</h1>
+  <h1 class="wp-heading-inline"><?=__('Product Editor', 'product-editor')?></h1>
   <div class="ajax-info">
     <div class="inner"></div>
   </div>
   <div class="lds-dual-ring"></div>
   <fieldset>
-    <h2>Параметры поиска</h2>
+    <h2><?=__('Search options', 'product-editor')?></h2>
   <form method="get">
     <input type="hidden" name="post_type" value="product" />
     <input type="hidden" name="page" value="product-editor" />
     <div class="form-group">
-      <label>Количество элементов на странице:</label>&nbsp;<input type="number" min="1" max="1000" name="limit" value="<?=General_Helper::getVar('limit', 10)?>">
-      &nbsp;&nbsp;<label><input type="checkbox" value="1" name="show_variations" <?= $show_variations == 1 ? 'checked' : ''?>>Показывать вариации</label>
+      <label><?=__('Number of items per page:', 'product-editor')?></label>&nbsp;<input type="number" min="1" max="1000" name="limit" value="<?=General_Helper::getVar('limit', 10)?>">
+      &nbsp;&nbsp;<label><input type="checkbox" value="1" name="show_variations" <?= $show_variations == 1 ? 'checked' : ''?>><?=__('Show variations', 'product-editor')?></label>
     </div>
     <div class="form-group">
 
     </div>
     <div class="form-group">
-    <label>Категория:&nbsp;
+    <label><?=__('Category:', 'product-editor')?>&nbsp;
       <select name="product_cat">
-        <option value="">Все</option>
+        <option value=""><?=__('All', 'product-editor')?></option>
         <?php
         foreach ($product_categories as $category) {
           echo '<option value="'.$category->slug.'" '
@@ -67,9 +67,9 @@
         </select>
     </label>
     &nbsp;&nbsp;
-    <label>Название:&nbsp;<input type="search" name="s" value="<?= General_Helper::getVar('s', '')?>"/></label>
+    <label><?=__('Name:', 'product-editor')?>&nbsp;<input type="search" name="s" value="<?= General_Helper::getVar('s', '')?>"/></label>
     </div>
-    <input type="submit" value="Поиск" class="button">
+    <input type="submit" value="<?=__('Search', 'product-editor')?>" class="button">
   </form>
 
   </fieldset>
@@ -79,39 +79,34 @@
     <input type="hidden" name="action" value="bulk_changes">
     <input type="hidden" name="nonce" value="<?= wp_create_nonce( 'pe_bulk_changes' )?>">
     <fieldset>
-      <h2>Массовое изменение</h2>
+      <h2><?=__('Bulk change', 'product-editor')?></h2>
       <div class="info-box">
-        Вычисляемая цена - цена которою увидит пользователь.<br/>
-        Вариативные товары не имеют собственной цены и цены расспродажи.<br/>
-        Чтобы изменить цену у вариативных товаров, изменяйте цену у её вариаций.<br/>
-        Галочку "Товар по акции" можно поставить только на основной товар.<br/>
-        Цена расспродажи не может быть выше обычной цены, если задаётся цена выше,
-        то расспродажа отменяется.
+        <?=__('Basic concepts help', 'product-editor')?>
       </div>
       <div class="form-group">
         <label>
-          <span class="title">Цена:</span>&nbsp;
+          <span class="title"><?=__('Price:', 'product-editor')?></span>&nbsp;
 					<select class="change_regular_price change_to" name="change_regular_price">
-						<option value="">— Без изменений —</option>
-            <option value="1">Изменить на:</option>
-            <option value="2">Увеличить существующие цены на (фиксированную величину или %):</option>
-            <option value="3">Уменьшить базовую цену на (фиксированное значение или %):</option>
+						<option value=""><?=__('— No change —', 'product-editor')?></option>
+            <option value="1"><?=__('Change to:', 'product-editor')?></option>
+            <option value="2"><?=__('Increase existing price by (fixed amount or %):', 'product-editor')?></option>
+            <option value="3"><?=__('Decrease existing price by (fixed amount or %):', 'product-editor')?></option>
           </select>
         </label>
-        <input type="text" name="_regular_price" pattern="^[0-9 ]*%?₽?$">
+        <input type="text" name="_regular_price" pattern="^[0-9 ]*%?\w{0,3}\s*$">
       </div>
       <div class="form-group">
         <label>
-          <span class="title">Цена расспродажи:</span>&nbsp;
+          <span class="title"><?=__('Sale price:', 'product-editor')?></span>&nbsp;
           <select class="change_sale_price change_to" name="change_sale_price">
-            <option value="">— Без изменений —</option>
-            <option value="1">Изменить на:</option>
-            <option value="2">Увеличить текущую цену на (фиксированную сумму или %):</option>
-            <option value="3">Уменьшить текущую цену на (фиксированную сумму или %):</option>
-            <option value="4">Задать на уровне обычной цены, пониженной на (фиксированную сумму или %):</option>
+            <option value=""><?=__('— No change —', 'product-editor')?></option>
+            <option value="1"><?=__('Change to:', 'product-editor')?></option>
+            <option value="2"><?=__('Increase existing sale price by (fixed amount or %):', 'product-editor')?></option>
+            <option value="3"><?=__('Decrease existing sale price by (fixed amount or %):', 'product-editor')?></option>
+            <option value="4"><?=__('Set to regular price decreased by (fixed amount or %):', 'product-editor')?></option>
           </select>
         </label>
-        <input type="text" name="_sale_price" pattern="^[0-9 ]*%?₽?$">
+        <input type="text" name="_sale_price" pattern="^[0-9 ]*%?\w{0,3}\s*$">
       </div>
       <div class="form-group">
         <label>
@@ -127,10 +122,10 @@
 
       <br>
       <div class="form-group">
-        <input type="submit" class="button" value="Изменить выбранное">&nbsp;&nbsp;
+        <input type="submit" class="button" value="<?=__('Change Selected', 'product-editor')?>">&nbsp;&nbsp;
         <a href="javascript://" class="do_reverse"
           <?= !empty($_SESSION['reverse_steps']) ? '':'style="display: none;"'?>
-        >Отменить последнее изменение</a>
+        ><?=__('Undo the last change', 'product-editor')?></a>
 
       </div>
     </fieldset>
@@ -154,8 +149,8 @@
     }
     ?>
     <ul class="subsubsub">
-      <li><b>Всего найдено: <?= $total?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-      <li><b>Записей на странице: <?= $num_on_page ?></b></li>
+      <li><b><?=__('Total found:', 'product-editor')?> <?= $total?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+      <li><b><?=__('Items per page:', 'product-editor')?> <?= $num_on_page ?></b></li>
     </ul>
     <div class="tablenav-pages"><?= $page_links ?></div>
   </div>
@@ -164,31 +159,31 @@
     <thead>
     <tr>
       <td class="check-column-t">
-        Основные<input class="cb-pr-all" type="checkbox">
+        <?=__('Base', 'product-editor')?><br/><input class="cb-pr-all" type="checkbox">
       </td>
       <td class="check-column-t">
-        Вариации<input class="cb-vr-all" type="checkbox">
+        <?=__('Variations', 'product-editor')?><br/><input class="cb-vr-all" type="checkbox">
       </td>
       <th scope="col" class="manage-column col-id">
         <span>ID</span>
       </th>
       <th scope="col" class="manage-column">
-        <span>Название</span>
+        <span><?=__('Name', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column col-status">
-        <span>Статус</span>
+        <span><?=__('Status', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column">
-        <span>Тип</span>
+        <span><?=__('Type', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column">
-        <span>Вычисляемая цена</span>
+        <span><?=__('Displayed price', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column">
-        <span>Цена</span>
+        <span><?=__('Regular price', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column">
-        <span>Цена расспродажи</span>
+        <span><?=__('Sale price', 'product-editor')?></span>
       </th>
       <th scope="col" class="manage-column">
         <span>Товар по акции</span>

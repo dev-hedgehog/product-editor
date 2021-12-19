@@ -94,7 +94,7 @@ class Product_Editor_Admin {
     if (!current_user_can('manage_woocommerce')) {
       return;
     }
-    add_submenu_page('edit.php?post_type=product', 'Редактор продуктов', 'Редактор продуктов',
+    add_submenu_page('edit.php?post_type=product', __('Product Editor', 'product-editor'), __('Product Editor', 'product-editor'),
       'manage_options', 'product-editor', [$this, 'main_page']);
     add_submenu_page('edit.php?post_type=product', 'Fix attrs', 'Fix attributes',
       'manage_options', 'product-editor-fix-variations', [$this, 'sub_page']);
@@ -182,7 +182,7 @@ class Product_Editor_Admin {
 	public function action_reverse_products_data() {
     self::securityCheck(true, true);
 	  if (empty($_SESSION['reverse_steps'])) {
-      self::sendResponse(['message' => 'Нет данных для востановления'], 409);
+      self::sendResponse(['message' => __('No data to recover', 'product-editor')], 409);
     }
     global $wpdb;
 	  $products = [];
@@ -229,7 +229,7 @@ class Product_Editor_Admin {
       }
     }
     if ($isEmpty || empty($ids)) {
-      self::sendResponse(['message' => 'Нечего изменять', 'content'=>[]]);
+      self::sendResponse(['message' => __('Nothing to change', 'product-editor'), 'content'=>[]]);
     }
 
     global $wpdb;
@@ -239,7 +239,10 @@ class Product_Editor_Admin {
       $id = sanitize_key($id);
       $product = wc_get_product($id);
       if (!$product) {
-        self::sendResponse(['message' => 'Продукт с id:'.$id.' не найден. Операции отменены.'], 500);
+        self::sendResponse(
+          ['message' => sprintf(__('Product with id:%s not found. Operations canceled.', 'product-editor'), $id)],
+          500
+        );
       }
       $this->process_change_product($product);
     }
@@ -261,7 +264,7 @@ class Product_Editor_Admin {
     $_SESSION['reverse_steps'] = $this->reverse_steps;
     // reload products data
     self::sendResponse([
-      'message' => 'Применено операций: '.sizeof($this->reverse_steps),
+      'message' => sprintf(__('Operations applied: %s', 'product-editor'), sizeof($this->reverse_steps)),
       'content' => self::response_data_for_ids($ids),
       'reverse' => !empty($this->reverse_steps)
     ]);
@@ -385,7 +388,10 @@ class Product_Editor_Admin {
     }
     if ($new_regular_price <= 0 || $new_regular_price == '') {
       self::sendResponse(
-        ['message' => 'Для продукта '.$product->get_name().' вычислена недопустимая цена: "'.$new_regular_price.'". Операции отменены.'],409);
+        ['message' =>
+          sprintf(__('Invalid price computed for product "%1$s": "%2$s". Operations canceled.', 'product-editor'),
+            $product->get_name(), $new_regular_price)
+        ],409);
     }
     $product->set_regular_price($new_regular_price);
   }
@@ -398,13 +404,13 @@ class Product_Editor_Admin {
   private static function securityCheck($check_read = true, $check_change = false) {
     if ($check_read) {
       if (!current_user_can('manage_woocommerce')) {
-        self::sendResponse(['message' => 'У вас нет прав на редактирование товаров'], 403);
+        self::sendResponse(['message' => __('You do not have permission to edit products', 'product-editor')], 403);
       }
     }
     if ($check_change) {
       if (!wp_verify_nonce(General_Helper::postVar('nonce'), 'pe_changes' ) ) {
-        self::sendResponse(['message' => 'Некорректный авторизационный ключ. Обновите страницу.'], 401);
-      }
+        self::sendResponse(['message' => __('Incorrect authorization key. Refresh the page.', 'product-editor')], 401);
+      }//check_admin_referer
     }
   }
 }

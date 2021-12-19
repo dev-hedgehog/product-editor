@@ -22,7 +22,7 @@ foreach ($products as $product) {
     <td><?=$product->get_id()?></td>
     <td><?=$product->get_name()?></td>
     <td><?=$product->get_status()?></td>
-    <td><?= $isVariable ? 'Вариативный' : 'Простой'?></td>
+    <td><?= $isVariable ? __('Variable', 'product-editor') : __('Simple', 'product-editor')?></td>
     <td class="td-price"><?= $product->get_price_html()?></td>
     <td class="td-regular-price <?= $isVariable ? '' : 'editable'?>"><?=$product->get_regular_price('edit')?></td>
     <td class="td-sale-price <?= $isVariable ? '' : 'editable'?>"><?=$product->get_sale_price('edit')?></td>

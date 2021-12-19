@@ -1,0 +1,252 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Product Editor\n"
+"POT-Creation-Date: 2021-12-20 00:12+0500\n"
+"PO-Revision-Date: 2021-12-20 00:14+0500\n"
+"Last-Translator: \n"
+"Language-Team: dev.hedgehog.core@gmail.com\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: admin/class-product-editor-admin.php:97
+#: admin/partials/product-editor-admin-display.php:39
+msgid "Product Editor"
+msgstr "Редактор продуктов"
+
+#: admin/class-product-editor-admin.php:185
+msgid "No data to recover"
+msgstr "Нет данных для восстановления"
+
+#: admin/class-product-editor-admin.php:232
+msgid "Nothing to change"
+msgstr "Нечего изменять"
+
+#: admin/class-product-editor-admin.php:243
+#, php-format
+msgid "Product with id:%s not found. Operations canceled."
+msgstr "Продукт с id:%s не найден. Операции отменены."
+
+#: admin/class-product-editor-admin.php:267
+#, php-format
+msgid "Operations applied: %s"
+msgstr "Применено операций: %s"
+
+#: admin/class-product-editor-admin.php:392
+#, php-format
+msgid ""
+"Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
+msgstr ""
+"Для продукта \"%1$s\" вычислена недопустимая цена: \"%2$s\". Операции "
+"отменены."
+
+#: admin/class-product-editor-admin.php:407
+msgid "You do not have permission to edit products"
+msgstr "У вас нет прав на редактирование товаров"
+
+#: admin/class-product-editor-admin.php:412
+msgid "Incorrect authorization key. Refresh the page."
+msgstr "Некорректный авторизационный ключ. Обновите страницу."
+
+#: admin/partials/product-editor-admin-display.php:30
+msgid "Save"
+msgstr "Сохранить"
+
+#: admin/partials/product-editor-admin-display.php:31
+msgid "Cancel"
+msgstr "Отменить"
+
+#: admin/partials/product-editor-admin-display.php:45
+msgid "Search options"
+msgstr "Параметры поиска"
+
+#: admin/partials/product-editor-admin-display.php:50
+msgid "Number of items per page:"
+msgstr "Количество элементов на странице:"
+
+#: admin/partials/product-editor-admin-display.php:51
+msgid "Show variations"
+msgstr "Показывать вариации"
+
+#: admin/partials/product-editor-admin-display.php:57
+msgid "Category:"
+msgstr "Категория:"
+
+#: admin/partials/product-editor-admin-display.php:59
+msgid "All"
+msgstr "Все"
+
+#: admin/partials/product-editor-admin-display.php:70
+msgid "Name:"
+msgstr "Название:"
+
+#: admin/partials/product-editor-admin-display.php:72
+msgid "Search"
+msgstr "Поиск"
+
+#: admin/partials/product-editor-admin-display.php:82
+msgid "Bulk change"
+msgstr "Массовое изменение"
+
+#: admin/partials/product-editor-admin-display.php:84
+msgid "Basic concepts help"
+msgstr ""
+"Отображаемая цена - цена как её видит пользователь.<br/>\n"
+"Вариативный товар состоит из основного товара и его дочерних вариаций.<br/>\n"
+"Основа вариативного товара не имеет цены и цены распродажи<br/>\n"
+"Чтобы изменить цену у вариативных товаров, изменяйте цену у её вариаций.<br/"
+">\n"
+"Чекбоксы \"Основные\" - отвечают за выделение простых товаров и основ "
+"вариативных товаров.<br/>\n"
+"Чекбоксы \"Вариации\" - отвечают за выделение вариаций у вариативных товаров."
+"<br/>\n"
+"Цена распродажи не может быть выше обычной цены, если задаётся цена выше, то "
+"распродажа отменяется.<br/>\n"
+"Галочку \"Товар по акции\" можно поставить только на основной товар"
+
+#: admin/partials/product-editor-admin-display.php:88
+msgid "Price:"
+msgstr "Цена:"
+
+#: admin/partials/product-editor-admin-display.php:90
+#: admin/partials/product-editor-admin-display.php:102
+msgid "— No change —"
+msgstr "— Без изменений —"
+
+#: admin/partials/product-editor-admin-display.php:91
+#: admin/partials/product-editor-admin-display.php:103
+msgid "Change to:"
+msgstr "Установить на:"
+
+#: admin/partials/product-editor-admin-display.php:92
+msgid "Increase existing price by (fixed amount or %):"
+msgstr "Увеличить существующие цены на (фиксированную величину или %):"
+
+#: admin/partials/product-editor-admin-display.php:93
+msgid "Decrease existing price by (fixed amount or %):"
+msgstr "Уменьшить существующие цены на (фиксированное значение или %):"
+
+#: admin/partials/product-editor-admin-display.php:100
+msgid "Sale price:"
+msgstr "Цена распродажи:"
+
+#: admin/partials/product-editor-admin-display.php:104
+msgid "Increase existing sale price by (fixed amount or %):"
+msgstr "Увеличить текущую цену распродажи на (фиксированную сумму или %):"
+
+#: admin/partials/product-editor-admin-display.php:105
+msgid "Decrease existing sale price by (fixed amount or %):"
+msgstr "Уменьшить текущую цену распродажи на (фиксированную сумму или %):"
+
+#: admin/partials/product-editor-admin-display.php:106
+msgid "Set to regular price decreased by (fixed amount or %):"
+msgstr ""
+"Задать цену распродажи на уровне обычной цены, пониженной на (фиксированную "
+"сумму или %):"
+
+#: admin/partials/product-editor-admin-display.php:125
+msgid "Change Selected"
+msgstr "Изменить выбранное"
+
+#: admin/partials/product-editor-admin-display.php:128
+msgid "Undo the last change"
+msgstr "Отменить последнее изменение"
+
+#: admin/partials/product-editor-admin-display.php:139
+msgid "&laquo;"
+msgstr ""
+
+#: admin/partials/product-editor-admin-display.php:140
+msgid "&raquo;"
+msgstr ""
+
+#: admin/partials/product-editor-admin-display.php:152
+msgid "Total found:"
+msgstr "Всего найдено:"
+
+#: admin/partials/product-editor-admin-display.php:153
+msgid "Items per page:"
+msgstr "Записей на странице:"
+
+#: admin/partials/product-editor-admin-display.php:162
+msgid "Base"
+msgstr "Основные"
+
+#: admin/partials/product-editor-admin-display.php:165
+msgid "Variations"
+msgstr "Вариации"
+
+#: admin/partials/product-editor-admin-display.php:171
+msgid "Name"
+msgstr "Название"
+
+#: admin/partials/product-editor-admin-display.php:174
+msgid "Status"
+msgstr "Статус"
+
+#: admin/partials/product-editor-admin-display.php:177
+msgid "Type"
+msgstr "Тип"
+
+#: admin/partials/product-editor-admin-display.php:180
+msgid "Displayed price"
+msgstr "Отображаемая цена"
+
+#: admin/partials/product-editor-admin-display.php:183
+msgid "Regular price"
+msgstr "Цена"
+
+#: admin/partials/product-editor-admin-display.php:186
+msgid "Sale price"
+msgstr "Цена распродажи"
+
+#: admin/partials/product-editor-admin-table-rows.php:25
+msgid "Variable"
+msgstr "Вариативный"
+
+#: admin/partials/product-editor-admin-table-rows.php:25
+msgid "Simple"
+msgstr "Простой"
+
+#: admin/partials/product-editor-admin-table-variations-rows.php:27
+msgid "Variation:"
+msgstr "Вариация:"
+
+#~ msgid ""
+#~ "\"Displayed price\" is the price as the user sees it. <br/>\n"
+#~ "A variable product consists of a base product and its child variations. "
+#~ "<br/>\n"
+#~ "Variable product base has no price or sale price. <br/>\n"
+#~ "To change the price of variable products, change the price of its "
+#~ "variations. <br/>\n"
+#~ "Checkboxes \"Base\" - are responsible for selecting simple products and "
+#~ "the basics of variable products. <br/>\n"
+#~ "Checkboxes \"Variations\" - are responsible for selecting variations in "
+#~ "variable products. <br/>\n"
+#~ "The sale price cannot be higher than the regular price, if a higher price "
+#~ "is set, the sale is canceled."
+#~ msgstr ""
+#~ "Отображаемая цена - цена как её видит пользователь.<br/>\n"
+#~ "Вариативный товар состоит из основного товара и его дочерних вариаций.<br/"
+#~ ">\n"
+#~ "Основа вариативного товара не имеет цены и цены распродажи<br/>\n"
+#~ "Чтобы изменить цену у вариативных товаров, изменяйте цену у её вариаций."
+#~ "<br/>\n"
+#~ "Чекбоксы \"Основные\" - отвечают за выделение простых товаров и основ "
+#~ "вариативных товаров.<br/>\n"
+#~ "Чекбоксы \"Вариации\" - отвечают за выделение вариаций у вариативных "
+#~ "товаров.<br/>\n"
+#~ "Цена распродажи не может быть выше обычной цены, если задаётся цена выше, "
+#~ "то распродажа отменяется.<br/>\n"
+#~ "Галочку \"Товар по акции\" можно поставить только на основной товар."
+
+#~ msgid "Title:"
+#~ msgstr "Название:"
