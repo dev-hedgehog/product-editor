@@ -12,6 +12,7 @@
 $variation_ids = $product->get_children();
 foreach ( $variation_ids as $variation_id ) {
   $var = wc_get_product( $variation_id );
+  // create a string with attributes for the variation
   $at = wc_get_product_variation_attributes($variation_id);
   $var_atts = '';
   array_walk($at, function($val, $ind) use (&$var_atts) {

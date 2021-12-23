@@ -12,11 +12,11 @@
  * @subpackage Product_Editor/admin/partials
  */
 
-/** @var int $show_variations */
-/** @var int $total */
-/** @var int $num_on_page */
-/** @var int $num_of_pages */
-/** @var WP_Term[] $product_categories */
+/** @var int $show_variations Should show variations in variable products */
+/** @var int $total count of base products */
+/** @var int $num_on_page count products on page */
+/** @var int $num_of_pages count of pages */
+/** @var WP_Term[] $product_categories categories */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
 
 ?>
@@ -155,7 +155,7 @@
     <div class="tablenav-pages"><?= $page_links ?></div>
   </div>
 
-  <table class="wp-list-table widefat fixed striped table-view-list">
+  <table class="pe-product-table wp-list-table widefat fixed striped table-view-list">
     <thead>
     <tr>
       <td class="check-column-t">

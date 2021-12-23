@@ -83,13 +83,22 @@ class Product_Editor_Admin {
 
 	}
 
+  /**
+   * Create session if doesn't exists
+   *
+   * @since    1.0.0
+   */
 	public function start_session() {
     if(!session_id()) {
       session_start();
     }
   }
 
-
+  /**
+   * Adds menu items
+   *
+   * @since    1.0.0
+   */
 	public function admin_menu() {
     if (!current_user_can('manage_woocommerce')) {
       return;
@@ -143,11 +152,17 @@ class Product_Editor_Admin {
     print_r($bad_terms);
   }
 
+  /**
+   * Home page handler in admin area
+   *
+   * @since    1.0.0
+   */
   public function main_page() {
     self::securityCheck(true);
     global $wpdb;
     global $wp_query;
 
+    // We get products that match the passed parameters
     $args = [
       'paginate' => true,
        'type' => ['simple','variable']
@@ -157,12 +172,13 @@ class Product_Editor_Admin {
     General_Helper::getVar('product_cat', false) && $args['category'] = [sanitize_title_for_query(General_Helper::getVar('product_cat'))];
     General_Helper::getVar('s', false) && $args['name'] = sanitize_title_for_query(General_Helper::getVar('s'));
     $results = wc_get_products($args);
+    // if the search for an exact match of the name did not give any results, we are looking for an inaccurate
     if ($results->total === 0 && $args['name']) {
       $args['s'] = $args['name'];
       unset($args['name']);
       $results = wc_get_products($args);
     }
-    // vars for template
+    // variables for template
     $total = $results->total;
     $num_of_pages = $results->max_num_pages;
     $products = $results->products;
@@ -173,12 +189,22 @@ class Product_Editor_Admin {
     include ('partials/product-editor-admin-display.php');
   }
 
+  /**
+   * An array of mappings of action requests and functions that perform them
+   *
+   * @var string[]
+   */
   public static $changeActions = [
     'change_regular_price' => 'change_regular_price',
     'change_sale_price' => 'change_sale_price',
     'change_akciya'  => 'change_akciya',
   ];
 
+  /**
+   * The handler that implements the rollback of the last change
+   *
+   * @since    1.0.0
+   */
 	public function action_reverse_products_data() {
     self::securityCheck(true, true);
 	  if (empty($_SESSION['reverse_steps'])) {
@@ -187,6 +213,7 @@ class Product_Editor_Admin {
     global $wpdb;
 	  $products = [];
     $wpdb->query("START TRANSACTION");
+    // each record contains information on changing one attribute of the product
 	  foreach ($_SESSION['reverse_steps'] as $record) {
 	    if (!empty($products[$record['id']])) {
         $product = $products[$record['id']];
@@ -210,6 +237,11 @@ class Product_Editor_Admin {
     self::sendResponse('ok', 200, 'raw');
   }
 
+  /**
+   * The handler that returns (HTML) variations of a variable product. $_GET['id'] - variable product id
+   *
+   * @since    1.0.0
+   */
 	public function action_expand_product_variable() {
     self::securityCheck(true);
     if (!($id = sanitize_key(General_Helper::getVar('id'))) || !($product = wc_get_product($id)) || !is_a($product, 'WC_Product_Variable')) {
@@ -219,8 +251,14 @@ class Product_Editor_Admin {
     self::sendResponse(include ('partials/product-editor-admin-table-variations-rows.php'), 200, 'raw');
 	}
 
+  /**
+   * Product Change Request Handler
+   *
+   * @since    1.0.0
+   */
   public function action_bulk_changes() {
     self::securityCheck(true, true);
+    // check input data
     $isEmpty = true;
     $ids = (array)General_Helper::postVar('ids');
     foreach (self::$changeActions as $action_name => $func_name) {
@@ -233,8 +271,10 @@ class Product_Editor_Admin {
     }
 
     global $wpdb;
+    // the request must be applied in full or not at all
     $wpdb->query("START TRANSACTION");
 
+    // walk through each product and apply the requested operations
     foreach ($ids as $id) {
       $id = sanitize_key($id);
       $product = wc_get_product($id);
@@ -246,6 +286,7 @@ class Product_Editor_Admin {
       }
       $this->process_change_product($product);
     }
+    // if changes were made, save the previous values to the database
     if ($this->reverse_steps) {
       $table_name = $wpdb->prefix . REVERSE_TABLE;
       $wpdb->insert(
@@ -262,7 +303,8 @@ class Product_Editor_Admin {
       $this->reverse_steps = [];
     }
     $_SESSION['reverse_steps'] = $this->reverse_steps;
-    // reload products data
+
+    // response new products data
     self::sendResponse([
       'message' => sprintf(__('Operations applied: %s', 'product-editor'), sizeof($this->reverse_steps)),
       'content' => self::response_data_for_ids($ids),
@@ -270,21 +312,38 @@ class Product_Editor_Admin {
     ]);
   }
 
+  /**
+   * @param $product
+   *
+   * Applies the requested change operations to the product
+   *
+   * @since   1.0.0
+   */
   private function process_change_product($product) {
+    // self::$changeActions - an array of mappings of action requests and functions that perform them
     foreach (self::$changeActions as $action_name => $func_name) {
       if (General_Helper::postVar($action_name)) {
         $this->$func_name($product);
       }
     }
+    // save model after all changes
     $product->save();
   }
 
+  /**
+   * Creates an array of data for the frontend for the specified product ids
+   *
+   * @param $ids
+   * @return array
+   *
+   * @since    1.0.0
+   */
   private static function response_data_for_ids($ids) {
     $response_data = [];
     $extra_ids = [];
     foreach ($ids as $id) {
       $product = wc_get_product($id);
-
+      // for variations, we also add their parent product to the output list, if it is not already added or is not in ids list
       if (is_a($product, 'WC_Product_Variation') && !in_array($product->get_parent_id(), $ids) && !in_array($product->get_parent_id(), $extra_ids)) {
         $extra_ids[] = $product->get_parent_id();
         $response_data[] = self::response_data_for_product(wc_get_product($product->get_parent_id()));
@@ -295,6 +354,14 @@ class Product_Editor_Admin {
     return $response_data;
   }
 
+  /**
+   * Creates a frontend dataset for a specific product
+   *
+   * @param $product
+   * @return array
+   *
+   * @since    1.0.0
+   */
   private static function response_data_for_product($product) {
     return [
       'id' => $product->get_id(),
@@ -304,6 +371,7 @@ class Product_Editor_Admin {
       'akciya' => is_a($product, 'WC_Product_Variation') ? '' : (!$product->get_meta('sale')? 'Нет': 'Да'),
     ];
   }
+
 
   private function change_akciya($product) {
     $action = General_Helper::postVar('change_akciya');
@@ -322,12 +390,21 @@ class Product_Editor_Admin {
     }
   }
 
+  /**
+   * Handler function for the action to change a sale price. Data for the operation is taken from POST request
+   * The handler is registered with self::$changeActions
+   *
+   * @param $product
+   *
+   * @since    1.0.0
+   */
   private function change_sale_price($product) {
     $arg_sale_price = trim(General_Helper::postVar('_sale_price', 0));
     $action = General_Helper::postVar('change_sale_price');
     if (empty($action)) {
       return;
     }
+    // Save the value before the changes, to be able to roll back the changes
     $this->reverse_steps[] = [
       'id' => $product->get_id(),
       'action' => 'change_sale_price',
@@ -341,15 +418,19 @@ class Product_Editor_Admin {
     $number = (float) wc_format_decimal($arg_sale_price);
     switch ((int)$action) {
       case 1:
+        // Change to
         $new_sale_price = $number;
         break;
       case 2:
+        // Increase existing sale price by (fixed amount or %)
         $new_sale_price = $old_sale_price + ($isPercentage ? $old_sale_price/100*$number : $number);
         break;
       case 3:
+        // Decrease existing sale price by (fixed amount or %)
         $new_sale_price = $old_sale_price - ($isPercentage ? $old_sale_price/100*$number : $number);
         break;
       case 4:
+        // Set to regular price decreased by (fixed amount or %)
         $new_sale_price = $regular_price - ($isPercentage ? $regular_price/100*$number : $number);
         break;
     }
@@ -359,12 +440,21 @@ class Product_Editor_Admin {
     $product->set_sale_price($new_sale_price);
   }
 
+  /**
+   * Handler function for the action to change a regular price. Data for the operation is taken from POST request
+   * The handler is registered with self::$changeActions
+   *
+   * @param $product
+   *
+   * @since    1.0.0
+   */
   private function change_regular_price($product) {
     $arg_regular_price = trim(General_Helper::postVar('_regular_price'));
     $action = General_Helper::postVar('change_regular_price');
     if (empty($action)) {
       return;
     }
+    // Save the value before the changes, to be able to roll back the changes
     $this->reverse_steps[] = [
       'id' => $product->get_id(),
       'action' => 'change_regular_price',
@@ -377,12 +467,15 @@ class Product_Editor_Admin {
     $number = (float) wc_format_decimal($arg_regular_price);
     switch ((int)$action) {
       case 1:
+        // Change to
         $new_regular_price = $number;
         break;
       case 2:
+        // Increase existing price by (fixed amount or %)
         $new_regular_price = $old_regular_price + ($isPercentage ? $old_regular_price/100*$number : $number);
         break;
       case 3:
+        // Decrease existing price by (fixed amount or %)
         $new_regular_price = $old_regular_price - ($isPercentage ? $old_regular_price/100*$number : $number);
         break;
     }
@@ -396,11 +489,28 @@ class Product_Editor_Admin {
     $product->set_regular_price($new_regular_price);
   }
 
+  /**
+   * Common function for send response
+   *
+   * @param array $body
+   * @param int $code
+   * @param string $format
+   *
+   * @since    1.0.0
+   */
   private static function sendResponse($body = [], $code = 200, $format='json') {
     status_header($code);
     exit($format=='json'? json_encode($body) : $body);
   }
 
+  /**
+   * Guard helper
+   *
+   * @param bool $check_read
+   * @param false $check_change
+   *
+   * @since    1.0.0
+   */
   private static function securityCheck($check_read = true, $check_change = false) {
     if ($check_read) {
       if (!current_user_can('manage_woocommerce')) {
@@ -410,7 +520,7 @@ class Product_Editor_Admin {
     if ($check_change) {
       if (!wp_verify_nonce(General_Helper::postVar('nonce'), 'pe_changes' ) ) {
         self::sendResponse(['message' => __('Incorrect authorization key. Refresh the page.', 'product-editor')], 401);
-      }//check_admin_referer
+      }
     }
   }
 }

@@ -4,6 +4,7 @@
 	let isRequested = false;
 
 	$(function() {
+		// submit handler for bulk changes form
 		$('#bulk-changes').submit(function (e) {
 			e.preventDefault();
 
@@ -29,7 +30,7 @@
 				if (response.ok) {
 					return response.json();
 				}
-				//response.text().then(text => { throw new Error(text) })
+
 				return Promise.reject(response);
 			}).then(function (data) {
 				console.log(data);
@@ -91,7 +92,7 @@
 				$('.cb-vr,.cb-vr-all-parent').prop('checked', false);
 			}
 		});
-		$('table.widefat').on('change', '.cb-vr-all-parent', function () {
+		$('table.pe-product-table').on('change', '.cb-vr-all-parent', function () {
 			let parent_id = $(this).data('id');
 			if (this.checked) {
 				$('.cb-vr[data-parent="'+parent_id+'"]').prop('checked', true);
@@ -100,12 +101,12 @@
 			}
 			$('.cb-vr-all').prop('checked',check_checkboxes('.cb-vr, .cb-vr-all-parent'));
 		});
-		$('table.widefat').on('click','.cb-vr', function () {
+		$('table.pe-product-table').on('click','.cb-vr', function () {
 			let parent_id = $(this).data('parent');
 			$('.cb-vr-all-parent[data-id="'+parent_id+'"]').prop('checked', check_checkboxes('.cb-vr[data-parent="'+parent_id+'"]'));
 			$('.cb-vr-all').prop('checked', check_checkboxes('.cb-vr, .cb-vr-all-parent'));
 		});
-		$('table.widefat').on('click','.cb-pr', function () {
+		$('table.pe-product-table').on('click','.cb-pr', function () {
 			if (!this.checked) {
 				$('.cb-pr-all').prop('checked',false);
 			} else {
@@ -114,7 +115,8 @@
 		});
 		/** End applying checkboxes */
 
-		$('table.widefat').on('click', '.editable', function (e) {
+		// Handler for clicking on a table cell available for editing
+		$('table.pe-product-table').on('click', '.editable', function (e) {
 			if ($(this).find('form').length)
 				return;
 			discardEditBoxes();
@@ -146,7 +148,8 @@
 		});
 
 
-		$('table.widefat').on('click', '.lbl-toggle', function (e) {
+		// Handler for toggle variations of a variable product
+		$('table.pe-product-table').on('click', '.lbl-toggle', function (e) {
 			if (isRequested) return;
 			let $sib_input = $(this).siblings('input'),
 				id = $sib_input.data('id');
@@ -174,6 +177,7 @@
 			}
 		});
 
+		// Handler for rollback of the last change
 		$('.do_reverse').click(function () {
 			if (isRequested) return;
 			isRequested = true;
@@ -195,6 +199,7 @@
 
 	});
 
+	// Common function for getting error (ajax jquery)
 	function $getTextError (error) {
 		try {
 			return (JSON.parse(error.responseText)).message;
@@ -203,17 +208,19 @@
 		}
 	}
 
+	// When press Escape - close inline edit boxes
 	$(document).keyup(function(e) {
 		if (e.key === "Escape") {
 			discardEditBoxes();
 		}
 	});
 
-
+	// Close inline edit boxes
 	function discardEditBoxes() {
 		$('table .pe-edit-box').each((i, el)=> $(el).parents('td').html($(el).data('old_value')))
 	}
 
+	// Show popup message
 	function showInfo(message) {
 		let $box = $('.ajax-info');
 		$box.children('.inner').html(message);
@@ -221,10 +228,13 @@
 			.delay(1300)
 			.fadeOut(1000);
 	}
+
+	// Hide popup message
 	function hideInfo() {
 		$('.ajax-info').hide();
 	}
 
+	// Submit handler for inline edit form
 	function onSubmitSingleValue(e) {
 		e.preventDefault();
 

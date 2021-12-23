@@ -7,7 +7,7 @@
  * @subpackage Product_Editor/admin/partials
  */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
-/** @var int $show_variations */
+/** @var int $show_variations Should show variations in variable products */
 
 foreach ($products as $product) {
   $isVariable = is_a($product, 'WC_Product_Variable');

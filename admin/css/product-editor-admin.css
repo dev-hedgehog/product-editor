@@ -8,39 +8,39 @@
 .product-editor .tablenav-pages .current {
     font-size: 16px;
 }
-.product-editor .widefat tr {
+.product-editor .pe-product-table tr {
     height: 60px;
 }
-.product-editor .widefat tbody tr:hover {
+.product-editor .pe-product-table tbody tr:hover {
     background: #effbee!important;
 }
 
-.product-editor .widefat .check-column-t {
+.product-editor .pe-product-table .check-column-t {
     width: 5em;
     text-align: center;
     padding: 2px;
 }
-.product-editor .widefat .col-id,
-.product-editor .widefat .col-status {
+.product-editor .pe-product-table .col-id,
+.product-editor .pe-product-table .col-status {
     width: 4em;
 }
-.product-editor .widefat td {
+.product-editor .pe-product-table td {
     border-bottom: 1px solid #adc1ff;
 }
 
-.product-editor .widefat .editable {
+.product-editor .pe-product-table .editable {
     border: 1px dashed #b5c1fd;
     cursor: pointer;
 }
 
-.product-editor .widefat .editable .button {
+.product-editor .pe-product-table .editable .button {
     margin-top: 2px;
 }
-.product-editor .widefat input[type="checkbox"] {
+.product-editor .pe-product-table input[type="checkbox"] {
     margin: 0;
 }
-.product-editor .widefat tr > :nth-child(1),
-.product-editor .widefat tr > :nth-child(2) {
+.product-editor .pe-product-table tr > :nth-child(1),
+.product-editor .pe-product-table tr > :nth-child(2) {
     text-align: center;
 }
 

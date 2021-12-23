@@ -12,13 +12,24 @@
 
 class General_Helper {
 
+  /**
+   * Returns the GET value by a key
+   * @param $key
+   * @param string $default
+   * @return mixed|string
+   */
   static public function getVar( $key, $default = '' ) {
     $value = filter_input( INPUT_GET, $key );
     return $value ? $value : $default;
   }
 
+  /**
+   * Returns the POST value by a key
+   * @param $key
+   * @param string $default
+   * @return mixed|string
+   */
   static public function postVar( $key, $default = '' ) {
-    //$value = filter_input( INPUT_POST, $key, FILTER_DEFAULT , FILTER_REQUIRE_ARRAY );
     $value = null;
     isset($_POST[$key]) && $value = $_POST[$key];
     return $value ? $value : $default;
