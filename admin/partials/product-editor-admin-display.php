@@ -51,8 +51,8 @@
 							 min="1"
 							 max="1000"
 							 name="limit"
-							 value="<?php echo esc_attr( General_Helper::get_var( 'limit', 10 ) ); ?>
-				">
+							 value="<?php echo esc_attr( General_Helper::get_var( 'limit', 10 ) ); ?>"
+				>
 				&nbsp;&nbsp;<label><input type="checkbox" value="1"
 																	name="show_variations"
 									<?php echo 1 == $show_variations ? 'checked' : ''; ?>><?php esc_html_e( 'Show variations', 'product-editor' ); ?>
