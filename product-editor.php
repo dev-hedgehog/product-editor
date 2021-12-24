@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link              https://github.com/dev-hedgehog/product-editor
  * @since             1.0.0
@@ -20,31 +19,33 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if (! defined('WPINC')) {
+    die;
 }
 
-define( 'PRODUCT_EDITOR_VERSION', '1.0.0' );
-// table for storing old values of changed attributes
-define( 'REVERSE_TABLE', 'pe_reverse_steps');
+define('PRODUCT_EDITOR_VERSION', '1.0.0');
+// table for storing old values of changed attributes.
+define('REVERSE_TABLE', 'pe_reverse_steps');
 
-require plugin_dir_path( __FILE__ ) . 'helpers/class-general-helper.php';
+require plugin_dir_path(__FILE__) . 'helpers/class-general-helper.php';
 
-function activate_product_editor() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-product-editor-activator.php';
-	Product_Editor_Activator::activate();
+function activate_product_editor()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-product-editor-activator.php';
+    Product_Editor_Activator::activate();
 }
 
-function deactivate_product_editor() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-product-editor-deactivator.php';
-	Product_Editor_Deactivator::deactivate();
+function deactivate_product_editor()
+{
+    require_once plugin_dir_path(__FILE__) . 'includes/class-product-editor-deactivator.php';
+    Product_Editor_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_product_editor' );
-register_deactivation_hook( __FILE__, 'deactivate_product_editor' );
+register_activation_hook(__FILE__, 'activate_product_editor');
+register_deactivation_hook(__FILE__, 'deactivate_product_editor');
 
-// The core plugin class
-require plugin_dir_path( __FILE__ ) . 'includes/class-product-editor.php';
+// The core plugin class.
+require plugin_dir_path(__FILE__) . 'includes/class-product-editor.php';
 
 /**
  * Begins execution of the plugin.
@@ -55,12 +56,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-product-editor.php';
  *
  * @since    1.0.0
  */
-function run_product_editor() {
-
-	$plugin = new Product_Editor();
-	$plugin->run();
-
+function run_product_editor()
+{
+    $plugin = new Product_Editor();
+    $plugin->run();
 }
 
 run_product_editor();
-

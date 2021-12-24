@@ -1,174 +1,184 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
 .wrap.product-editor {
-    position: relative;
+	position: relative;
 }
+
 .product-editor .tablenav-pages .current {
-    font-size: 16px;
+	font-size: 16px;
 }
+
 .product-editor .pe-product-table tr {
-    height: 60px;
+	height: 60px;
 }
+
 .product-editor .pe-product-table tbody tr:hover {
-    background: #effbee!important;
+	background: #effbee !important;
 }
 
 .product-editor .pe-product-table .check-column-t {
-    width: 5em;
-    text-align: center;
-    padding: 2px;
+	width: 5em;
+	text-align: center;
+	padding: 2px;
 }
+
 .product-editor .pe-product-table .col-id,
 .product-editor .pe-product-table .col-status {
-    width: 4em;
+	width: 4em;
 }
+
 .product-editor .pe-product-table td {
-    border-bottom: 1px solid #adc1ff;
+	border-bottom: 1px solid #adc1ff;
 }
 
 .product-editor .pe-product-table .editable {
-    border: 1px dashed #b5c1fd;
-    cursor: pointer;
+	border: 1px dashed #b5c1fd;
+	cursor: pointer;
 }
 
 .product-editor .pe-product-table .editable .button {
-    margin-top: 2px;
+	margin-top: 2px;
 }
+
 .product-editor .pe-product-table input[type="checkbox"] {
-    margin: 0;
+	margin: 0;
 }
+
 .product-editor .pe-product-table tr > :nth-child(1),
 .product-editor .pe-product-table tr > :nth-child(2) {
-    text-align: center;
+	text-align: center;
 }
 
 .product-editor table .variable-product {
-    background-color: #e2e6ff;
-    font-weight: bold;
+	background-color: #e2e6ff;
+	font-weight: bold;
 }
 
 .product-editor table .simple-product {
-    background-color: #d2eafd;
-    font-weight: bold;
+	background-color: #d2eafd;
+	font-weight: bold;
 }
 
 .product-editor .variation-product {
-    background-color: #edeff7;
+	background-color: #edeff7;
 }
 
 .product-editor input[type="search"] {
-    min-width: 400px;
+	min-width: 400px;
 }
 
 .product-editor .form-group {
-    display: flex;
-    align-items: center;
-    margin: 3px auto;
+	display: flex;
+	align-items: center;
+	margin: 3px auto;
 }
 
 span.title {
-    font-weight: bold;
-    display: inline-block;
-    min-width: 150px;
+	font-weight: bold;
+	display: inline-block;
+	min-width: 150px;
 }
 
 /** loader */
 .lds-dual-ring {
 
-    display: none;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    border-radius: 10px;
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	border-radius: 10px;
 }
+
 .lds-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border-radius: 50%;
-    border: 6px solid #5c1bdd;
-    border-color: #006ef7 transparent #006ef7 transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
+	content: " ";
+	display: block;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border-radius: 50%;
+	border: 6px solid #5c1bdd;
+	border-color: #006ef7 transparent #006ef7 transparent;
+	animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
+
 /** end loader */
 
 /** expand triangle */
 .lbl-toggle {
-    display: block;
+	display: block;
 
-    font-weight: bold;
-    font-family: monospace;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    text-align: center;
-    color: #000;
-    cursor: pointer;
-    border-radius: 7px;
-    transition: all 0.25s ease-out;
+	font-weight: bold;
+	font-family: monospace;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	text-align: center;
+	color: #000;
+	cursor: pointer;
+	border-radius: 7px;
+	transition: all 0.25s ease-out;
 }
 
 .lbl-toggle:hover {
-    color: #0008ff;
+	color: #0008ff;
 }
+
 .lbl-toggle::before {
-    content: ' ';
-    display: inline-block;
+	content: ' ';
+	display: inline-block;
 
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 5px solid currentColor;
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	border-left: 5px solid currentColor;
 
-    vertical-align: sub;
-    transform: translateY(-2px);
+	vertical-align: sub;
+	transform: translateY(-2px);
 
-    transition: transform .2s ease-out;
+	transition: transform .2s ease-out;
 }
-.expand+.lbl-toggle::before {
-    transform: rotate(90deg) translateX(-3px);
+
+.expand + .lbl-toggle::before {
+	transform: rotate(90deg) translateX(-3px);
 }
 
 .expand.lbl-toggle {
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
 }
+
 /** end expand triangle */
 
 .ajax-info {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: calc(50% - 120px);
-    background: #ffffffd4;
-    font-size: 19px;
-    min-width: 250px;
-    min-height: 100px;
-    border-radius: 6px;
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: calc(50% - 120px);
+	background: #ffffffd4;
+	font-size: 19px;
+	min-width: 250px;
+	min-height: 100px;
+	border-radius: 6px;
 
-    box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+	box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
 }
+
 .ajax-info .inner {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-wrap: wrap;
-    min-height: inherit;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-wrap: wrap;
+	min-height: inherit;
 }
 
 .info-box {
-    width: 500px;
-    position: absolute;
-    right: 0px;
-    color: #7e7e7e;
+	width: 500px;
+	position: absolute;
+	right: 0px;
+	color: #7e7e7e;
 }

@@ -1,6 +1,5 @@
 === Product Editor ===
 Contributors: @devhedgehog
-Donate link: http://example.com/
 Tags:  woocommerce, product, products, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
 Requires PHP: 7.0
 Requires at least: 5.0
@@ -10,7 +9,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The free plugin provides the ability to bulk\individually edit prices and sales prices for simple and variable woocommerce products.
+The free plugin for Woo provides the ability to bulk\individually edit prices and sales prices for simple and variable woocommerce products.
 
 == Installation ==
 
