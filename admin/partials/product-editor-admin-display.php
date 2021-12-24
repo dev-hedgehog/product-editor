@@ -174,12 +174,12 @@
 	<table class="pe-product-table wp-list-table widefat fixed striped table-view-list">
 		<thead>
 		<tr>
-			<td class="check-column-t">
+			<th class="check-column-t">
 				<label><?php esc_html_e( 'Base', 'product-editor' ); ?><br/><input class="cb-pr-all" type="checkbox"></label>
-			</td>
-			<td class="check-column-t">
+			</th>
+			<th class="check-column-t">
 				<label><?php esc_html_e( 'Variations', 'product-editor' ); ?><br/><input class="cb-vr-all" type="checkbox"></label>
-			</td>
+			</th>
 			<th scope="col" class="manage-column col-id">
 				<span>ID</span>
 			</th>
