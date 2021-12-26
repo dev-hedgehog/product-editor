@@ -92,9 +92,6 @@
 		<input type="hidden" name="action" value="bulk_changes">
 		<fieldset>
 			<h2><?php esc_html_e( 'Bulk change', 'product-editor' ); ?></h2>
-			<div class="info-box">
-				<?php echo __( 'Basic concepts help', 'product-editor' ); ?>
-			</div>
 			<div class="form-group">
 				<label>
 					<span class="title"><?php esc_html_e( 'Price:', 'product-editor' ); ?></span>&nbsp;

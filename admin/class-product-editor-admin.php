@@ -111,7 +111,7 @@ class Product_Editor_Admin {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return;
 		}
-		add_submenu_page(
+		$hookname = add_submenu_page(
 			'edit.php?post_type=product',
 			__( 'Product Editor', 'product-editor' ),
 			__( 'Product Editor', 'product-editor' ),
@@ -126,6 +126,29 @@ class Product_Editor_Admin {
 			'manage_options',
 			'product-editor-fix-variations',
 			array( $this, 'sub_page' )
+		);
+
+		add_action( 'load-' . $hookname, array( $this, 'add_screen_help' ) );
+	}
+
+	/**
+	 * Adds a help tab to the screen
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_screen_help() {
+		get_current_screen()->add_help_tab(
+			array(
+				'id'      => 'common-help',
+				'title'   => __( 'Common help', 'product-editor' ),
+				'content' => '<p>' . __( 'Column "Displayed price" is the price as the user sees it.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'A variable product consists of a base product and its child variations.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'Variable product base has no price or sale price.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'To change the price of variable products, change the price of its variations.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'Checkboxes "Base" - are responsible for selecting simple products and the basics of variable products.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'Checkboxes "Variations" - are responsible for selecting variations in variable products.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'The sale price cannot be higher than the regular price, if a higher price is set, the sale is canceled.', 'product-editor' ) . '</p>',
+			)
 		);
 	}
 
@@ -187,7 +210,7 @@ class Product_Editor_Admin {
 		self::security_check( true );
 		global $wpdb;
 		global $wp_query;
-
+		$this->add_screen_help();
 		// Get products that match the passed parameters.
 		$args           = array(
 			'paginate' => true,
@@ -557,7 +580,7 @@ class Product_Editor_Admin {
 		}
 		if ( $check_change ) {
 			if ( ! wp_verify_nonce( General_Helper::get_or_post_var( 'nonce' ), 'pe_changes' ) ) {
-				self::send_response( array( 'message' => __( 'Incorrect authorization key. Refresh the page.', 'product-editor' ) ), 401 );
+				self::send_response( array( 'message' => __( 'The link you followed has expired.', 'product-editor' ) ), 401 );
 			}
 		}
 	}
