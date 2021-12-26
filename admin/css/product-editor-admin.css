@@ -6,12 +6,23 @@
 	font-size: 16px;
 }
 
+.product-editor .pe-product-table {
+	border-collapse: collapse;
+	border-radius: 4px;
+	border-style: hidden;
+	box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+}
+
+.product-editor .pe-product-table th.check-column-t label {
+	font-size: 11px;
+}
+
 .product-editor .pe-product-table tr {
 	height: 60px;
 }
 
 .product-editor .pe-product-table tbody tr:hover {
-	background: #effbee !important;
+	background: #f9fbee !important;
 }
 
 .product-editor .pe-product-table .check-column-t {
@@ -26,7 +37,7 @@
 }
 
 .product-editor .pe-product-table td {
-	border-bottom: 1px solid #adc1ff;
+	border-bottom: 1px solid #cadae8;
 }
 
 .product-editor .pe-product-table .editable {
@@ -47,18 +58,29 @@
 	text-align: center;
 }
 
-.product-editor table .variable-product {
-	background-color: #e2e6ff;
+.product-editor .pe-product-table .td-name,
+.product-editor .pe-product-table .td-price,
+.product-editor .pe-product-table .td-regular-price,
+.product-editor .pe-product-table .td-sale-price,
+.product-editor .pe-product-table .td-akciya
+{
 	font-weight: bold;
+}
+
+.product-editor .pe-product-table .variation-product td:nth-child(4) {
+	font-weight: normal;
+}
+
+.product-editor table .variable-product {
+	background-color: #edf0ff;
 }
 
 .product-editor table .simple-product {
-	background-color: #d2eafd;
-	font-weight: bold;
+	background-color: #ecf7ff;
 }
 
 .product-editor .variation-product {
-	background-color: #edeff7;
+	background-color: #f1f1f1;
 }
 
 .product-editor input[type="search"] {
@@ -163,7 +185,7 @@ span.title {
 	font-size: 19px;
 	min-width: 250px;
 	min-height: 100px;
-	border-radius: 6px;
+	border-radius: 3px;
 
 	box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px, rgb(60 64 67 / 15%) 0px 1px 3px 1px;
 }

@@ -34,7 +34,7 @@ foreach ( $variation_ids as $variation_id ) {
 							 value="<?php echo esc_attr( $variation_id ); ?>"
 							 type="checkbox"></td>
 		<td><?php echo esc_html( $variation_id ); ?></td>
-		<td><?php echo esc_html( $var->get_name() ); ?></td>
+		<td class="td-name"><?php echo esc_html( $var->get_name() ); ?></td>
 		<td></td>
 		<td><?php esc_html_e( 'Variation:', 'product-editor' ); ?> <?php echo esc_html( $var_atts ); ?></td>
 		<td class="td-price"><?php echo $var->get_price_html(); ?></td>

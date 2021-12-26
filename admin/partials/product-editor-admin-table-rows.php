@@ -27,7 +27,7 @@ foreach ( $products as $product ) {
 		?>
 							</td>
 		<td><?php echo esc_html( $product->get_id() ); ?></td>
-		<td><?php echo esc_html( $product->get_name() ); ?></td>
+		<td class="td-name"><?php echo esc_html( $product->get_name() ); ?></td>
 		<td><?php echo esc_html( $product->get_status() ); ?></td>
 		<td><?php $is_variable ? esc_html_e( 'Variable', 'product-editor' ) : esc_html_e( 'Simple', 'product-editor' ); ?></td>
 		<td class="td-price"><?php echo $product->get_price_html(); ?></td>
