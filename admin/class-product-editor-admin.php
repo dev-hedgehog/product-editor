@@ -92,6 +92,16 @@ class Product_Editor_Admin {
 	}
 
 	/**
+	 * Enqueue stylesheets and scripts.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_assets() {
+		$this->enqueue_scripts();
+		$this->enqueue_styles();
+	}
+
+	/**
 	 * Create session if doesn't exists
 	 *
 	 * @since    1.0.0
@@ -129,6 +139,7 @@ class Product_Editor_Admin {
 		);
 
 		add_action( 'load-' . $hookname, array( $this, 'add_screen_help' ) );
+		add_action( "admin_print_scripts-$hookname", array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
