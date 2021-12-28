@@ -23,6 +23,11 @@ foreach ( $variation_ids as $variation_id ) {
 			$var_atts .= str_replace( 'attribute_pa_', '', $ind ) . ':' . $val . ' ';
 		}
 	);
+	// Get on sale dates.
+	$date_on_sale_from = $var->get_date_on_sale_from( 'edit' );
+	$date_on_sale_from = $date_on_sale_from ? $date_on_sale_from->date( 'Y-m-d' ) : '';
+	$date_on_sale_to   = $var->get_date_on_sale_to( 'edit' );
+	$date_on_sale_to   = $date_on_sale_to ? $date_on_sale_to->date( 'Y-m-d' ) : '';
 	?>
 	<tr class="variation-product"
 			data-id="<?php echo esc_attr( $variation_id ); ?>"
@@ -40,6 +45,8 @@ foreach ( $variation_ids as $variation_id ) {
 		<td class="td-price"><?php echo $var->get_price_html(); ?></td>
 		<td class="td-regular-price editable"><?php echo esc_html( $var->get_regular_price() ); ?></td>
 		<td class="td-sale-price editable"><?php echo esc_html( $var->get_sale_price() ); ?></td>
+		<td class="td-date-on-sale-from editable"><?php echo esc_html( $date_on_sale_from ); ?></td>
+		<td class="td-date-on-sale-to editable"><?php echo esc_html( $date_on_sale_to ); ?></td>
 		<td class="td-akciya"></td>
 	</tr>
 

@@ -50,9 +50,11 @@ class Product_Editor_Admin {
 	 * @var string[]
 	 */
 	public static $change_actions = array(
-		'change_regular_price' => 'change_regular_price',
-		'change_sale_price'    => 'change_sale_price',
-		'change_akciya'        => 'change_akciya',
+		'change_regular_price'     => 'change_regular_price',
+		'change_sale_price'        => 'change_sale_price',
+		'change_date_on_sale_from' => 'change_date_on_sale_from',
+		'change_date_on_sale_to'   => 'change_date_on_sale_to',
+		'change_akciya'            => 'change_akciya',
 	);
 
 	/**
@@ -77,6 +79,8 @@ class Product_Editor_Admin {
 	public function enqueue_styles() {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array(), $this->version, 'all' );
+		wp_register_style( 'jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' );
+		wp_enqueue_style( 'jquery-ui' );
 
 	}
 
@@ -88,6 +92,7 @@ class Product_Editor_Admin {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'jquery-ui-datepicker' );
 
 	}
 
@@ -158,7 +163,8 @@ class Product_Editor_Admin {
 					. '<p>' . __( 'To change the price of variable products, change the price of its variations.', 'product-editor' ) . '</p>'
 					. '<p>' . __( 'Checkboxes "Base" - are responsible for selecting simple products and the basics of variable products.', 'product-editor' ) . '</p>'
 					. '<p>' . __( 'Checkboxes "Variations" - are responsible for selecting variations in variable products.', 'product-editor' ) . '</p>'
-					. '<p>' . __( 'The sale price cannot be higher than the regular price, if a higher price is set, the sale is canceled.', 'product-editor' ) . '</p>',
+					. '<p>' . __( 'The sale price cannot be higher than the regular price, if a higher price is set, the sale is canceled.', 'product-editor' ) . '</p>'
+					. '<p>' . __( 'If a "sale date" and / or "sale end date" are set, then the sale price will be active only during this period.', 'product-editor' ) . '</p>',
 			)
 		);
 	}
@@ -282,6 +288,12 @@ class Product_Editor_Admin {
 					break;
 				case 'change_regular_price':
 					$product->set_regular_price( $record['value'] );
+					break;
+				case 'change_date_on_sale_from':
+					$product->set_date_on_sale_from( $record['value'] );
+					break;
+				case 'change_date_on_sale_to':
+					$product->set_date_on_sale_to( $record['value'] );
 					break;
 			}
 			$product->save();
@@ -426,12 +438,18 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	private static function response_data_for_product( $product ) {
+		$date_on_sale_from = $product->get_date_on_sale_from();
+		$date_on_sale_from = $date_on_sale_from ? $date_on_sale_from->date( 'Y-m-d' ) : '';
+		$date_on_sale_to   = $product->get_date_on_sale_to();
+		$date_on_sale_to   = $date_on_sale_to ? $date_on_sale_to->date( 'Y-m-d' ) : '';
 		return array(
-			'id'            => $product->get_id(),
-			'price'         => $product->get_price_html(),
-			'regular_price' => $product->get_regular_price(),
-			'sale_price'    => $product->get_sale_price(),
-			'akciya'        => is_a( $product, 'WC_Product_Variation' ) ? '' : ( ! $product->get_meta( 'sale' ) ? 'Нет' : 'Да' ),
+			'id'                => $product->get_id(),
+			'price'             => $product->get_price_html(),
+			'regular_price'     => $product->get_regular_price(),
+			'sale_price'        => $product->get_sale_price(),
+			'date_on_sale_from' => $date_on_sale_from,
+			'date_on_sale_to'   => $date_on_sale_to,
+			'akciya'            => is_a( $product, 'WC_Product_Variation' ) ? '' : ( ! $product->get_meta( 'sale' ) ? 'Нет' : 'Да' ),
 		);
 	}
 
@@ -453,6 +471,62 @@ class Product_Editor_Admin {
 			case 2:
 				$product->update_meta_data( 'sale', '' );
 		}
+	}
+
+	/**
+	 * Handler function for the action to change a regular price. Data for the operation is taken from POST request
+	 * The handler is registered with self::$changeActions
+	 *
+	 * @param WC_Product $product Object of WC_Product for change.
+	 *
+	 * @since    1.0.0
+	 */
+	private function change_regular_price( $product ) {
+		$arg_regular_price = wc_clean( General_Helper::post_var( '_regular_price' ) );
+		$action            = General_Helper::post_var( 'change_regular_price' );
+		if ( empty( $action ) ) {
+			return;
+		}
+		// Save the value before the changes, to be able to roll back the changes.
+		$this->reverse_steps[] = array(
+			'id'     => $product->get_id(),
+			'action' => 'change_regular_price',
+			'value'  => $product->get_regular_price(),
+		);
+		$is_percentage         = stripos( $arg_regular_price, '%' ) !== false;
+		$arg_regular_price     = preg_replace( '/[^\d\.\-]/', '', $arg_regular_price );
+		$old_regular_price     = $product->get_regular_price();
+		$new_regular_price     = $old_regular_price;
+		$number                = (float) wc_format_decimal( $arg_regular_price );
+		switch ( (int) $action ) {
+			case 1:
+				// Change to.
+				$new_regular_price = $number;
+				break;
+			case 2:
+				// Increase existing price by (fixed amount or %).
+				$new_regular_price = $old_regular_price + ( $is_percentage ? $old_regular_price / 100 * $number : $number );
+				break;
+			case 3:
+				// Decrease existing price by (fixed amount or %).
+				$new_regular_price = $old_regular_price - ( $is_percentage ? $old_regular_price / 100 * $number : $number );
+				break;
+		}
+		if ( $new_regular_price <= 0 || '' == $new_regular_price ) {
+			self::send_response(
+				array(
+					'message' =>
+						sprintf(
+						/* translators: 1: Name of a product 2: New regular price */
+							__( 'Invalid price computed for product "%1$s": "%2$s". Operations canceled.', 'product-editor' ),
+							$product->get_name(),
+							$new_regular_price
+						),
+				),
+				409
+			);
+		}
+		$product->set_regular_price( $new_regular_price );
 	}
 
 	/**
@@ -506,59 +580,53 @@ class Product_Editor_Admin {
 	}
 
 	/**
-	 * Handler function for the action to change a regular price. Data for the operation is taken from POST request
+	 * Handler function for the action to change sale date. Data for the operation is taken from POST request
 	 * The handler is registered with self::$changeActions
 	 *
 	 * @param WC_Product $product Object of WC_Product for change.
 	 *
 	 * @since    1.0.0
 	 */
-	private function change_regular_price( $product ) {
-		$arg_regular_price = trim( General_Helper::post_var( '_regular_price' ) );
-		$action            = General_Helper::post_var( 'change_regular_price' );
+	private function change_date_on_sale_from( $product ) {
+		 $arg_date = wc_clean( General_Helper::post_var( '_sale_date_from' ) );
+		$action    = General_Helper::post_var( 'change_date_on_sale_from' );
 		if ( empty( $action ) ) {
 			return;
 		}
 		// Save the value before the changes, to be able to roll back the changes.
+		$old_timestamp         = $product->get_date_on_sale_from( 'edit' );
+		$old_timestamp         = $old_timestamp ? $old_timestamp->getTimestamp() : null;
 		$this->reverse_steps[] = array(
 			'id'     => $product->get_id(),
-			'action' => 'change_regular_price',
-			'value'  => $product->get_regular_price(),
+			'action' => 'change_date_on_sale_from',
+			'value'  => $old_timestamp,
 		);
-		$is_percentage         = stripos( $arg_regular_price, '%' ) !== false;
-		$arg_regular_price     = preg_replace( '/[^\d\.\-]/', '', $arg_regular_price );
-		$old_regular_price     = $product->get_regular_price();
-		$new_regular_price     = $old_regular_price;
-		$number                = (float) wc_format_decimal( $arg_regular_price );
-		switch ( (int) $action ) {
-			case 1:
-				// Change to.
-				$new_regular_price = $number;
-				break;
-			case 2:
-				// Increase existing price by (fixed amount or %).
-				$new_regular_price = $old_regular_price + ( $is_percentage ? $old_regular_price / 100 * $number : $number );
-				break;
-			case 3:
-				// Decrease existing price by (fixed amount or %).
-				$new_regular_price = $old_regular_price - ( $is_percentage ? $old_regular_price / 100 * $number : $number );
-				break;
+		$product->set_date_on_sale_from( $arg_date );
+	}
+
+	/**
+	 * Handler function for the action to change sale end date. Data for the operation is taken from POST request
+	 * The handler is registered with self::$changeActions
+	 *
+	 * @param WC_Product $product Object of WC_Product for change.
+	 *
+	 * @since    1.0.0
+	 */
+	private function change_date_on_sale_to( $product ) {
+		$arg_date = wc_clean( General_Helper::post_var( '_sale_date_to' ) );
+		$action   = General_Helper::post_var( 'change_date_on_sale_to' );
+		if ( empty( $action ) ) {
+			return;
 		}
-		if ( $new_regular_price <= 0 || '' == $new_regular_price ) {
-			self::send_response(
-				array(
-					'message' =>
-					sprintf(
-					/* translators: 1: Name of a product 2: New regular price */
-						__( 'Invalid price computed for product "%1$s": "%2$s". Operations canceled.', 'product-editor' ),
-						$product->get_name(),
-						$new_regular_price
-					),
-				),
-				409
-			);
-		}
-		$product->set_regular_price( $new_regular_price );
+		// Save the value before the changes, to be able to roll back the changes.
+		$old_timestamp         = $product->get_date_on_sale_to( 'edit' );
+		$old_timestamp         = $old_timestamp ? $old_timestamp->getTimestamp() : null;
+		$this->reverse_steps[] = array(
+			'id'     => $product->get_id(),
+			'action' => 'change_date_on_sale_to',
+			'value'  => $old_timestamp,
+		);
+		$product->set_date_on_sale_to( $arg_date );
 	}
 
 	/**

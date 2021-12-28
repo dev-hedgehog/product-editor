@@ -9,7 +9,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-The free plugin for Woo provides the ability to bulk\individually edit prices and sales prices for simple and variable woocommerce products.
+The free plugin for Woo provides the ability to bulk\individually edit prices, sales prices and sale dates for simple and variable woocommerce products.
 
 == Installation ==
 

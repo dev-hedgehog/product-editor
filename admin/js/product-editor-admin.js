@@ -2,8 +2,22 @@
 	'use strict';
 
 	let isRequested = false;
+	let datepicker_options = {
+		dateFormat: 'yy-mm-dd',
+		showButtonPanel: true,
+		// Allow to click mouse at any position on a page no worries about click at a wrong place.
+		beforeShow: function () {
+			$('.product-editor').prepend('<div id="overlay_datepicker"></div>');
+		},
+		onClose: function () {
+			$('#overlay_datepicker').remove();
+		}
+	};
 
 	$(function () {
+		/** date pickers */
+		$('.date-picker').datepicker(datepicker_options);
+
 		/** Submit handler for bulk changes form. */
 		$('#bulk-changes').submit(function (e) {
 			e.preventDefault();
@@ -40,6 +54,8 @@
 					$tr.find('.td-price').html(el.price);
 					$tr.find('.td-regular-price').html(el.regular_price);
 					$tr.find('.td-sale-price').html(el.sale_price);
+					$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
+					$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
 					$tr.find('.td-akciya').html(el.akciya);
 				});
 				form.find('input[type="submit"]').prop('disabled', false);
@@ -134,14 +150,26 @@
 			});
 			if ($el.hasClass('td-regular-price')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="number" class="focus" name="_regular_price" value="' + old_value + '">');
+					.prepend('<input type="number" class="focus" name="_regular_price" value="' + old_value + '" autocomplete="off">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_regular_price').val(1);
 				$el.html(tmplNode);
 			} else if ($el.hasClass('td-sale-price')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="number" class="focus" name="_sale_price" value="' + old_value + '">');
+					.prepend('<input type="number" class="focus" name="_sale_price" value="' + old_value + '" autocomplete="off">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_sale_price').val(1);
 				$el.html(tmplNode);
+			} else if ($el.hasClass('td-date-on-sale-from')) {
+				$(tmplNode).find('.pe-edit-box')
+					.prepend('<input type="text" class="date-picker" name="_sale_date_from" value="' + old_value + '" placeholder="From&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
+				$(tmplNode).find('input#change_action').prop('name', 'change_date_on_sale_from').val(1);
+				$el.html(tmplNode);
+				$el.find('.date-picker').datepicker(datepicker_options);
+			} else if ($el.hasClass('td-date-on-sale-to')) {
+				$(tmplNode).find('.pe-edit-box')
+					.prepend('<input type="text" class="date-picker" name="_sale_date_to" value="' + old_value + '" placeholder="To&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
+				$(tmplNode).find('input#change_action').prop('name', 'change_date_on_sale_to').val(1);
+				$el.html(tmplNode);
+				$el.find('.date-picker').datepicker(datepicker_options);
 			} else if ($el.hasClass('td-akciya')) {
 				$(tmplNode).find('.pe-edit-box')
 					.prepend('<label>Товар по акции<select name="change_akciya" class="focus"><option value="1">Да</option><option value="2" ' + (old_value == 'Нет' ? 'selected' : '') + '>Нет</option></select></label>');
@@ -264,6 +292,8 @@
 				$tr.find('.td-price').html(el.price);
 				$tr.find('.td-regular-price').html(el.regular_price);
 				$tr.find('.td-sale-price').html(el.sale_price);
+				$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
+				$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
 				$tr.find('.td-akciya').html(el.akciya);
 			});
 			form.find('input[type="submit"]').prop('disabled', false);

@@ -25,9 +25,11 @@
 		<input type="hidden" id="change_action" name="" value="">
 		<input type="hidden" name="ids[]" value="">
 		<div class="pe-edit-box" data-old_value="">
-			<br/>
-			<input type="submit" class="button" value="<?php esc_html_e( 'Save', 'product-editor' ); ?>"/>
-			<a class="button discard" tabindex="0"><?php esc_html_e( 'Cancel', 'product-editor' ); ?></a>
+
+			<div class="btn-container">
+				<input type="submit" class="button" value="<?php esc_html_e( 'Save', 'product-editor' ); ?>"/>
+				<a class="button discard" tabindex="0"><?php esc_html_e( 'Cancel', 'product-editor' ); ?></a>
+			</div>
 		</div>
 	</form>
 </template>
@@ -102,7 +104,7 @@
 						<option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
 					</select>
 				</label>
-				<input type="text" name="_regular_price" pattern="^[0-9 ]*%?\w{0,3}\s*$">
+				<input type="text" name="_regular_price" pattern="^[0-9 ]*%?\w{0,3}\s*$" autocomplete="off">
 			</div>
 			<div class="form-group">
 				<label>
@@ -115,7 +117,27 @@
 						<option value="4"><?php esc_html_e( 'Set to regular price decreased by (fixed amount or %):', 'product-editor' ); ?></option>
 					</select>
 				</label>
-				<input type="text" name="_sale_price" pattern="^[0-9 ]*%?\w{0,3}\s*$">
+				<input type="text" name="_sale_price" pattern="^[0-9 ]*%?\w{0,3}\s*$" autocomplete="off">
+			</div>
+			<div class="form-group">
+				<label>
+					<span class="title"><?php esc_html_e( 'Sale date:', 'product-editor' ); ?></span>&nbsp;
+					<select class="change_sale_date_from" name="change_date_on_sale_from">
+						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
+						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
+					</select>
+				</label>
+				<input type="text" class="date-picker" name="_sale_date_from" value="" placeholder="<?php esc_html_e( 'From&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
+			</div>
+			<div class="form-group">
+				<label>
+					<span class="title"><?php esc_html_e( 'Sale end date:', 'product-editor' ); ?></span>&nbsp;
+					<select class="change_sale_date_to" name="change_date_on_sale_to">
+						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
+						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
+					</select>
+				</label>
+				<input type="text" class="date-picker" name="_sale_date_to" value="" placeholder="<?php esc_html_e( 'To&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
 			</div>
 			<div class="form-group">
 				<label>
@@ -161,9 +183,9 @@
 		?>
 		<ul class="subsubsub">
 			<li>
-				<b><?php esc_html_e( 'Total found:', 'product-editor' ); ?><?php echo esc_html( $total ); ?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+				<b><?php esc_html_e( 'Total found:', 'product-editor' ); ?> <?php echo esc_html( $total ); ?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
 			</li>
-			<li><b><?php esc_html_e( 'Items per page:', 'product-editor' ); ?><?php echo esc_html( $num_on_page ); ?></b></li>
+			<li><b><?php esc_html_e( 'Items per page:', 'product-editor' ); ?> <?php echo esc_html( $num_on_page ); ?></b></li>
 		</ul>
 		<div class="tablenav-pages"><?php echo $page_links; ?></div>
 	</div>
@@ -197,6 +219,12 @@
 			</th>
 			<th scope="col" class="manage-column">
 				<span><?php esc_html_e( 'Sale price', 'product-editor' ); ?></span>
+			</th>
+			<th>
+				<span><?php esc_html_e( 'Sale date', 'product-editor' ); ?></span>
+			</th>
+			<th scope="col" class="manage-column">
+				<span><?php esc_html_e( 'Sale end date', 'product-editor' ); ?></span>
 			</th>
 			<th scope="col" class="manage-column">
 				<span>Товар по акции</span>

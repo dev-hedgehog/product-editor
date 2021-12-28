@@ -33,6 +33,22 @@ foreach ( $products as $product ) {
 		<td class="td-price"><?php echo $product->get_price_html(); ?></td>
 		<td class="td-regular-price <?php echo $is_variable ? '' : 'editable'; ?>"><?php echo esc_html( $product->get_regular_price( 'edit' ) ); ?></td>
 		<td class="td-sale-price <?php echo $is_variable ? '' : 'editable'; ?>"><?php echo esc_html( $product->get_sale_price( 'edit' ) ); ?></td>
+		<td class="td-date-on-sale-from <?php echo $is_variable ? '' : 'editable'; ?>">
+												   <?php
+													if ( $is_simple ) {
+														$date_on_sale_from = $product->get_date_on_sale_from( 'edit' );
+														$date_on_sale_from = $date_on_sale_from ? $date_on_sale_from->date( 'Y-m-d' ) : '';
+														echo esc_html( $date_on_sale_from ); }
+													?>
+			</td>
+		<td class="td-date-on-sale-to <?php echo $is_variable ? '' : 'editable'; ?>">
+												 <?php
+													if ( $is_simple ) {
+															$date_on_sale_to = $product->get_date_on_sale_to( 'edit' );
+															$date_on_sale_to = $date_on_sale_to ? $date_on_sale_to->date( 'Y-m-d' ) : '';
+															echo esc_html( $date_on_sale_to ); }
+													?>
+			</td>
 		<td class="td-akciya editable"><?php echo ! $product->get_meta( 'sale' ) ? 'Нет' : 'Да'; ?></td>
 	</tr>
 	<?php
