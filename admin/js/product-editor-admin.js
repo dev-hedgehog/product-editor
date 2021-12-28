@@ -15,7 +15,13 @@
 	};
 
 	$(function () {
-		/** date pickers */
+		if (!$('.product-editor').length) {
+			return;
+		}
+		/** Pulse help button */
+		$('#contextual-help-link-wrap').addClass('btn--shockwave');
+
+		/** Date pickers */
 		$('.date-picker').datepicker(datepicker_options);
 
 		/** Submit handler for bulk changes form. */
