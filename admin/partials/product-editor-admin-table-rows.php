@@ -49,7 +49,6 @@ foreach ( $products as $product ) {
 															echo esc_html( $date_on_sale_to ); }
 													?>
 			</td>
-		<td class="td-akciya editable"><?php echo ! $product->get_meta( 'sale' ) ? 'Нет' : 'Да'; ?></td>
 	</tr>
 	<?php
 	if ( $is_variable && $show_variations ) {

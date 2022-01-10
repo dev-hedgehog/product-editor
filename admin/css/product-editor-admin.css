@@ -74,8 +74,7 @@
 .product-editor .pe-product-table .td-name,
 .product-editor .pe-product-table .td-price,
 .product-editor .pe-product-table .td-regular-price,
-.product-editor .pe-product-table .td-sale-price,
-.product-editor .pe-product-table .td-akciya {
+.product-editor .pe-product-table .td-sale-price {
     font-weight: bold;
 }
 
