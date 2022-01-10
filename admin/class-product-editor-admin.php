@@ -133,14 +133,6 @@ class Product_Editor_Admin {
 			'product-editor',
 			array( $this, 'main_page' )
 		);
-		add_submenu_page(
-			'edit.php?post_type=product',
-			'Fix attrs',
-			'Fix attributes',
-			'manage_options',
-			'product-editor-fix-variations',
-			array( $this, 'sub_page' )
-		);
 
 		add_action( 'load-' . $hookname, array( $this, 'add_screen_help' ) );
 		add_action( "admin_print_scripts-$hookname", array( $this, 'enqueue_assets' ) );
