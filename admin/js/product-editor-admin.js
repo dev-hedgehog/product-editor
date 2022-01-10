@@ -62,6 +62,7 @@
 					$tr.find('.td-sale-price').html(el.sale_price);
 					$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
 					$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
+					$tr.find('.td-akciya').html(el.akciya);
 				});
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
@@ -175,6 +176,11 @@
 				$(tmplNode).find('input#change_action').prop('name', 'change_date_on_sale_to').val(1);
 				$el.html(tmplNode);
 				$el.find('.date-picker').datepicker(datepicker_options);
+			} else if ($el.hasClass('td-akciya')) {
+				$(tmplNode).find('.pe-edit-box')
+					.prepend('<label>Товар по акции<select name="change_akciya" class="focus"><option value="1">Да</option><option value="2" ' + (old_value == 'Нет' ? 'selected' : '') + '>Нет</option></select></label>');
+				$(tmplNode).find('input#change_action').prop('name', 'change_akciya').val(1);
+				$el.html(tmplNode);
 			}
 			$el.find('.focus').focus();
 		});
@@ -294,6 +300,7 @@
 				$tr.find('.td-sale-price').html(el.sale_price);
 				$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
 				$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
+				$tr.find('.td-akciya').html(el.akciya);
 			});
 			form.find('input[type="submit"]').prop('disabled', false);
 			$('.lds-dual-ring').hide();

@@ -139,6 +139,17 @@
 				</label>
 				<input type="text" class="date-picker" name="_sale_date_to" value="" placeholder="<?php esc_html_e( 'To&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
 			</div>
+			<div class="form-group">
+				<label>
+					<span class="title">Товар по акции:</span>&nbsp;
+					<select class="change_regular_price change_to" name="change_akciya">
+						<option value="">— Без изменений —</option>
+						<option value="1">Да</option>
+						<option value="2">Нет</option>
+					</select>
+				</label>
+
+			</div>
 
 			<br>
 			<div class="form-group">
@@ -214,6 +225,9 @@
 			</th>
 			<th scope="col" class="manage-column">
 				<span><?php esc_html_e( 'Sale end date', 'product-editor' ); ?></span>
+			</th>
+			<th scope="col" class="manage-column">
+				<span>Товар по акции</span>
 			</th>
 
 		</tr>

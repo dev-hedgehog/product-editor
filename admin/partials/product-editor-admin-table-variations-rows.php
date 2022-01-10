@@ -47,6 +47,7 @@ foreach ( $variation_ids as $variation_id ) {
 		<td class="td-sale-price editable"><?php echo esc_html( $var->get_sale_price() ); ?></td>
 		<td class="td-date-on-sale-from editable"><?php echo esc_html( $date_on_sale_from ); ?></td>
 		<td class="td-date-on-sale-to editable"><?php echo esc_html( $date_on_sale_to ); ?></td>
+		<td class="td-akciya"></td>
 	</tr>
 
 	<?php

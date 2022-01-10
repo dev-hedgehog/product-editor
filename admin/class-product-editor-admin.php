@@ -54,6 +54,7 @@ class Product_Editor_Admin {
 		'change_sale_price'        => 'change_sale_price',
 		'change_date_on_sale_from' => 'change_date_on_sale_from',
 		'change_date_on_sale_to'   => 'change_date_on_sale_to',
+		'change_akciya'            => 'change_akciya',
 	);
 
 	/**
@@ -168,6 +169,55 @@ class Product_Editor_Admin {
 		);
 	}
 
+	public function sub_page() {
+		self::security_check( true );
+		$args = array(
+			'type' => array( 'variable' ),
+		// 'limit' => 2
+		);
+		$products     = wc_get_products( $args );
+		$bad_products = array();
+		$bad_terms    = array();
+		$all_terms    = array();
+		foreach ( $products as $product ) {
+			$vars       = $product->get_available_variations( 'object' );
+			$prod_terms = array();
+			foreach ( $vars as $var ) {
+				$at = wc_get_product_variation_attributes( $var->get_id() );
+				foreach ( $at as $att_name => $value ) {
+					if ( ! $value ) {
+						continue;
+					}
+					$term_name = str_replace( 'attribute_', '', $att_name );
+					if ( ! isset( $prod_terms[ $term_name ] ) ) {
+						$prod_terms[ $term_name ] = wp_get_post_terms( $product->get_id(), $term_name, array( 'fields' => 'slugs' ) );
+					}
+					if ( ! in_array( $value, $prod_terms[ $term_name ], true ) ) {
+						$bad_products[ $product->get_id() ][ $var->get_id() ][] = $term_name . ':' . $value;
+						if ( ! isset( $all_terms[ $term_name ] ) ) {
+							$all_terms[ $term_name ] = get_terms(
+								array(
+									'taxonomy'   => $term_name,
+									'hide_empty' => false,
+									'fields'     => 'slugs',
+								)
+							);
+						}
+						if ( ! in_array( $value, $all_terms[ $term_name ], true ) ) {
+							$bad_terms[ $term_name ][ $value ] = 1;
+						} elseif ( ! empty( $_GET['doitg'] ) ) {
+							wp_set_object_terms( $product->get_id(), $value, $term_name, true );
+						}
+					}
+				}
+			}
+		}
+		echo '<pre>';
+		print_r( $bad_products );
+		echo "\n====================\n";
+		print_r( $bad_terms );
+	}
+
 	/**
 	 * Home page handler in admin area
 	 *
@@ -230,6 +280,9 @@ class Product_Editor_Admin {
 			}
 
 			switch ( $record['action'] ) {
+				case 'change_akciya':
+					$product->update_meta_data( 'sale', $record['value'] );
+					break;
 				case 'change_sale_price':
 					$product->set_sale_price( $record['value'] );
 					break;
@@ -396,7 +449,28 @@ class Product_Editor_Admin {
 			'sale_price'        => $product->get_sale_price(),
 			'date_on_sale_from' => $date_on_sale_from,
 			'date_on_sale_to'   => $date_on_sale_to,
+			'akciya'            => is_a( $product, 'WC_Product_Variation' ) ? '' : ( ! $product->get_meta( 'sale' ) ? 'Нет' : 'Да' ),
 		);
+	}
+
+
+	private function change_akciya( $product ) {
+		$action = General_Helper::post_var( 'change_akciya' );
+		if ( empty( $action ) || is_a( $product, 'WC_Product_Variation' ) ) {
+			return;
+		}
+		$this->reverse_steps[] = array(
+			'id'     => $product->get_id(),
+			'action' => 'change_akciya',
+			'value'  => $product->get_meta( 'sale' ),
+		);
+		switch ( (int) $action ) {
+			case 1:
+				$product->update_meta_data( 'sale', array( 'Товар по акции' ) );
+				break;
+			case 2:
+				$product->update_meta_data( 'sale', '' );
+		}
 	}
 
 	/**
