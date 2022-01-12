@@ -1,6 +1,7 @@
 === Product Editor ===
 Contributors: @devhedgehog
 Tags:  woocommerce, product, products, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
+Stable tag: 1.0.0
 Requires PHP: 7.0
 Requires at least: 5.0
 Tested up to: 5.8
