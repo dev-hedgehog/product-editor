@@ -156,12 +156,12 @@
 			});
 			if ($el.hasClass('td-regular-price')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="number" class="focus" name="_regular_price" value="' + old_value + '" autocomplete="off">');
+					.prepend('<input type="number" class="focus" name="_regular_price" value="' + old_value + '" autocomplete="off" step="0.01">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_regular_price').val(1);
 				$el.html(tmplNode);
 			} else if ($el.hasClass('td-sale-price')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="number" class="focus" name="_sale_price" value="' + old_value + '" autocomplete="off">');
+					.prepend('<input type="number" class="focus" name="_sale_price" value="' + old_value + '" autocomplete="off" step="0.01">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_sale_price').val(1);
 				$el.html(tmplNode);
 			} else if ($el.hasClass('td-date-on-sale-from')) {

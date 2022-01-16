@@ -104,7 +104,7 @@
 						<option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
 					</select>
 				</label>
-				<input type="text" name="_regular_price" pattern="^[0-9 ]*%?\w{0,3}\s*$" autocomplete="off">
+				<input type="text" name="_regular_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
 			</div>
 			<div class="form-group">
 				<label>
@@ -117,7 +117,7 @@
 						<option value="4"><?php esc_html_e( 'Set to regular price decreased by (fixed amount or %):', 'product-editor' ); ?></option>
 					</select>
 				</label>
-				<input type="text" name="_sale_price" pattern="^[0-9 ]*%?\w{0,3}\s*$" autocomplete="off">
+				<input type="text" name="_sale_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
 			</div>
 			<div class="form-group">
 				<label>
