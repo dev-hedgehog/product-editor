@@ -413,7 +413,8 @@ class Product_Editor_Admin {
 			'value'  => $product->get_regular_price(),
 		);
 		$is_percentage         = stripos( $arg_regular_price, '%' ) !== false;
-		$arg_regular_price     = preg_replace( '/[^\d\.\-]/', '', $arg_regular_price );
+		$arg_regular_price     = str_replace( ',', '.', $arg_regular_price );
+		$arg_regular_price     = preg_replace( '/[^\d\.\,\-]/', '', $arg_regular_price );
 		$old_regular_price     = $product->get_regular_price();
 		$new_regular_price     = $old_regular_price;
 		$number                = (float) wc_format_decimal( $arg_regular_price );
@@ -469,7 +470,8 @@ class Product_Editor_Admin {
 			'value'  => $product->get_sale_price(),
 		);
 		$is_percentage         = stripos( $arg_sale_price, '%' ) !== false;
-		$arg_sale_price        = preg_replace( '/[^\d\.\-]/', '', $arg_sale_price );
+		$arg_sale_price        = str_replace( ',', '.', $arg_sale_price );
+		$arg_sale_price        = preg_replace( '/[^\d\.\,\-]/', '', $arg_sale_price );
 		$regular_price         = (float) $product->get_regular_price();
 		$old_sale_price        = (float) $product->get_sale_price();
 		$new_sale_price        = $old_sale_price;
