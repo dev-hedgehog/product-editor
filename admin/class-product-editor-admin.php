@@ -403,7 +403,7 @@ class Product_Editor_Admin {
 	private function change_regular_price( $product ) {
 		$arg_regular_price = wc_clean( General_Helper::post_var( '_regular_price' ) );
 		$action            = General_Helper::post_var( 'change_regular_price' );
-		if ( empty( $action ) ) {
+		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
 		// Save the value before the changes, to be able to roll back the changes.
@@ -415,7 +415,7 @@ class Product_Editor_Admin {
 		$is_percentage         = stripos( $arg_regular_price, '%' ) !== false;
 		$arg_regular_price     = str_replace( ',', '.', $arg_regular_price );
 		$arg_regular_price     = preg_replace( '/[^\d\.\,\-]/', '', $arg_regular_price );
-		$old_regular_price     = $product->get_regular_price();
+		$old_regular_price     = (float) $product->get_regular_price();
 		$new_regular_price     = $old_regular_price;
 		$number                = (float) wc_format_decimal( $arg_regular_price );
 		switch ( (int) $action ) {
@@ -460,7 +460,7 @@ class Product_Editor_Admin {
 	private function change_sale_price( $product ) {
 		$arg_sale_price = trim( General_Helper::post_var( '_sale_price', 0 ) );
 		$action         = General_Helper::post_var( 'change_sale_price' );
-		if ( empty( $action ) ) {
+		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
 		// Save the value before the changes, to be able to roll back the changes.
@@ -511,7 +511,7 @@ class Product_Editor_Admin {
 	private function change_date_on_sale_from( $product ) {
 		 $arg_date = wc_clean( General_Helper::post_var( '_sale_date_from' ) );
 		$action    = General_Helper::post_var( 'change_date_on_sale_from' );
-		if ( empty( $action ) ) {
+		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
 		// Save the value before the changes, to be able to roll back the changes.
@@ -536,7 +536,7 @@ class Product_Editor_Admin {
 	private function change_date_on_sale_to( $product ) {
 		$arg_date = wc_clean( General_Helper::post_var( '_sale_date_to' ) );
 		$action   = General_Helper::post_var( 'change_date_on_sale_to' );
-		if ( empty( $action ) ) {
+		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
 		// Save the value before the changes, to be able to roll back the changes.
