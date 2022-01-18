@@ -18,6 +18,14 @@ The free plugin for Woo provides the ability to bulk\individually edit prices, s
 1. Upload `product-editor` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
+== Screenshots ==
+
+1.
+2.
+3.
+4.
+5.
+
 == Changelog ==
 
 = 1.0.1 =
