@@ -1,5 +1,6 @@
 === Product Editor ===
 Contributors: @devhedgehog
+Donate link: https://ko-fi.com/devhedgehog
 Tags:  woocommerce, product, products, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
 Stable tag: 1.0.1
 Requires PHP: 5.6
