@@ -431,6 +431,10 @@ class Product_Editor_Admin {
 				// Decrease existing price by (fixed amount or %).
 				$new_regular_price = $old_regular_price - ( $is_percentage ? $old_regular_price / 100 * $number : $number );
 				break;
+            case 4:
+                // Multiply existing price by a value
+                $new_regular_price = $old_regular_price * $number;
+                break;
 		}
 		if ( $new_regular_price <= 0 || '' == $new_regular_price ) {
 			self::send_response(

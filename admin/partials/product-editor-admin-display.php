@@ -102,6 +102,7 @@
 						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
 						<option value="2"><?php esc_html_e( 'Increase existing price by (fixed amount or %):', 'product-editor' ); ?></option>
 						<option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
+						<option value="4"><?php esc_html_e( 'Multiply existing price by a value', 'product-editor' ); ?></option>
 					</select>
 				</label>
 				<input type="text" name="_regular_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
