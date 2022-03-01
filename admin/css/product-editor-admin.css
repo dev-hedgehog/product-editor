@@ -98,6 +98,15 @@
     min-width: 400px;
 }
 
+.product-editor .round_input,
+.product-editor .precision_input {
+    display: none;
+}
+
+.product-editor .precision_input {
+    width: 50px
+}
+
 .product-editor .form-group {
     display: flex;
     align-items: center;

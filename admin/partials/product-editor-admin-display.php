@@ -97,47 +97,59 @@
 			<div class="form-group">
 				<label>
 					<span class="title"><?php esc_html_e( 'Price:', 'product-editor' ); ?></span>&nbsp;
-					<select class="change_regular_price change_to" name="change_regular_price">
-						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
-						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
-						<option value="2"><?php esc_html_e( 'Increase existing price by (fixed amount or %):', 'product-editor' ); ?></option>
-						<option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
-						<option value="4"><?php esc_html_e( 'Multiply existing price by a value', 'product-editor' ); ?></option>
-					</select>
-				</label>
+                </label>
+                <select class="change_regular_price change_to" name="change_regular_price">
+                    <option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
+                    <option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
+                    <option value="2"><?php esc_html_e( 'Increase existing price by (fixed amount or %):', 'product-editor' ); ?></option>
+                    <option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
+                    <option value="4"><?php esc_html_e( 'Multiply existing price by a value', 'product-editor' ); ?></option>
+                </select>
 				<input type="text" name="_regular_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
+                <select class="round_regular_price round_input" name="round_regular_price">
+                    <option value=""><?php esc_html_e( '— Without rounding —', 'product-editor' ); ?></option>
+                    <option value="1"><?php esc_html_e( 'Round up, with the number of decimal places:', 'product-editor' ); ?></option>
+                    <option value="2"><?php esc_html_e( 'Round down, with the number of decimal places:', 'product-editor' ); ?></option>
+                </select>
+                <input type="number" name="precision_regular_price" class="precision_regular_price precision_input" min="0" max="9" placeholder="0" autocomplete="off" >
 			</div>
 			<div class="form-group">
 				<label>
 					<span class="title"><?php esc_html_e( 'Sale price:', 'product-editor' ); ?></span>&nbsp;
-					<select class="change_sale_price change_to" name="change_sale_price">
-						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
-						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
-						<option value="2"><?php esc_html_e( 'Increase existing sale price by (fixed amount or %):', 'product-editor' ); ?></option>
-						<option value="3"><?php esc_html_e( 'Decrease existing sale price by (fixed amount or %):', 'product-editor' ); ?></option>
-						<option value="4"><?php esc_html_e( 'Set to regular price decreased by (fixed amount or %):', 'product-editor' ); ?></option>
-					</select>
-				</label>
+                </label>
+                <select class="change_sale_price change_to" name="change_sale_price">
+                    <option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
+                    <option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
+                    <option value="2"><?php esc_html_e( 'Increase existing sale price by (fixed amount or %):', 'product-editor' ); ?></option>
+                    <option value="3"><?php esc_html_e( 'Decrease existing sale price by (fixed amount or %):', 'product-editor' ); ?></option>
+                    <option value="4"><?php esc_html_e( 'Set to regular price decreased by (fixed amount or %):', 'product-editor' ); ?></option>
+                </select>
 				<input type="text" name="_sale_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
+                <select class="round_sale_price round_input" name="round_sale_price">
+                    <option value=""><?php esc_html_e( '— Without rounding —', 'product-editor' ); ?></option>
+                    <option value="1"><?php esc_html_e( 'Round up, with the number of decimal places:', 'product-editor' ); ?></option>
+                    <option value="2"><?php esc_html_e( 'Round down, with the number of decimal places:', 'product-editor' ); ?></option>
+                </select>
+                <input type="number" name="precision_sale_price" class="precision_sale_price precision_input" min="0" max="9" placeholder="0" autocomplete="off" >
 			</div>
 			<div class="form-group">
 				<label>
 					<span class="title"><?php esc_html_e( 'Sale date:', 'product-editor' ); ?></span>&nbsp;
-					<select class="change_sale_date_from" name="change_date_on_sale_from">
+                </label>
+                    <select class="change_sale_date_from" name="change_date_on_sale_from">
 						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
 						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
 					</select>
-				</label>
 				<input type="text" class="date-picker" name="_sale_date_from" value="" placeholder="<?php esc_html_e( 'From&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
 			</div>
 			<div class="form-group">
 				<label>
 					<span class="title"><?php esc_html_e( 'Sale end date:', 'product-editor' ); ?></span>&nbsp;
+                </label>
 					<select class="change_sale_date_to" name="change_date_on_sale_to">
 						<option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
 						<option value="1"><?php esc_html_e( 'Change to:', 'product-editor' ); ?></option>
 					</select>
-				</label>
 				<input type="text" class="date-picker" name="_sale_date_to" value="" placeholder="<?php esc_html_e( 'To&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
 			</div>
 
@@ -175,7 +187,7 @@
 			<li>
 				<b><?php esc_html_e( 'Total found:', 'product-editor' ); ?> <?php echo esc_html( $total ); ?></b>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
 			</li>
-			<li><b><?php esc_html_e( 'Items per page:', 'product-editor' ); ?> <?php echo esc_html( $num_on_page ); ?></b></li>
+			<li><b><?php esc_html_e( 'Items on page:', 'product-editor' ); ?> <?php echo esc_html( $num_on_page ); ?></b></li>
 		</ul>
 		<div class="tablenav-pages"><?php echo $page_links; ?></div>
 	</div>

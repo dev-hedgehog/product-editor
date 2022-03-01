@@ -392,6 +392,29 @@ class Product_Editor_Admin {
 		);
 	}
 
+    /**
+     * Round price value
+     *
+     * @param float $value
+     * @param int $precision
+     * @param int|string $round_type
+     * @return float|int
+     */
+    private static function round_price( $value, $precision, $round_type ) {
+        $new_value = $value;
+        switch ( (int) $round_type ) {
+            case 1:
+                // Round up
+                $new_value = General_Helper::round_up( $value, $precision );
+                break;
+            case 2:
+                // Round down
+                $new_value = General_Helper::round_down( $value, $precision );
+                break;
+        };
+        return $new_value;
+    }
+
 	/**
 	 * Handler function for the action to change a regular price. Data for the operation is taken from POST request
 	 * The handler is registered with self::$changeActions
@@ -403,6 +426,9 @@ class Product_Editor_Admin {
 	private function change_regular_price( $product ) {
 		$arg_regular_price = wc_clean( General_Helper::post_var( '_regular_price' ) );
 		$action            = General_Helper::post_var( 'change_regular_price' );
+		$round_type        = General_Helper::post_var( 'round_regular_price' );
+		$round_precision   = (int) General_Helper::post_var( 'precision_regular_price' );
+
 		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
@@ -435,7 +461,10 @@ class Product_Editor_Admin {
                 // Multiply existing price by a value
                 $new_regular_price = $old_regular_price * $number;
                 break;
-		}
+		};
+
+		$new_regular_price = self::round_price( $new_regular_price, $round_precision, $round_type);
+
 		if ( $new_regular_price <= 0 || '' == $new_regular_price ) {
 			self::send_response(
 				array(
@@ -462,8 +491,10 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	private function change_sale_price( $product ) {
-		$arg_sale_price = trim( General_Helper::post_var( '_sale_price', 0 ) );
-		$action         = General_Helper::post_var( 'change_sale_price' );
+		$arg_sale_price    = trim( General_Helper::post_var( '_sale_price', 0 ) );
+		$action            = General_Helper::post_var( 'change_sale_price' );
+        $round_type        = General_Helper::post_var( 'round_sale_price' );
+        $round_precision   = (int) General_Helper::post_var( 'precision_sale_price' );
 		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
 		}
@@ -498,6 +529,9 @@ class Product_Editor_Admin {
 				$new_sale_price = $regular_price - ( $is_percentage ? $regular_price / 100 * $number : $number );
 				break;
 		}
+
+        $new_sale_price = self::round_price( $new_sale_price, $round_precision, $round_type);
+
 		if ( $new_sale_price <= 0 ) {
 			$new_sale_price = '';
 		}
