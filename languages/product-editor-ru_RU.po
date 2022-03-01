@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2021-12-28 20:34+0500\n"
-"PO-Revision-Date: 2021-12-28 20:42+0500\n"
+"POT-Creation-Date: 2022-03-02 02:23+0500\n"
+"PO-Revision-Date: 2022-03-02 02:23+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: ru\n"
@@ -23,29 +23,29 @@ msgstr ""
 msgid "Product Editor"
 msgstr "Редактор продуктов"
 
-#: admin/class-product-editor-admin.php:159
+#: admin/class-product-editor-admin.php:151
 msgid "Common help"
 msgstr "Общая информация"
 
-#: admin/class-product-editor-admin.php:160
+#: admin/class-product-editor-admin.php:152
 msgid "Column \"Displayed price\" is the price as the user sees it."
 msgstr "Отображаемая цена - цена как её видит пользователь."
 
-#: admin/class-product-editor-admin.php:161
+#: admin/class-product-editor-admin.php:153
 msgid "A variable product consists of a base product and its child variations."
 msgstr "Вариативный товар состоит из основного товара и его дочерних вариаций."
 
-#: admin/class-product-editor-admin.php:162
+#: admin/class-product-editor-admin.php:154
 msgid "Variable product base has no price or sale price."
 msgstr "Основа вариативного товара не имеет цены и цены распродажи."
 
-#: admin/class-product-editor-admin.php:163
+#: admin/class-product-editor-admin.php:155
 msgid ""
 "To change the price of variable products, change the price of its variations."
 msgstr ""
 "Чтобы изменить цену у вариативных товаров, изменяйте цену у её вариаций."
 
-#: admin/class-product-editor-admin.php:164
+#: admin/class-product-editor-admin.php:156
 msgid ""
 "Checkboxes \"Base\" - are responsible for selecting simple products and the "
 "basics of variable products."
@@ -53,14 +53,14 @@ msgstr ""
 "Чекбоксы \"Основные\" - отвечают за выделение простых товаров и основ "
 "вариативных товаров."
 
-#: admin/class-product-editor-admin.php:165
+#: admin/class-product-editor-admin.php:157
 msgid ""
 "Checkboxes \"Variations\" - are responsible for selecting variations in "
 "variable products."
 msgstr ""
 "Чекбоксы \"Вариации\" - отвечают за выделение вариаций у вариативных товаров."
 
-#: admin/class-product-editor-admin.php:166
+#: admin/class-product-editor-admin.php:158
 msgid ""
 "The sale price cannot be higher than the regular price, if a higher price is "
 "set, the sale is canceled."
@@ -68,7 +68,7 @@ msgstr ""
 "Цена распродажи не может быть выше обычной цены, если задаётся цена выше, то "
 "распродажа отменяется."
 
-#: admin/class-product-editor-admin.php:167
+#: admin/class-product-editor-admin.php:159
 msgid ""
 "If a \"sale date\" and / or \"sale end date\" are set, then the sale price "
 "will be active only during this period."
@@ -76,25 +76,25 @@ msgstr ""
 "Если установлены \"дата начала распродажи\" и\\или \"дата конца распродажи"
 "\", то цена распродажи будет активна только в этот период."
 
-#: admin/class-product-editor-admin.php:266
+#: admin/class-product-editor-admin.php:209
 msgid "No data to recover"
 msgstr "Нет данных для восстановления"
 
-#: admin/class-product-editor-admin.php:338
+#: admin/class-product-editor-admin.php:278
 msgid "Nothing to change"
 msgstr "Нечего изменять"
 
-#: admin/class-product-editor-admin.php:355
+#: admin/class-product-editor-admin.php:295
 #, php-format
 msgid "Product with id:%s not found. Operations canceled."
 msgstr "Продукт с id:%s не найден. Операции отменены."
 
-#: admin/class-product-editor-admin.php:383
+#: admin/class-product-editor-admin.php:323
 #, php-format
 msgid "Operations applied: %s"
 msgstr "Применено операций: %s"
 
-#: admin/class-product-editor-admin.php:521
+#: admin/class-product-editor-admin.php:474
 #, php-format
 msgid ""
 "Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
@@ -102,11 +102,11 @@ msgstr ""
 "Для продукта \"%1$s\" вычислена недопустимая цена: \"%2$s\". Операции "
 "отменены."
 
-#: admin/class-product-editor-admin.php:657
+#: admin/class-product-editor-admin.php:616
 msgid "You do not have permission to edit products"
 msgstr "У вас нет прав на редактирование товаров"
 
-#: admin/class-product-editor-admin.php:662
+#: admin/class-product-editor-admin.php:621
 msgid "The link you followed has expired."
 msgstr "Ссылка, по которой вы перешли, устарела."
 
@@ -154,131 +154,154 @@ msgstr "Массовое изменение"
 msgid "Price:"
 msgstr "Цена:"
 
-#: admin/partials/product-editor-admin-display.php:101
-#: admin/partials/product-editor-admin-display.php:113
-#: admin/partials/product-editor-admin-display.php:126
-#: admin/partials/product-editor-admin-display.php:136
+#: admin/partials/product-editor-admin-display.php:102
+#: admin/partials/product-editor-admin-display.php:121
+#: admin/partials/product-editor-admin-display.php:140
+#: admin/partials/product-editor-admin-display.php:150
 msgid "— No change —"
 msgstr "— Без изменений —"
 
-#: admin/partials/product-editor-admin-display.php:102
-#: admin/partials/product-editor-admin-display.php:114
-#: admin/partials/product-editor-admin-display.php:127
-#: admin/partials/product-editor-admin-display.php:137
+#: admin/partials/product-editor-admin-display.php:103
+#: admin/partials/product-editor-admin-display.php:122
+#: admin/partials/product-editor-admin-display.php:141
+#: admin/partials/product-editor-admin-display.php:151
 msgid "Change to:"
 msgstr "Установить на:"
 
-#: admin/partials/product-editor-admin-display.php:103
+#: admin/partials/product-editor-admin-display.php:104
 msgid "Increase existing price by (fixed amount or %):"
 msgstr "Увеличить существующие цены на (фиксированную величину или %):"
 
-#: admin/partials/product-editor-admin-display.php:104
+#: admin/partials/product-editor-admin-display.php:105
 msgid "Decrease existing price by (fixed amount or %):"
 msgstr "Уменьшить существующие цены на (фиксированное значение или %):"
 
+#: admin/partials/product-editor-admin-display.php:106
+msgid "Multiply existing price by a value"
+msgstr "Умножить существующую цену на значение"
+
+#: admin/partials/product-editor-admin-display.php:110
+#: admin/partials/product-editor-admin-display.php:129
+msgid "— Without rounding —"
+msgstr "— Не округлять —"
+
 #: admin/partials/product-editor-admin-display.php:111
+#: admin/partials/product-editor-admin-display.php:130
+msgid "Round up, with the number of decimal places:"
+msgstr "Округлять в большую сторону, с кол-вом знаков после запятой:"
+
+#: admin/partials/product-editor-admin-display.php:112
+#: admin/partials/product-editor-admin-display.php:131
+msgid "Round down, with the number of decimal places:"
+msgstr "Округлять в меньшую сторону, с кол-вом знаков после запятой:"
+
+#: admin/partials/product-editor-admin-display.php:118
 msgid "Sale price:"
 msgstr "Цена распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:115
+#: admin/partials/product-editor-admin-display.php:123
 msgid "Increase existing sale price by (fixed amount or %):"
 msgstr "Увеличить текущую цену распродажи на (фиксированную сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:116
+#: admin/partials/product-editor-admin-display.php:124
 msgid "Decrease existing sale price by (fixed amount or %):"
 msgstr "Уменьшить текущую цену распродажи на (фиксированную сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:117
+#: admin/partials/product-editor-admin-display.php:125
 msgid "Set to regular price decreased by (fixed amount or %):"
 msgstr ""
 "Задать цену распродажи на уровне обычной цены, пониженной на (фиксированную "
 "сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:124
+#: admin/partials/product-editor-admin-display.php:137
 msgid "Sale date:"
 msgstr "Дата начала распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:130
+#: admin/partials/product-editor-admin-display.php:143
 msgid "From&hellip;"
 msgstr "С&hellip;"
 
-#: admin/partials/product-editor-admin-display.php:134
+#: admin/partials/product-editor-admin-display.php:147
 msgid "Sale end date:"
 msgstr "Дата конца распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:140
+#: admin/partials/product-editor-admin-display.php:153
 msgid "To&hellip;"
 msgstr "До&hellip;"
 
-#: admin/partials/product-editor-admin-display.php:156
+#: admin/partials/product-editor-admin-display.php:158
 msgid "Change Selected"
 msgstr "Изменить выбранное"
 
-#: admin/partials/product-editor-admin-display.php:159
+#: admin/partials/product-editor-admin-display.php:161
 msgid "Undo the last change"
 msgstr "Отменить последнее изменение"
 
-#: admin/partials/product-editor-admin-display.php:171
+#: admin/partials/product-editor-admin-display.php:173
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:172
+#: admin/partials/product-editor-admin-display.php:174
 msgid "&raquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:186
+#: admin/partials/product-editor-admin-display.php:188
 msgid "Total found:"
 msgstr "Всего найдено:"
 
-#: admin/partials/product-editor-admin-display.php:188
-msgid "Items per page:"
+#: admin/partials/product-editor-admin-display.php:190
+msgid "Items on page:"
 msgstr "Записей на странице:"
 
-#: admin/partials/product-editor-admin-display.php:197
+#: admin/partials/product-editor-admin-display.php:199
 msgid "Base"
 msgstr "Основные"
 
-#: admin/partials/product-editor-admin-display.php:200
+#: admin/partials/product-editor-admin-display.php:202
 msgid "Variations"
 msgstr "Вариации"
 
-#: admin/partials/product-editor-admin-display.php:206
+#: admin/partials/product-editor-admin-display.php:208
 msgid "Name"
 msgstr "Название"
 
-#: admin/partials/product-editor-admin-display.php:209
+#: admin/partials/product-editor-admin-display.php:211
 msgid "Status"
 msgstr "Статус"
 
-#: admin/partials/product-editor-admin-display.php:212
+#: admin/partials/product-editor-admin-display.php:214
 msgid "Type"
 msgstr "Тип"
 
-#: admin/partials/product-editor-admin-display.php:215
+#: admin/partials/product-editor-admin-display.php:217
 msgid "Displayed price"
 msgstr "Отображаемая цена"
 
-#: admin/partials/product-editor-admin-display.php:218
+#: admin/partials/product-editor-admin-display.php:220
 msgid "Regular price"
 msgstr "Цена"
 
-#: admin/partials/product-editor-admin-display.php:221
+#: admin/partials/product-editor-admin-display.php:223
 msgid "Sale price"
 msgstr "Цена распродажи"
 
-#: admin/partials/product-editor-admin-display.php:224
+#: admin/partials/product-editor-admin-display.php:226
 msgid "Sale date"
 msgstr "Начало распродажи"
 
-#: admin/partials/product-editor-admin-display.php:227
+#: admin/partials/product-editor-admin-display.php:229
 msgid "Sale end date"
 msgstr "Конец распродажи"
 
-#: admin/partials/product-editor-admin-table-rows.php:32
+#: admin/partials/product-editor-admin-table-rows.php:34
+msgid "Open for editing"
+msgstr "Открыть для редактирования"
+
+#: admin/partials/product-editor-admin-table-rows.php:37
 msgid "Variable"
 msgstr "Вариативный"
 
-#: admin/partials/product-editor-admin-table-rows.php:32
+#: admin/partials/product-editor-admin-table-rows.php:37
 msgid "Simple"
 msgstr "Простой"
 

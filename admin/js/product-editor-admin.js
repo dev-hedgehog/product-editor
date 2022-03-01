@@ -24,6 +24,40 @@
 		/** Date pickers */
 		$('.date-picker').datepicker(datepicker_options);
 
+		/** Show round inputs */
+		$('.change_regular_price').on('change', function () {
+			if (['2','3','4'].includes($(this).val())) {
+				$('.round_regular_price').show();
+			} else {
+				$('.round_regular_price').hide();
+				$('.precision_regular_price').hide();
+				$('.round_regular_price').val('');
+			}
+		});
+		$('.round_regular_price').on('change', function () {
+			if ($(this).val()) {
+				$('.precision_regular_price').show();
+			} else {
+				$('.precision_regular_price').hide();
+			}
+		});
+		$('.change_sale_price').on('change', function () {
+			if (['2','3','4'].includes($(this).val())) {
+				$('.round_sale_price').show();
+			} else {
+				$('.round_regular_price').val('');
+				$('.round_sale_price').hide();
+				$('.precision_sale_price').hide();
+			}
+		});
+		$('.round_sale_price').on('change', function () {
+			if ($(this).val()) {
+				$('.precision_sale_price').show();
+			} else {
+				$('.precision_sale_price').hide();
+			}
+		});
+
 		/** Submit handler for bulk changes form. */
 		$('#bulk-changes').submit(function (e) {
 			e.preventDefault();
@@ -67,6 +101,8 @@
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 				form[0].reset();
+				// Reset round inputs
+				$('.change_to').trigger('change');
 				if (data.reverse) {
 					$('.do_reverse').show();
 				}

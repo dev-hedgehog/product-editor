@@ -8,7 +8,7 @@
  * Plugin Name:       Product Editor
  * Plugin URI:        https://github.com/dev-hedgehog/product-editor
  * Description:       The free plugin for Woo provides the ability to bulk\individually edit prices, sales prices and sale dates for simple and variable woocommerce products.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            dev-hedgehog
  * Author URI:        https://github.com/dev-hedgehog
  * License:           GPL-2.0+
@@ -23,7 +23,7 @@ if (! defined('WPINC')) {
     die;
 }
 
-define('PRODUCT_EDITOR_VERSION', '1.0.0');
+define('PRODUCT_EDITOR_VERSION', '1.0.2');
 // table for storing old values of changed attributes.
 define('REVERSE_TABLE', 'pe_reverse_steps');
 
@@ -46,6 +46,26 @@ register_deactivation_hook(__FILE__, 'deactivate_product_editor');
 
 // The core plugin class.
 require plugin_dir_path(__FILE__) . 'includes/class-product-editor.php';
+
+
+/**
+ * Add plugin action links.
+ *
+ * @since 1.0.2
+ *
+ * @param  array  $links List of existing plugin action links.
+ * @return array         List of modified plugin action links.
+ */
+function plugin_action_links( $links ) {
+
+    $links = array_merge( array(
+        '<a href="' . esc_url( admin_url( '/edit.php?post_type=product&page=product-editor' ) ) . '">' . __( 'Product Editor', 'product-editor' ) . '</a>'
+    ), $links );
+
+    return $links;
+
+}
+add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
 
 /**
  * Begins execution of the plugin.
