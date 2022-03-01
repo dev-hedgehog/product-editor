@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-03-02 01:39+0500\n"
-"PO-Revision-Date: 2022-03-02 01:39+0500\n"
+"POT-Creation-Date: 2022-03-02 02:23+0500\n"
+"PO-Revision-Date: 2022-03-02 02:23+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: en\n"
@@ -278,6 +278,10 @@ msgstr ""
 
 #: admin/partials/product-editor-admin-display.php:229
 msgid "Sale end date"
+msgstr ""
+
+#: admin/partials/product-editor-admin-table-rows.php:34
+msgid "Open for editing"
 msgstr ""
 
 #: admin/partials/product-editor-admin-table-rows.php:37

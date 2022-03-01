@@ -90,6 +90,11 @@
     background-color: #ecf7ff;
 }
 
+.product-editor .product-link {
+    width: 16px;
+    vertical-align: middle;
+}
+
 .product-editor .variation-product {
     background-color: #f1f1f1;
 }
