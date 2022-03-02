@@ -174,7 +174,7 @@ class Product_Editor_Admin {
 		// Get products that match the passed parameters.
 		$args           = array(
 			'paginate' => true,
-			'type'     => array( 'simple', 'variable' ),
+			'type'     => array( 'simple', 'variable', 'external' ),
 		);
 		$args['limit']  = (int) General_Helper::get_var( 'limit', 10 );
 		$args['offset'] = ( General_Helper::get_var( 'paged', 1 ) - 1 ) * $args['limit'];

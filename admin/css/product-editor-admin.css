@@ -90,6 +90,10 @@
     background-color: #ecf7ff;
 }
 
+.product-editor table .external-product {
+    background-color: #ecfffa;
+}
+
 .product-editor .product-link {
     width: 16px;
     vertical-align: middle;

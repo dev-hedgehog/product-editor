@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-03-02 02:23+0500\n"
-"PO-Revision-Date: 2022-03-02 02:23+0500\n"
+"POT-Creation-Date: 2022-03-02 15:01+0500\n"
+"PO-Revision-Date: 2022-03-02 15:03+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: ru\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: admin/class-product-editor-admin.php:131
 #: admin/class-product-editor-admin.php:132
-#: admin/partials/product-editor-admin-display.php:40
+#: admin/partials/product-editor-admin-display.php:40 product-editor.php:62
 msgid "Product Editor"
 msgstr "Редактор продуктов"
 
@@ -293,17 +293,21 @@ msgstr "Начало распродажи"
 msgid "Sale end date"
 msgstr "Конец распродажи"
 
-#: admin/partials/product-editor-admin-table-rows.php:34
-msgid "Open for editing"
-msgstr "Открыть для редактирования"
-
-#: admin/partials/product-editor-admin-table-rows.php:37
+#: admin/partials/product-editor-admin-table-rows.php:20
 msgid "Variable"
 msgstr "Вариативный"
 
-#: admin/partials/product-editor-admin-table-rows.php:37
+#: admin/partials/product-editor-admin-table-rows.php:24
 msgid "Simple"
 msgstr "Простой"
+
+#: admin/partials/product-editor-admin-table-rows.php:28
+msgid "External"
+msgstr "Внешний"
+
+#: admin/partials/product-editor-admin-table-rows.php:46
+msgid "Open for editing"
+msgstr "Открыть для редактирования"
 
 #: admin/partials/product-editor-admin-table-variations-rows.php:44
 msgid "Variation:"
