@@ -1,3 +1,6 @@
+.product-editor .notice-dismiss {
+    text-decoration: none;
+}
 
 .product-editor .tablenav-pages .current {
     font-size: 16px;

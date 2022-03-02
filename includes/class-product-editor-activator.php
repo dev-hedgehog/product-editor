@@ -30,7 +30,7 @@ class Product_Editor_Activator {
     $version = get_option( 'PRODUCT_EDITOR_VERSION', PRODUCT_EDITOR_VERSION );
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
-    $table_name = $wpdb->prefix . REVERSE_TABLE;
+    $table_name = $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE;
 
     $sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,

@@ -3,6 +3,7 @@
  * @link              https://github.com/dev-hedgehog/product-editor
  * @since             1.0.0
  * @package           Product-Editor
+ * @author            dev-hedgehog <dev.hedgehog.core@gmail.com>
  *
  * @wordpress-plugin
  * Plugin Name:       Product Editor
@@ -25,7 +26,10 @@ if (! defined('WPINC')) {
 
 define('PRODUCT_EDITOR_VERSION', '1.0.2');
 // table for storing old values of changed attributes.
-define('REVERSE_TABLE', 'pe_reverse_steps');
+define('PRODUCT_EDITOR_REVERSE_TABLE', 'pe_reverse_steps');
+
+define('PRODUCT_EDITOR_SUPPORT_EMAIL', 'dev.hedgehog.core@gmail.com');
+define('PRODUCT_EDITOR_VIDEO_URL', 'https://youtu.be/mSM_ndk2z7A');
 
 require plugin_dir_path(__FILE__) . 'helpers/class-general-helper.php';
 

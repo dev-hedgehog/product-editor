@@ -19,6 +19,10 @@
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
 
 ?>
+<?php
+    // Show welcome notice
+    include "product-editor-admin-notice.php";
+?>
 <template id="tmp-edit-single">
 	<form method="post" action="/wp-admin/admin-post.php">
 		<input type="hidden" name="action" value="bulk_changes">

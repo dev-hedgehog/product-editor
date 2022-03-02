@@ -149,7 +149,18 @@ class Product_Editor_Admin {
 			array(
 				'id'      => 'common-help',
 				'title'   => __( 'Common help', 'product-editor' ),
-				'content' => '<p>' . __( 'Column "Displayed price" is the price as the user sees it.', 'product-editor' ) . '</p>'
+				'content' =>
+                    '<p>' . sprintf( wp_kses(
+                        __( 'If you are not familiar with the plugin, please watch this <a href="%s" target="_blank">video</a> first.<br/> If you still have questions, you can ask them under the video, on the plugin\'s <a href="%s" target="_blank">forum</a> or email <a href="mailto:%s">%s</a>.', 'product-editor' ),
+                        array(  'a' => array( 'href' => array() ), 'br' => array() ) ),
+                        // video url
+                        PRODUCT_EDITOR_VIDEO_URL,
+                        // forum url
+                        'https://wordpress.org/support/plugin/product-editor/',
+                        // email
+                        PRODUCT_EDITOR_SUPPORT_EMAIL, PRODUCT_EDITOR_SUPPORT_EMAIL
+                    ) . '</p>'
+                    . '<p>' . __( 'Column "Displayed price" is the price as the user sees it.', 'product-editor' ) . '</p>'
 					. '<p>' . __( 'A variable product consists of a base product and its child variations.', 'product-editor' ) . '</p>'
 					. '<p>' . __( 'Variable product base has no price or sale price.', 'product-editor' ) . '</p>'
 					. '<p>' . __( 'To change the price of variable products, change the price of its variations.', 'product-editor' ) . '</p>'
@@ -170,6 +181,8 @@ class Product_Editor_Admin {
 		self::security_check( true );
 		global $wpdb;
 		global $wp_query;
+
+		$this->should_hide_notice();
 		$this->add_screen_help();
 		// Get products that match the passed parameters.
 		$args           = array(
@@ -300,7 +313,7 @@ class Product_Editor_Admin {
 		}
 		// If changes were made, save the previous values to the database.
 		if ( $this->reverse_steps ) {
-			$table_name = $wpdb->prefix . REVERSE_TABLE;
+			$table_name = $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE;
 			$wpdb->insert(
 				$table_name,
 				array(
@@ -622,4 +635,19 @@ class Product_Editor_Admin {
 			}
 		}
 	}
+
+    /**
+     * Disables welcome notice
+     *
+     * @since   1.0.2
+     */
+	public function should_hide_notice() {
+	    if ( General_Helper::get_var('action') !== 'hide_notice_welcome'
+            || ! wp_verify_nonce( General_Helper::get_var( 'nonce' ), 'pe_hide_notice_welcome' )
+        ) return false;
+
+        if ( !get_option('pe_hide_note_welcome') ) {
+            add_option('pe_hide_note_welcome', true);
+        }
+    }
 }
