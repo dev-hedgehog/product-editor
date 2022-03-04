@@ -19,6 +19,10 @@
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
 
 ?>
+<?php
+    // Show welcome notice
+    include "product-editor-admin-notice.php";
+?>
 <template id="tmp-edit-single">
 	<form method="post" action="/wp-admin/admin-post.php">
 		<input type="hidden" name="action" value="bulk_changes">
@@ -90,6 +94,14 @@
 	</fieldset>
 	<br>
 	<hr/>
+	<?php
+	$round_tooltip_text = esc_html__('Examples of rounding up:
+precision -2 price 21856.234 = 21900
+precision -1 price 21856.234 = 21860
+precision 0 price 21856.234 = 21857
+precision 1 price 21856.234 = 21856.3
+precision 2 price 21856.234 = 21856.24');
+	?>
 	<form method="post" action="/wp-admin/admin-post.php" id="bulk-changes">
 		<input type="hidden" name="action" value="bulk_changes">
 		<fieldset>
@@ -105,13 +117,15 @@
                     <option value="3"><?php esc_html_e( 'Decrease existing price by (fixed amount or %):', 'product-editor' ); ?></option>
                     <option value="4"><?php esc_html_e( 'Multiply existing price by a value', 'product-editor' ); ?></option>
                 </select>
-				<input type="text" name="_regular_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
+								<input type="text" name="_regular_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
                 <select class="round_regular_price round_input" name="round_regular_price">
                     <option value=""><?php esc_html_e( '— Without rounding —', 'product-editor' ); ?></option>
                     <option value="1"><?php esc_html_e( 'Round up, with the number of decimal places:', 'product-editor' ); ?></option>
                     <option value="2"><?php esc_html_e( 'Round down, with the number of decimal places:', 'product-editor' ); ?></option>
                 </select>
-                <input type="number" name="precision_regular_price" class="precision_regular_price precision_input" min="0" max="9" placeholder="0" autocomplete="off" >
+                <input type="number" name="precision_regular_price" class="precision_regular_price precision_input" min="-9" max="9" placeholder="0" autocomplete="off" >
+								<span class="pe-help-tip precision_regular_price" title="<?php echo $round_tooltip_text; ?>"></span>
+
 			</div>
 			<div class="form-group">
 				<label>
@@ -124,13 +138,14 @@
                     <option value="3"><?php esc_html_e( 'Decrease existing sale price by (fixed amount or %):', 'product-editor' ); ?></option>
                     <option value="4"><?php esc_html_e( 'Set to regular price decreased by (fixed amount or %):', 'product-editor' ); ?></option>
                 </select>
-				<input type="text" name="_sale_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
+								<input type="text" name="_sale_price" pattern="^[0-9\., ]*%?\w{0,3}\s*$" autocomplete="off">
                 <select class="round_sale_price round_input" name="round_sale_price">
                     <option value=""><?php esc_html_e( '— Without rounding —', 'product-editor' ); ?></option>
                     <option value="1"><?php esc_html_e( 'Round up, with the number of decimal places:', 'product-editor' ); ?></option>
                     <option value="2"><?php esc_html_e( 'Round down, with the number of decimal places:', 'product-editor' ); ?></option>
                 </select>
-                <input type="number" name="precision_sale_price" class="precision_sale_price precision_input" min="0" max="9" placeholder="0" autocomplete="off" >
+                <input type="number" name="precision_sale_price" class="precision_sale_price precision_input" min="-9" max="9" placeholder="0" autocomplete="off" >
+								<span class="pe-help-tip precision_sale_price" title="<?php echo $round_tooltip_text; ?>"></span>
 			</div>
 			<div class="form-group">
 				<label>
