@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://ko-fi.com/devhedgehog
 Tags:  woocommerce, product, products, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.9
@@ -45,6 +45,10 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 
 == Changelog ==
 
+= 1.0.3 =
+* bugfix fatal error
+* add rounding an integer part of number
+
 = 1.0.2 =
 * added multiplying existing prices by a value
 * added rounding prices with a required precision
@@ -58,6 +62,10 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+* bugfix fatal error
+* add rounding an integer part of number
 
 = 1.0.2 =
 * added multiplying existing prices by a value

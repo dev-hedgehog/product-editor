@@ -32,6 +32,7 @@
 				$('.round_regular_price').hide();
 				$('.precision_regular_price').hide();
 				$('.round_regular_price').val('');
+				$('input[name="precision_regular_price"]').val('');
 			}
 		});
 		$('.round_regular_price').on('change', function () {
@@ -46,6 +47,7 @@
 				$('.round_sale_price').show();
 			} else {
 				$('.round_regular_price').val('');
+				$('input[name="precision_sale_price"]').val('');
 				$('.round_sale_price').hide();
 				$('.precision_sale_price').hide();
 			}

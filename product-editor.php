@@ -9,7 +9,7 @@
  * Plugin Name:       Product Editor
  * Plugin URI:        https://github.com/dev-hedgehog/product-editor
  * Description:       Bulk\individual editing of prices, sale prices and sale dates of woocommerce variable, simple and external products.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            dev-hedgehog
  * Author URI:        https://github.com/dev-hedgehog
  * License:           GPL-2.0+
@@ -24,7 +24,7 @@ if (! defined('WPINC')) {
     die;
 }
 
-define('PRODUCT_EDITOR_VERSION', '1.0.2');
+define('PRODUCT_EDITOR_VERSION', '1.0.3');
 // table for storing old values of changed attributes.
 define('PRODUCT_EDITOR_REVERSE_TABLE', 'pe_reverse_steps');
 
@@ -51,25 +51,17 @@ register_deactivation_hook(__FILE__, 'deactivate_product_editor');
 // The core plugin class.
 require plugin_dir_path(__FILE__) . 'includes/class-product-editor.php';
 
+add_filter( 'plugin_action_links', 'action_links_product_editor', 10, 2 );
 
-/**
- * Add plugin action links.
- *
- * @since 1.0.2
- *
- * @param  array  $links List of existing plugin action links.
- * @return array         List of modified plugin action links.
- */
-function plugin_action_links( $links ) {
-
-    $links = array_merge( array(
-        '<a href="' . esc_url( admin_url( '/edit.php?post_type=product&page=product-editor' ) ) . '">' . __( 'Product Editor', 'product-editor' ) . '</a>'
-    ), $links );
-
-    return $links;
-
+function action_links_product_editor( $links_array, $plugin_file_name )
+{
+	if( strpos( $plugin_file_name, basename(__FILE__) ) ) {
+		array_unshift($links_array,
+			'<a href="' . esc_url( admin_url( '/edit.php?post_type=product&page=product-editor' ) ) . '">' . __( 'Product Editor', 'product-editor' ) . '</a>'
+		);
+	}
+	return $links_array;
 }
-add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'plugin_action_links' );
 
 /**
  * Begins execution of the plugin.
