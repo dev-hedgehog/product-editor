@@ -43,8 +43,8 @@ foreach ( $variation_ids as $variation_id ) {
 		<td></td>
 		<td><?php esc_html_e( 'Variation:', 'product-editor' ); ?> <?php echo esc_html( $var_atts ); ?></td>
 		<td class="td-price"><?php echo $var->get_price_html(); ?></td>
-		<td class="td-regular-price editable"><?php echo esc_html( $var->get_regular_price() ); ?></td>
-		<td class="td-sale-price editable"><?php echo esc_html( $var->get_sale_price() ); ?></td>
+		<td class="td-regular-price editable"><?php echo esc_html( $var->get_regular_price( 'edit' ) ); ?></td>
+		<td class="td-sale-price editable"><?php echo esc_html( $var->get_sale_price( 'edit' ) ); ?></td>
 		<td class="td-date-on-sale-from editable"><?php echo esc_html( $date_on_sale_from ); ?></td>
 		<td class="td-date-on-sale-to editable"><?php echo esc_html( $date_on_sale_to ); ?></td>
 	</tr>

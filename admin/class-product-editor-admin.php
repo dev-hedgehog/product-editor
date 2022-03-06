@@ -113,7 +113,7 @@ class Product_Editor_Admin {
 	 */
 	public function start_session() {
 		if ( ! session_id() ) {
-			session_start();
+			@session_start();
 		}
 	}
 
@@ -391,15 +391,15 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	private static function response_data_for_product( $product ) {
-		$date_on_sale_from = $product->get_date_on_sale_from();
+		$date_on_sale_from = $product->get_date_on_sale_from( 'edit' );
 		$date_on_sale_from = $date_on_sale_from ? $date_on_sale_from->date( 'Y-m-d' ) : '';
-		$date_on_sale_to   = $product->get_date_on_sale_to();
+		$date_on_sale_to   = $product->get_date_on_sale_to( 'edit' );
 		$date_on_sale_to   = $date_on_sale_to ? $date_on_sale_to->date( 'Y-m-d' ) : '';
 		return array(
 			'id'                => $product->get_id(),
 			'price'             => $product->get_price_html(),
-			'regular_price'     => $product->get_regular_price(),
-			'sale_price'        => $product->get_sale_price(),
+			'regular_price'     => $product->get_regular_price( 'edit' ),
+			'sale_price'        => $product->get_sale_price( 'edit' ),
 			'date_on_sale_from' => $date_on_sale_from,
 			'date_on_sale_to'   => $date_on_sale_to,
 		);
@@ -449,12 +449,12 @@ class Product_Editor_Admin {
 		$this->reverse_steps[] = array(
 			'id'     => $product->get_id(),
 			'action' => 'change_regular_price',
-			'value'  => $product->get_regular_price(),
+			'value'  => $product->get_regular_price( 'edit' ),
 		);
 		$is_percentage         = stripos( $arg_regular_price, '%' ) !== false;
 		$arg_regular_price     = str_replace( ',', '.', $arg_regular_price );
 		$arg_regular_price     = preg_replace( '/[^\d\.\,\-]/', '', $arg_regular_price );
-		$old_regular_price     = (float) $product->get_regular_price();
+		$old_regular_price     = (float) $product->get_regular_price( 'edit' );
 		$new_regular_price     = $old_regular_price;
 		$number                = (float) wc_format_decimal( $arg_regular_price );
 		switch ( (int) $action ) {
@@ -515,13 +515,13 @@ class Product_Editor_Admin {
 		$this->reverse_steps[] = array(
 			'id'     => $product->get_id(),
 			'action' => 'change_sale_price',
-			'value'  => $product->get_sale_price(),
+			'value'  => $product->get_sale_price( 'edit' ),
 		);
 		$is_percentage         = stripos( $arg_sale_price, '%' ) !== false;
 		$arg_sale_price        = str_replace( ',', '.', $arg_sale_price );
 		$arg_sale_price        = preg_replace( '/[^\d\.\,\-]/', '', $arg_sale_price );
-		$regular_price         = (float) $product->get_regular_price();
-		$old_sale_price        = (float) $product->get_sale_price();
+		$regular_price         = (float) $product->get_regular_price( 'edit' );
+		$old_sale_price        = (float) $product->get_sale_price( 'edit' );
 		$new_sale_price        = $old_sale_price;
 		$number                = (float) wc_format_decimal( $arg_sale_price );
 		switch ( (int) $action ) {
