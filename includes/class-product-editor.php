@@ -73,6 +73,7 @@ class Product_Editor {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
+		$this->define_common_hooks();
 
 	}
 
@@ -150,6 +151,69 @@ class Product_Editor {
         $this->loader->add_action( 'admin_post_reverse_products_data', $plugin_admin, 'action_reverse_products_data' );
 
 	}
+
+    /**
+     * Register all of the hooks related to the admin area and frontend area
+     *
+     * @since   1.0.4
+     * @access   private
+     */
+	private function define_common_hooks() {
+        // Simple, grouped and external products
+        $this->loader->add_filter( 'woocommerce_product_get_price', $this, 'dynamic_price', 99, 2 );
+        $this->loader->add_filter( 'woocommerce_product_get_regular_price', $this, 'dynamic_price', 99, 2 );
+        $this->loader->add_filter( 'woocommerce_product_get_sale_price', $this, 'dynamic_price', 99, 2 );
+        // Variations
+        $this->loader->add_filter( 'woocommerce_product_variation_get_regular_price', $this, 'dynamic_price', 99, 2 );
+        $this->loader->add_filter( 'woocommerce_product_variation_get_price', $this, 'dynamic_price', 99, 2 );
+        $this->loader->add_filter( 'woocommerce_product_variation_get_sale_price', $this, 'dynamic_price', 99, 2 );
+        // Variable (price range)
+        $this->loader->add_filter( 'woocommerce_variation_prices_price', $this, 'dynamic_price', 99, 3 );
+        $this->loader->add_filter( 'woocommerce_variation_prices_regular_price', $this, 'dynamic_price', 99, 3 );
+        $this->loader->add_filter( 'woocommerce_variation_prices_sale_price', $this, 'dynamic_price', 99, 2 );
+        // Handling price caching
+        $this->loader->add_filter( 'woocommerce_get_variation_prices_hash', $this, 'dynamic_variation_prices_hash', 99, 3 );
+    }
+
+    /**
+     * Decorator for prices
+     * @param $price
+     * @param $v
+     * @param null $p
+     * @return float|mixed
+     * @since   1.0.4
+     */
+    public function dynamic_price( $price, $v, $p = null ) {
+	    if (
+	        !$price
+            || ( ! get_option( 'pe_dynamic_is_multiply' ) && ! get_option( 'pe_dynamic_is_add' ) )
+            || ( ! get_option( 'pe_dynamic_multiply_value' ) && ! get_option( 'pe_dynamic_add_value' ) )
+        ) {
+            return $price;
+        }
+	    $new_price = (float) $price;
+        if ( get_option( 'pe_dynamic_is_multiply' ) && (float) get_option( 'pe_dynamic_multiply_value' ) > 0) {
+            $new_price = $new_price * (float) get_option( 'pe_dynamic_multiply_value' );
+        }
+        if ( get_option( 'pe_dynamic_is_add' ) ) {
+            $new_price = $new_price + (float) get_option( 'pe_dynamic_add_value' );
+        }
+        return $new_price >= 0 ? (float) $new_price : $price;
+    }
+
+    /**
+     * Hash for dynamic prices
+     *
+     * @param $price_hash
+     * @param $product
+     * @param $for_display
+     * @return mixed
+     * @since   1.0.4
+     */
+    public function dynamic_variation_prices_hash( $price_hash, $product, $for_display ) {
+        $price_hash[] = array ( get_option( 'pe_dynamic_is_multiply' ), get_option( 'pe_dynamic_is_add' ), get_option( 'pe_dynamic_multiply_value' ), get_option( 'pe_dynamic_add_value' ) );
+        return $price_hash;
+    }
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.

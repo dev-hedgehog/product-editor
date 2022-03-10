@@ -78,10 +78,9 @@ class Product_Editor_Admin {
 	public function enqueue_styles() {
 
 		$min = defined( SCRIPT_DEBUG ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array(), $this->version, 'all' );
-		wp_register_style( 'jquery-ui', plugin_dir_url( __FILE__ ) . 'libs/jquery-ui-1.13.0/jquery-ui' . $min .'.css' );
-		wp_enqueue_style( 'jquery-ui' );
-
+        wp_register_style( 'jquery-ui', plugin_dir_url( __FILE__ ) . 'libs/jquery-ui-1.13.0/jquery-ui' . $min .'.css' );
+        wp_register_style( 'tipTip', plugin_dir_url( __FILE__ ) . 'libs/tipTip/tipTip.css' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array( 'jquery-ui', 'tipTip' ), $this->version, 'all' );
 	}
 
 	/**
@@ -90,10 +89,8 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-
+        wp_register_script( 'tipTip', plugin_dir_url( __FILE__ ) . 'libs/tipTip/tipTip.min.js', array( 'jquery' ) );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery', 'tipTip', 'jquery-ui-datepicker' ), $this->version, false );
 	}
 
 	/**
@@ -182,6 +179,7 @@ class Product_Editor_Admin {
 		global $wpdb;
 		global $wp_query;
 
+		$this->set_dynamic_prices();
 		$this->should_hide_notice();
 		$this->add_screen_help();
 		// Get products that match the passed parameters.
@@ -649,5 +647,24 @@ class Product_Editor_Admin {
         if ( !get_option('pe_hide_note_welcome') ) {
             add_option('pe_hide_note_welcome', true);
         }
+    }
+
+    /**
+     * Handler for dynamic price changes form
+     *
+     * @since   1.0.4
+     */
+    public function set_dynamic_prices() {
+	    if (
+	        General_Helper::post_var('action') !== 'pe_change_dynamic_price'
+            || ! wp_verify_nonce( General_Helper::post_var( 'nonce' ), 'pe_changes' )
+        )
+	        return;
+        $multiply_value = ! General_Helper::post_var( 'multiply_value' ) || ! (bool) General_Helper::post_var( 'is_multiply' ) || (float) General_Helper::post_var( 'multiply_value' ) < 0 ? '' : (float) General_Helper::post_var( 'multiply_value' );
+        $add_value = ! General_Helper::post_var( 'add_value' ) || ! (bool) General_Helper::post_var( 'is_add' ) ? '' : (float) General_Helper::post_var( 'add_value' );
+	    update_option( 'pe_dynamic_is_multiply', (bool) General_Helper::post_var( 'is_multiply' ) );
+	    update_option( 'pe_dynamic_is_add', (bool) General_Helper::post_var( 'is_add' ) );
+	    update_option( 'pe_dynamic_multiply_value', $multiply_value );
+	    update_option( 'pe_dynamic_add_value', $add_value );
     }
 }
