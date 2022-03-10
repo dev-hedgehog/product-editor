@@ -24,6 +24,20 @@
 		/** Date pickers */
 		$('.date-picker').datepicker(datepicker_options);
 
+		/** Toggle dynamic prices */
+		$('.dynamic_prices__h2').on('click', function () {
+			$(this).parent('fieldset').toggleClass('active').children('form').slideToggle();
+		});
+
+		/** Tooltips */
+		$("[data-tooltip]").tipTip({
+			maxWidth: 'auto',
+			defaultPosition: 'bottom',
+			attribute: 'data-tooltip',
+			activation: 'click',
+			delay: 0
+		});
+
 		/** Show round inputs */
 		$('.change_regular_price').on('change', function () {
 			if (['2','3','4'].includes($(this).val())) {
