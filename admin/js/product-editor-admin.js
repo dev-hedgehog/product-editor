@@ -80,7 +80,9 @@
 
 			let form = $(this);
 			let data = new FormData(this);
+			let process_id = Date.now();
 			data.append('nonce', window.pe_nonce);
+			data.append('process_id', process_id);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
 				data.append("ids[]", $(this).val());
 			});
@@ -97,6 +99,8 @@
 				method: 'POST',
 				body: data,
 			}).then(function (response) {
+				clearInterval(intervalHandle);
+				intervalHandle = null;
 				if (response.ok) {
 					return response.json();
 				}
@@ -104,7 +108,7 @@
 				return Promise.reject(response);
 			}).then(function (data) {
 				console.log(data);
-				showInfo(data.message);
+				showInfo(data.message, 3000);
 				data.content.forEach((el) => {
 					let $tr = $('tr[data-id="' + el.id + '"]');
 					$tr.find('.td-price').html(el.price);
@@ -122,6 +126,8 @@
 					$('.do_reverse').show();
 				}
 			}).catch(function (error) {
+				clearInterval(intervalHandle);
+				intervalHandle = null;
 				if (typeof error.json === "function") {
 					error.json().then(jsonError => {
 						alert(jsonError.message);
@@ -138,7 +144,42 @@
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 			});
+			/** Get progress for process_id */
+			let progress_pending = false;
+			show_progress_bar(0);
+			let intervalHandle = setInterval(function () {
+				if (!progress_pending && intervalHandle) {
+					progress_pending = true;
+					$.get('/wp-admin/admin-post.php', {action: 'pe_get_progress', process_id: process_id})
+						.done(function (data) {
+							console.log('Progress: ', data, '%');
+							data = parseInt(data);
+							if (intervalHandle) {
+								show_progress_bar(data);
+								if (data == 100) {
+									intervalHandle = clearInterval(intervalHandle);
+									intervalHandle = null;
+								}
+							}
+						})
+						.fail(function (error) {
+							console.log(error);
+							clearInterval(intervalHandle);
+							intervalHandle = null;
+						})
+						.always(function () {
+							progress_pending = false;
+						});
+				}
+			}, 1500 );
 		});
+
+		/** Show progress bar */
+		function show_progress_bar(value) {
+			if (typeof value === 'number' && value >= 0 && value <= 100 )
+				$('.ajax-info').show().children('.inner')
+					.html('<progress value="'+value+'" max="100">'+value+' %</progress>'+value+'%')
+		}
 
 		/** Apply checkboxes */
 		function check_checkboxes(selector) {
@@ -304,11 +345,11 @@
 	}
 
 	/** Show popup message */
-	function showInfo(message) {
+	function showInfo(message, delay = 1300) {
 		let $box = $('.ajax-info');
 		$box.children('.inner').html(message);
 		$box.fadeIn(500)
-			.delay(1300)
+			.delay(delay)
 			.fadeOut(1000);
 	}
 

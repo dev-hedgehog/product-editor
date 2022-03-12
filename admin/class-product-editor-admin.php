@@ -110,7 +110,7 @@ class Product_Editor_Admin {
 	 */
 	public function start_session() {
 		if ( ! session_id() ) {
-			@session_start();
+			//@session_start();
 		}
 	}
 
@@ -295,9 +295,23 @@ class Product_Editor_Admin {
 		global $wpdb;
 		// The request must be applied in full or not at all.
 		$wpdb->query( 'START TRANSACTION' );
+		// If process_id is passed, we write progress to the file
+		$process_id = preg_replace('/[^\d]/', '', General_Helper::get_or_post_var( 'process_id' ) );
+		if ( $process_id ) {
+            $progress_tmp_file = get_temp_dir() . $process_id;
+            $fp = @fopen( $progress_tmp_file, 'w' );
+            @fwrite( $fp, '0' );
+            register_shutdown_function( function() use( $progress_tmp_file, $fp ) {
+                @fclose( $fp );
+                @unlink( $progress_tmp_file );
+            } );
+        }
 
-		// Walk through each product and apply the requested operations.
-		foreach ( $ids as $id ) {
+        $percentage_for_one_item = 100 / count( $ids );
+		$items_for_one_percentage = ceil( count( $ids ) / 100 );
+        $items_for_one_percentage = $items_for_one_percentage < 3 ? 3 : $items_for_one_percentage;
+        // Walk through each product and apply the requested operations.
+		foreach ( $ids as $i => $id ) {
 			$id      = sanitize_key( $id );
 			$product = wc_get_product( $id );
 			if ( ! $product ) {
@@ -308,6 +322,11 @@ class Product_Editor_Admin {
 				);
 			}
 			$this->process_change_product( $product );
+            if ( $process_id && $fp && $i % $items_for_one_percentage === 0 ) {
+                $progress = floor( $percentage_for_one_item * ( $i + 1 ) );
+                @fseek( $fp, 0 );
+                @fwrite( $fp, $progress );
+            }
 		}
 		// If changes were made, save the previous values to the database.
 		if ( $this->reverse_steps ) {
@@ -666,5 +685,28 @@ class Product_Editor_Admin {
 	    update_option( 'pe_dynamic_is_add', (bool) General_Helper::post_var( 'is_add' ) );
 	    update_option( 'pe_dynamic_multiply_value', $multiply_value );
 	    update_option( 'pe_dynamic_add_value', $add_value );
+    }
+
+    /**
+     * Handler for progress status requests
+     *
+     * @since   1.0.4
+     */
+    public function action_get_progress() {
+        self::security_check( true );
+        if ( ! General_Helper::get_or_post_var( 'process_id' ) ) {
+            return;
+        }
+        $tmp_filename = get_temp_dir() . preg_replace('/[^\d]/', '', General_Helper::get_or_post_var( 'process_id' ) );
+        if ( file_exists($tmp_filename) ) {
+            $status = file_get_contents( $tmp_filename );
+        } else {
+            $status = '100';
+        }
+        if ( preg_match( '/^\d{0,3}\.?\d*$/', $status ) ) {
+            self::send_response($status, 200, 'raw');
+        } else {
+            self::send_response('error', 520, 'raw');
+        }
     }
 }
