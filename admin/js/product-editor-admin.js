@@ -269,7 +269,7 @@
 				$el.html(tmplNode);
 				$el.find('.date-picker').datepicker(datepicker_options);
 			}
-			$el.find('.focus').focus();
+			$el.find('.focus').focus().select();
 		});
 
 

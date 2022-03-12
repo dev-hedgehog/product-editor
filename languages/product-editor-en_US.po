@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-03-10 19:40+0500\n"
-"PO-Revision-Date: 2022-03-10 19:40+0500\n"
+"POT-Creation-Date: 2022-03-13 00:25+0500\n"
+"PO-Revision-Date: 2022-03-13 00:25+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: en\n"
@@ -85,27 +85,27 @@ msgstr ""
 msgid "Nothing to change"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:306
+#: admin/class-product-editor-admin.php:320
 #, php-format
 msgid "Product with id:%s not found. Operations canceled."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:334
+#: admin/class-product-editor-admin.php:353
 #, php-format
 msgid "Operations applied: %s"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:485
+#: admin/class-product-editor-admin.php:504
 #, php-format
 msgid ""
 "Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:627
+#: admin/class-product-editor-admin.php:646
 msgid "You do not have permission to edit products"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:632
+#: admin/class-product-editor-admin.php:651
 msgid "The link you followed has expired."
 msgstr ""
 
@@ -357,7 +357,7 @@ msgid "External"
 msgstr ""
 
 #: admin/partials/product-editor-admin-table-rows.php:46
-msgid "Open for editing"
+msgid "Open for edit"
 msgstr ""
 
 #: admin/partials/product-editor-admin-table-variations-rows.php:44

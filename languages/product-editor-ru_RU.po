@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-03-10 19:40+0500\n"
-"PO-Revision-Date: 2022-03-10 19:46+0500\n"
+"POT-Creation-Date: 2022-03-13 00:25+0500\n"
+"PO-Revision-Date: 2022-03-13 00:25+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: ru\n"
@@ -98,17 +98,17 @@ msgstr "Нет данных для восстановления"
 msgid "Nothing to change"
 msgstr "Нечего изменять"
 
-#: admin/class-product-editor-admin.php:306
+#: admin/class-product-editor-admin.php:320
 #, php-format
 msgid "Product with id:%s not found. Operations canceled."
 msgstr "Продукт с id:%s не найден. Операции отменены."
 
-#: admin/class-product-editor-admin.php:334
+#: admin/class-product-editor-admin.php:353
 #, php-format
 msgid "Operations applied: %s"
 msgstr "Применено операций: %s"
 
-#: admin/class-product-editor-admin.php:485
+#: admin/class-product-editor-admin.php:504
 #, php-format
 msgid ""
 "Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
@@ -116,11 +116,11 @@ msgstr ""
 "Для продукта \"%1$s\" вычислена недопустимая цена: \"%2$s\". Операции "
 "отменены."
 
-#: admin/class-product-editor-admin.php:627
+#: admin/class-product-editor-admin.php:646
 msgid "You do not have permission to edit products"
 msgstr "У вас нет прав на редактирование товаров"
 
-#: admin/class-product-editor-admin.php:632
+#: admin/class-product-editor-admin.php:651
 msgid "The link you followed has expired."
 msgstr "Ссылка, по которой вы перешли, устарела."
 
@@ -385,7 +385,9 @@ msgid "External"
 msgstr "Внешний"
 
 #: admin/partials/product-editor-admin-table-rows.php:46
-msgid "Open for editing"
+#, fuzzy
+#| msgid "Open for editing"
+msgid "Open for edit"
 msgstr "Открыть для редактирования"
 
 #: admin/partials/product-editor-admin-table-variations-rows.php:44
