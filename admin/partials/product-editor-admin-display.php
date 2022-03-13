@@ -213,7 +213,7 @@
 			<div class="form-group">
 				<label>
 					<span class="title">Товар по акции:</span>&nbsp;
-					<select class="change_regular_price change_to" name="change_akciya">
+					<select class="" name="change_akciya">
 						<option value="">— Без изменений —</option>
 						<option value="1">Да</option>
 						<option value="2">Нет</option>
