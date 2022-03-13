@@ -143,12 +143,12 @@ class Product_Editor {
 
 		$plugin_admin = new Product_Editor_Admin( $this->get_plugin_name(), $this->get_version() );
 
-        $this->loader->add_action( 'init', $plugin_admin, 'start_session' );
         $this->loader->add_action( 'admin_menu', $plugin_admin, 'admin_menu' );
 
         $this->loader->add_action( 'admin_post_bulk_changes', $plugin_admin, 'action_bulk_changes' );
         $this->loader->add_action( 'admin_post_expand_product_variable', $plugin_admin, 'action_expand_product_variable' );
         $this->loader->add_action( 'admin_post_reverse_products_data', $plugin_admin, 'action_reverse_products_data' );
+        $this->loader->add_action( 'admin_post_pe_get_progress', $plugin_admin, 'action_get_progress' );
 
 	}
 

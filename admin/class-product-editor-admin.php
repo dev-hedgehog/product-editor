@@ -36,13 +36,22 @@ class Product_Editor_Admin {
 	private $version;
 
 	/**
-	 * The version of this plugin.
+	 * Array of data for reverse.
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      array|null    $reverse_steps    The current version of this plugin.
+	 * @var      array|null    $reverse_steps    Array of data for reverse.
 	 */
 	private $reverse_steps;
+
+    /**
+     * File handle for progress file.
+     *
+     * @since 1.0.4
+     * @access private
+     * @var resource|false|null $progress_tmp_handle    File handle for progress file.
+     */
+	private $progress_tmp_handle = null;
 
 	/**
 	 * An array of mappings of action requests and functions that perform them
@@ -91,7 +100,13 @@ class Product_Editor_Admin {
 	 */
 	public function enqueue_scripts() {
         wp_register_script( 'tipTip', plugin_dir_url( __FILE__ ) . 'libs/tipTip/tipTip.min.js', array( 'jquery' ) );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery', 'tipTip', 'jquery-ui-datepicker' ), $this->version, false );
+        wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery', 'tipTip', 'jquery-ui-datepicker' ), $this->version, false );
+        $translation_array = array(
+            'str_undo' => __( 'Undo the change: ', 'product-editor' ),
+            'str_reverse_dialog' => __( 'Item data that has been changed in the operation you are about to cancel will be overwritten by the data that preceded it. If any of the products has been edited outside the plugin, its data may be overwritten. Are you sure you want to return values for products?', 'product-editor' ),
+        );
+        wp_localize_script( $this->plugin_name, 'product_editor_object', $translation_array );
+        wp_enqueue_script( $this->plugin_name );
 	}
 
 	/**
@@ -104,16 +119,68 @@ class Product_Editor_Admin {
 		$this->enqueue_styles();
 	}
 
-	/**
-	 * Create session if doesn't exists
-	 *
-	 * @since    1.0.0
-	 */
-	public function start_session() {
-		if ( ! session_id() ) {
-			@session_start();
-		}
-	}
+    /**
+     * Returns filename for tmp progress file
+     *
+     * @return false|string
+     * @since   1.0.4
+     */
+    private function get_progress_filename () {
+        $process_id = preg_replace('/[^\d]/', '', General_Helper::get_or_post_var('process_id'));
+        if ( ! empty ( $process_id ) ) {
+            return get_temp_dir() . $process_id;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns file handle for tmp progress file
+     *
+     * @return false|resource|null
+     * @since   1.0.4
+     */
+    private function get_progress_file_handle () {
+        if ( ! empty( $this->progress_tmp_handle ) || $this->progress_tmp_handle === false ) {
+            return $this->progress_tmp_handle;
+        } else {
+            if ( ( $progress_tmp_file = $this->get_progress_filename() ) ) {
+                if ( $this->progress_tmp_handle = $fp = @fopen($progress_tmp_file, 'wr') ) {
+                    register_shutdown_function(function () use ($progress_tmp_file, $fp) {
+                        @fclose($fp);
+                        @unlink($progress_tmp_file);
+                    });
+                }
+            } else {
+                $this->progress_tmp_handle = false;
+            }
+        }
+        return $this->progress_tmp_handle;
+    }
+
+    /**
+     * Write to tmp progress file
+     *
+     * @param $data
+     * @param int $offset
+     * @since   1.0.4
+     */
+    private function write_progress_file ( $data, $offset = 0 ) {
+        if ( $fp = $this->get_progress_file_handle() ) {
+            @fseek( $fp, $offset );
+            @fwrite( $fp, $data );
+        }
+    }
+
+    /**
+     * Returns content of tmp progress file
+     *
+     * @return false|string
+     * @since   1.0.4
+     */
+    private function read_progress_file () {
+        return @file_get_contents( $this->get_progress_filename() );
+    }
 
 	/**
 	 * Adds menu items
@@ -255,6 +322,8 @@ class Product_Editor_Admin {
 		$num_on_page        = count( $products );
 		$show_variations    = (int) General_Helper::get_var( 'show_variations' );
 		$product_categories = get_terms( array( 'taxonomy' => 'product_cat' ) );
+        // Get last reverse_step
+        $reverse_step = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' ORDER BY id DESC LIMIT 1', ARRAY_A);
 
 		include 'partials/product-editor-admin-display.php';
 	}
@@ -266,14 +335,24 @@ class Product_Editor_Admin {
 	 */
 	public function action_reverse_products_data() {
 		self::security_check( true, true );
-		if ( empty( $_SESSION['reverse_steps'] ) ) {
+		$reverse_id = sanitize_key( General_Helper::get_or_post_var( 'reverse_id' ) );
+		if ( empty( $reverse_id ) ) {
 			self::send_response( array( 'message' => __( 'No data to recover', 'product-editor' ) ), 409 );
 		}
 		global $wpdb;
+        $reverse_step = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' WHERE id="' . $reverse_id . '"', ARRAY_A);
+        if ( ! $reverse_step || ! ( $reverse_step['data'] = @json_decode( $reverse_step['data'], true ) ) ) {
+            self::send_response( array( 'message' => __( 'No data to recover', 'product-editor' ) ), 409 );
+        }
 		$products = array();
 		$wpdb->query( 'START TRANSACTION' );
+		$this->write_progress_file( 0 );
+
+        $percentage_for_one_item = 100 / count( $reverse_step['data'] );
+        $items_for_one_percentage = ceil( count( $reverse_step['data'] ) / 100 );
+        $items_for_one_percentage = $items_for_one_percentage < 3 ? 3 : $items_for_one_percentage;
 		// Each record contains information on changing one attribute of the product.
-		foreach ( $_SESSION['reverse_steps'] as $record ) {
+		foreach ( $reverse_step['data'] as $i => $record ) {
 			if ( ! empty( $products[ $record['id'] ] ) ) {
 				$product = $products[ $record['id'] ];
 			} else {
@@ -301,9 +380,14 @@ class Product_Editor_Admin {
 					break;
 			}
 			$product->save();
+            if ( $i % $items_for_one_percentage === 0 ) {
+                $progress = floor( $percentage_for_one_item * ( $i + 1 ) );
+                $this->write_progress_file($progress);
+            }
 		}
+        $wpdb->delete( $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE, [ 'id' => $reverse_step['id'] ] );
 		$wpdb->query( 'COMMIT' );
-		$_SESSION['reverse_steps'] = null;
+
 		self::send_response( 'ok', 200, 'raw' );
 	}
 
@@ -347,10 +431,16 @@ class Product_Editor_Admin {
 
 		global $wpdb;
 		// The request must be applied in full or not at all.
+        $this->reverse_steps = [];
 		$wpdb->query( 'START TRANSACTION' );
+		$this->write_progress_file( 0 );
 
-		// Walk through each product and apply the requested operations.
-		foreach ( $ids as $id ) {
+		// 80% for changes, 20% for reloading
+        $percentage_for_one_item = 80 / count( $ids );
+		$items_for_one_percentage = ceil( count( $ids ) / 80 );
+        $items_for_one_percentage = $items_for_one_percentage < 3 ? 3 : $items_for_one_percentage;
+        // Walk through each product and apply the requested operations.
+		foreach ( $ids as $i => $id ) {
 			$id      = sanitize_key( $id );
 			$product = wc_get_product( $id );
 			if ( ! $product ) {
@@ -361,9 +451,13 @@ class Product_Editor_Admin {
 				);
 			}
 			$this->process_change_product( $product );
+            if ( $i % $items_for_one_percentage === 0 ) {
+                $progress = floor( $percentage_for_one_item * ( $i + 1 ) );
+                $this->write_progress_file($progress);
+            }
 		}
 		// If changes were made, save the previous values to the database.
-		if ( $this->reverse_steps ) {
+		if ( ! empty ( $this->reverse_steps ) ) {
 			$table_name = $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE;
 			$wpdb->insert(
 				$table_name,
@@ -375,18 +469,16 @@ class Product_Editor_Admin {
 			);
 		}
 		$wpdb->query( 'COMMIT' );
-		if ( ! $this->reverse_steps ) {
-			$this->reverse_steps = array();
-		}
-		$_SESSION['reverse_steps'] = $this->reverse_steps;
-
+        if ( ! empty ( $this->reverse_steps ) ) {
+            $reverse_step = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' ORDER BY id DESC LIMIT 1', ARRAY_A);
+        }
 		// Response new products data.
 		self::send_response(
 			array(
 				/* translators: %s: count of operations */
 				'message' => sprintf( __( 'Operations applied: %s', 'product-editor' ), count( $this->reverse_steps ) ),
-				'content' => self::response_data_for_ids( $ids ),
-				'reverse' => ! empty( $this->reverse_steps ),
+				'content' => $this->response_data_for_ids( $ids ),
+				'reverse' => ! empty( $reverse_step ) ? array( 'id' => $reverse_step['id'], 'name' => $reverse_step['name'] ) : '',
 			)
 		);
 	}
@@ -417,10 +509,15 @@ class Product_Editor_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	private static function response_data_for_ids( $ids ) {
+	private function response_data_for_ids( $ids ) {
 		$response_data = array();
 		$extra_ids     = array();
-		foreach ( $ids as $id ) {
+        // 80% for changes, 20% for reloading
+        $this->write_progress_file(80);
+        $percentage_for_one_item = 20 / count( $ids );
+        $items_for_one_percentage = ceil( count( $ids ) / 20 );
+        $items_for_one_percentage = $items_for_one_percentage < 3 ? 3 : $items_for_one_percentage;
+		foreach ( $ids as $i => $id ) {
 			$product = wc_get_product( $id );
 			// For variations, we also add their parent product to the output list, if it is not already added or is not in ids list.
 			if ( is_a( $product, 'WC_Product_Variation' ) && ! in_array( $product->get_parent_id(), $ids ) && ! in_array( $product->get_parent_id(), $extra_ids ) ) {
@@ -429,6 +526,10 @@ class Product_Editor_Admin {
 			}
 
 			$response_data[] = self::response_data_for_product( $product );
+            if ( $i % $items_for_one_percentage === 0 ) {
+                $progress = 80 + floor( $percentage_for_one_item * ( $i + 1 ) );
+                $this->write_progress_file($progress);
+            }
 		}
 		return $response_data;
 	}
@@ -741,5 +842,21 @@ class Product_Editor_Admin {
 	    update_option( 'pe_dynamic_is_add', (bool) General_Helper::post_var( 'is_add' ) );
 	    update_option( 'pe_dynamic_multiply_value', $multiply_value );
 	    update_option( 'pe_dynamic_add_value', $add_value );
+    }
+
+    /**
+     * Handler for progress status requests.
+     *
+     * @since   1.0.4
+     */
+    public function action_get_progress() {
+        self::security_check( true );
+        $status = $this->read_progress_file();
+        $status = $status !== false ? $status : '100';
+        if ( preg_match( '/^\d{0,3}\.?\d*$/', $status ) ) {
+            self::send_response($status, 200, 'raw');
+        } else {
+            self::send_response('error', 520, 'raw');
+        }
     }
 }

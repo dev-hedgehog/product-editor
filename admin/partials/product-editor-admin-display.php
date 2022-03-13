@@ -225,10 +225,14 @@
 			<br>
 			<div class="form-group">
 				<input type="submit" class="button" value="<?php esc_html_e( 'Change Selected', 'product-editor' ); ?>">&nbsp;&nbsp;
-				<a href="javascript://" class="do_reverse"
-								<?php echo ! empty( $_SESSION['reverse_steps'] ) ? '' : 'style="display: none;"'; ?>
-				><?php esc_html_e( 'Undo the last change', 'product-editor' ); ?></a>
-
+                <?php if ( ! empty( $reverse_step ) ): ?>
+                    <a href="javascript://" class="do_reverse"
+                       data-id="<?php echo esc_attr( $reverse_step['id'] ) ?>">
+                        <?php echo esc_html__( 'Undo the change: ', 'product-editor' ) . esc_html($reverse_step['name']); ?>
+                    </a>
+                <?php else: ?>
+                <a href="javascript://" class="do_reverse" style="display: none;"></a>
+                <?php endif; ?>
 			</div>
 		</fieldset>
 	</form>

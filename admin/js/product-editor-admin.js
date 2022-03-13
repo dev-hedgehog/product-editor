@@ -1,7 +1,9 @@
 (function ($) {
 	'use strict';
-
+	let product_editor_object = window.product_editor_object;
 	let isRequested = false;
+	let isProgressRequested = false;
+	let progressIntervalHandle = null;
 	let datepicker_options = {
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
@@ -77,10 +79,13 @@
 		/** Submit handler for bulk changes form. */
 		$('#bulk-changes').submit(function (e) {
 			e.preventDefault();
-
+			if (isRequested) return false;
+			isRequested = true;
 			let form = $(this);
 			let data = new FormData(this);
+			let process_id = Date.now();
 			data.append('nonce', window.pe_nonce);
+			data.append('process_id', process_id);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
 				data.append("ids[]", $(this).val());
 			});
@@ -97,6 +102,8 @@
 				method: 'POST',
 				body: data,
 			}).then(function (response) {
+				stop_observe_progress_status();
+				isRequested = false;
 				if (response.ok) {
 					return response.json();
 				}
@@ -104,7 +111,7 @@
 				return Promise.reject(response);
 			}).then(function (data) {
 				console.log(data);
-				showInfo(data.message);
+				showInfo(data.message, 3000);
 				data.content.forEach((el) => {
 					let $tr = $('tr[data-id="' + el.id + '"]');
 					$tr.find('.td-price').html(el.price);
@@ -120,9 +127,12 @@
 				// Reset round inputs
 				$('.change_to').trigger('change');
 				if (data.reverse) {
-					$('.do_reverse').show();
+					$('.do_reverse').show().data('id', data.reverse['id']).html(product_editor_object['str_undo'] + data.reverse['name']);
 				}
 			}).catch(function (error) {
+				stop_observe_progress_status();
+				isRequested = false;
+				showInfo('Error occurred!', 3000);
 				if (typeof error.json === "function") {
 					error.json().then(jsonError => {
 						alert(jsonError.message);
@@ -139,7 +149,54 @@
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 			});
+			/** Get progress for process_id */
+			observe_progress_status(process_id);
 		});
+
+		/** Sends requests to track the progress of the request */
+		function observe_progress_status(process_id) {
+			if (progressIntervalHandle) {
+				return;
+			}
+			isProgressRequested = false;
+			show_progress_bar(0);
+			progressIntervalHandle = setInterval(function () {
+				if (!isProgressRequested && progressIntervalHandle) {
+					isProgressRequested = true;
+					$.get('/wp-admin/admin-post.php', {action: 'pe_get_progress', process_id: process_id})
+						.done(function (data) {
+							console.log('Progress: ', data, '%');
+							data = parseInt(data);
+							if (progressIntervalHandle) {
+								show_progress_bar(data);
+								if (data == 100) {
+									stop_observe_progress_status();
+								}
+							}
+						})
+						.fail(function (error) {
+							console.log(error);
+							stop_observe_progress_status();
+						})
+						.always(function () {
+							isProgressRequested = false;
+						});
+				}
+			}, 1500 );
+		}
+
+		/** Stops progress tracking */
+		function stop_observe_progress_status() {
+			clearInterval(progressIntervalHandle);
+			progressIntervalHandle = null;
+		}
+
+		/** Show progress bar */
+		function show_progress_bar(value) {
+			if (typeof value === 'number' && value >= 0 && value <= 100 )
+				$('.ajax-info').show().children('.inner')
+					.html('<progress value="'+value+'" max="100">'+value+' %</progress>'+value+'%')
+		}
 
 		/** Apply checkboxes */
 		function check_checkboxes(selector) {
@@ -234,7 +291,7 @@
 				$(tmplNode).find('input#change_action').prop('name', 'change_akciya').val(1);
 				$el.html(tmplNode);
 			}
-			$el.find('.focus').focus();
+			$el.find('.focus').focus().select();
 		});
 
 
@@ -269,10 +326,21 @@
 
 		/** Handler for rollback of the last change. */
 		$('.do_reverse').click(function () {
-			if (isRequested) return;
+			let reverse_id = $(this).data('id');
+			if (
+				isRequested
+				|| !reverse_id
+				|| !confirm(product_editor_object['str_reverse_dialog'])
+			) return;
+			let process_id = Date.now();
 			isRequested = true;
 			$('.lds-dual-ring').show();
-			$.get('/wp-admin/admin-post.php', {action: 'reverse_products_data', nonce: window.pe_nonce})
+			$.get('/wp-admin/admin-post.php', {
+				action: 'reverse_products_data',
+				nonce: window.pe_nonce,
+				reverse_id: reverse_id,
+				process_id: process_id
+			})
 				.done(function (data) {
 					document.location.reload();
 				})
@@ -283,6 +351,8 @@
 				})
 				.always(function () {
 				});
+			/** Get progress for process_id */
+			observe_progress_status(process_id);
 		});
 
 
@@ -310,11 +380,11 @@
 	}
 
 	/** Show popup message */
-	function showInfo(message) {
+	function showInfo(message, delay = 1300) {
 		let $box = $('.ajax-info');
 		$box.children('.inner').html(message);
 		$box.fadeIn(500)
-			.delay(1300)
+			.delay(delay)
 			.fadeOut(1000);
 	}
 
@@ -326,7 +396,8 @@
 	/** Submit handler for inline edit form */
 	function onSubmitSingleValue(e) {
 		e.preventDefault();
-
+		if (isRequested) return false;
+		isRequested = true;
 		let form = $(this),
 			data = new FormData(this);
 		data.append('nonce', window.pe_nonce);
@@ -338,6 +409,7 @@
 			method: 'POST',
 			body: data,
 		}).then(function (response) {
+			isRequested = false;
 			if (response.ok) {
 				return response.json();
 			}
@@ -357,9 +429,10 @@
 			form.find('input[type="submit"]').prop('disabled', false);
 			$('.lds-dual-ring').hide();
 			if (data.reverse) {
-				$('.do_reverse').show();
+				$('.do_reverse').show().data('id', data.reverse['id']).html(product_editor_object['str_undo'] + data.reverse['name']);
 			}
 		}).catch(function (error) {
+			isRequested = false;
 			if (typeof error.json === "function") {
 				error.json().then(jsonError => {
 					alert(jsonError.message);
