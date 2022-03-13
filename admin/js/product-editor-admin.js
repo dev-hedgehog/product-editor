@@ -1,7 +1,9 @@
 (function ($) {
 	'use strict';
-
+	let product_editor_object = window.product_editor_object;
 	let isRequested = false;
+	let isProgressRequested = false;
+	let progressIntervalHandle = null;
 	let datepicker_options = {
 		dateFormat: 'yy-mm-dd',
 		showButtonPanel: true,
@@ -77,7 +79,8 @@
 		/** Submit handler for bulk changes form. */
 		$('#bulk-changes').submit(function (e) {
 			e.preventDefault();
-
+			if (isRequested) return false;
+			isRequested = true;
 			let form = $(this);
 			let data = new FormData(this);
 			let process_id = Date.now();
@@ -99,8 +102,8 @@
 				method: 'POST',
 				body: data,
 			}).then(function (response) {
-				clearInterval(intervalHandle);
-				intervalHandle = null;
+				stop_observe_progress_status();
+				isRequested = false;
 				if (response.ok) {
 					return response.json();
 				}
@@ -123,11 +126,12 @@
 				// Reset round inputs
 				$('.change_to').trigger('change');
 				if (data.reverse) {
-					$('.do_reverse').show();
+					$('.do_reverse').show().data('id', data.reverse['id']).html(product_editor_object['str_undo'] + data.reverse['name']);
 				}
 			}).catch(function (error) {
-				clearInterval(intervalHandle);
-				intervalHandle = null;
+				stop_observe_progress_status();
+				isRequested = false;
+				showInfo('Error occurred!', 3000);
 				if (typeof error.json === "function") {
 					error.json().then(jsonError => {
 						alert(jsonError.message);
@@ -145,34 +149,46 @@
 				$('.lds-dual-ring').hide();
 			});
 			/** Get progress for process_id */
-			let progress_pending = false;
+			observe_progress_status(process_id);
+		});
+
+		/** Sends requests to track the progress of the request */
+		function observe_progress_status(process_id) {
+			if (progressIntervalHandle) {
+				return;
+			}
+			isProgressRequested = false;
 			show_progress_bar(0);
-			let intervalHandle = setInterval(function () {
-				if (!progress_pending && intervalHandle) {
-					progress_pending = true;
+			progressIntervalHandle = setInterval(function () {
+				if (!isProgressRequested && progressIntervalHandle) {
+					isProgressRequested = true;
 					$.get('/wp-admin/admin-post.php', {action: 'pe_get_progress', process_id: process_id})
 						.done(function (data) {
 							console.log('Progress: ', data, '%');
 							data = parseInt(data);
-							if (intervalHandle) {
+							if (progressIntervalHandle) {
 								show_progress_bar(data);
 								if (data == 100) {
-									intervalHandle = clearInterval(intervalHandle);
-									intervalHandle = null;
+									stop_observe_progress_status();
 								}
 							}
 						})
 						.fail(function (error) {
 							console.log(error);
-							clearInterval(intervalHandle);
-							intervalHandle = null;
+							stop_observe_progress_status();
 						})
 						.always(function () {
-							progress_pending = false;
+							isProgressRequested = false;
 						});
 				}
 			}, 1500 );
-		});
+		}
+
+		/** Stops progress tracking */
+		function stop_observe_progress_status() {
+			clearInterval(progressIntervalHandle);
+			progressIntervalHandle = null;
+		}
 
 		/** Show progress bar */
 		function show_progress_bar(value) {
@@ -304,10 +320,21 @@
 
 		/** Handler for rollback of the last change. */
 		$('.do_reverse').click(function () {
-			if (isRequested) return;
+			let reverse_id = $(this).data('id');
+			if (
+				isRequested
+				|| !reverse_id
+				|| !confirm(product_editor_object['str_reverse_dialog'])
+			) return;
+			let process_id = Date.now();
 			isRequested = true;
 			$('.lds-dual-ring').show();
-			$.get('/wp-admin/admin-post.php', {action: 'reverse_products_data', nonce: window.pe_nonce})
+			$.get('/wp-admin/admin-post.php', {
+				action: 'reverse_products_data',
+				nonce: window.pe_nonce,
+				reverse_id: reverse_id,
+				process_id: process_id
+			})
 				.done(function (data) {
 					document.location.reload();
 				})
@@ -318,6 +345,8 @@
 				})
 				.always(function () {
 				});
+			/** Get progress for process_id */
+			observe_progress_status(process_id);
 		});
 
 
@@ -361,7 +390,8 @@
 	/** Submit handler for inline edit form */
 	function onSubmitSingleValue(e) {
 		e.preventDefault();
-
+		if (isRequested) return false;
+		isRequested = true;
 		let form = $(this),
 			data = new FormData(this);
 		data.append('nonce', window.pe_nonce);
@@ -373,6 +403,7 @@
 			method: 'POST',
 			body: data,
 		}).then(function (response) {
+			isRequested = false;
 			if (response.ok) {
 				return response.json();
 			}
@@ -391,9 +422,10 @@
 			form.find('input[type="submit"]').prop('disabled', false);
 			$('.lds-dual-ring').hide();
 			if (data.reverse) {
-				$('.do_reverse').show();
+				$('.do_reverse').show().data('id', data.reverse['id']).html(product_editor_object['str_undo'] + data.reverse['name']);
 			}
 		}).catch(function (error) {
+			isRequested = false;
 			if (typeof error.json === "function") {
 				error.json().then(jsonError => {
 					alert(jsonError.message);
