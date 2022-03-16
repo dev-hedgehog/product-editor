@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.9
@@ -24,6 +24,7 @@ It is possible to change the price, sale price and sale dates.
 * rounding prices with a required precision
 * dynamic price changes
 * ability to undo changes
+* tag-search
 
 I would be grateful if you leave a review about the plugin.
 
@@ -47,6 +48,9 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 
 == Changelog ==
 
+= 1.0.5 =
+* added tag-search
+
 = 1.0.4 =
 * added dynamic price changes functionality
 * added progress bar for bulk changes
@@ -69,6 +73,9 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+* added tag-search
 
 = 1.0.4 =
 * added dynamic price changes functionality

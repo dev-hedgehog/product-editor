@@ -15,6 +15,8 @@
 /** @var int $total count of base products */
 /** @var int $num_on_page count products on page */
 /** @var int $num_of_pages count of pages */
+/** @var array $tags_data associative array tags data */
+/** @var string $tags_get_value tags values from GET request */
 /** @var WP_Term[] $product_categories categories */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
 
@@ -40,6 +42,7 @@
 </template>
 <script>
 	var pe_nonce = '<?php echo $nonce; ?>';
+	var pe_tags_object = <?php echo json_encode($tags_data); ?>
 </script>
 <div class="wrap product-editor">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Product Editor', 'product-editor' ); ?></h1>
@@ -89,6 +92,7 @@
                        value="<?php echo esc_attr( $add_number ); ?>"
                 >
             </div>
+            <br/>
             <input type="submit" value="<?php esc_html_e( 'Save', 'product-editor' ); ?>" class="button">
         </form>
     </fieldset>
@@ -126,13 +130,19 @@
 					</select>
 				</label>
 				&nbsp;&nbsp;
-				<label><?php esc_html_e( 'Name:', 'product-editor' ); ?>&nbsp;
-					<input type="search"
+                <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
+                    <input type="text" id="selectTags" name="tags" class="form-control" value="<?php echo esc_attr( $tags_get_value ); ?>" >
+                </label>
+			</div>
+            <div class="form-group">
+                <label><?php esc_html_e( 'Name:', 'product-editor' ); ?>&nbsp;
+                    <input type="search"
                            name="s"
                            value="<?php echo esc_attr( General_Helper::get_var( 's', '' ) ); ?>"
-					/>
-				</label>
-			</div>
+                    />
+                </label>
+            </div>
+            <br/>
 			<input type="submit" value="<?php esc_html_e( 'Search', 'product-editor' ); ?>" class="button">
 		</form>
 

@@ -89,7 +89,8 @@ class Product_Editor_Admin {
 		$min = defined( SCRIPT_DEBUG ) && SCRIPT_DEBUG ? '' : '.min';
         wp_register_style( 'jquery-ui', plugin_dir_url( __FILE__ ) . 'libs/jquery-ui-1.13.0/jquery-ui' . $min .'.css' );
         wp_register_style( 'tipTip', plugin_dir_url( __FILE__ ) . 'libs/tipTip/tipTip.css' );
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array( 'jquery-ui', 'tipTip' ), $this->version, 'all' );
+        wp_register_style( 'selectPage', plugin_dir_url( __FILE__ ) . 'libs/selectPage/selectpage.css' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/product-editor-admin.css', array( 'jquery-ui', 'tipTip', 'selectPage' ), $this->version, 'all' );
 	}
 
 	/**
@@ -99,12 +100,16 @@ class Product_Editor_Admin {
 	 */
 	public function enqueue_scripts() {
         wp_register_script( 'tipTip', plugin_dir_url( __FILE__ ) . 'libs/tipTip/tipTip.min.js', array( 'jquery' ) );
-        wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery', 'tipTip', 'jquery-ui-datepicker' ), $this->version, false );
+        wp_register_script( 'selectPage', plugin_dir_url( __FILE__ ) . 'libs/selectPage/selectpage.js', array( 'jquery' ) );
+        wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/product-editor-admin.js', array( 'jquery', 'tipTip', 'jquery-ui-datepicker', 'selectPage' ), $this->version, false );
         $translation_array = array(
+            'str_items_count' => __( 'Items: ', 'product-editor' ),
             'str_undo' => __( 'Undo the change: ', 'product-editor' ),
             'str_reverse_dialog' => __( 'Item data that has been changed in the operation you are about to cancel will be overwritten by the data that preceded it. If any of the products has been edited outside the plugin, its data may be overwritten. Are you sure you want to return values for products?', 'product-editor' ),
         );
         wp_localize_script( $this->plugin_name, 'product_editor_object', $translation_array );
+        $selectpage_translation_array = include __DIR__ . "/libs/selectPage/selectpage-js-localize.php";
+        wp_localize_script( 'selectPage', 'selectpage_object', $selectpage_translation_array );
         wp_enqueue_script( $this->plugin_name );
 	}
 
@@ -258,9 +263,13 @@ class Product_Editor_Admin {
 		$args['offset'] = ( General_Helper::get_var( 'paged', 1 ) - 1 ) * $args['limit'];
 		General_Helper::get_var( 'product_cat', false ) && $args['category'] = array( sanitize_title_for_query( General_Helper::get_var( 'product_cat' ) ) );
 		General_Helper::get_var( 's', false ) && $args['name']               = sanitize_title_for_query( General_Helper::get_var( 's' ) );
+        $tags_get_value = preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'tags', '' ) );
+        if ( $tags_get_value ) {
+            $args['tag'] = explode( ',', $tags_get_value );
+        }
 		$results = wc_get_products( $args );
 		// if the search for an exact match of the name did not give any results, we are looking for an inaccurate.
-		if ( 0 === $results->total && $args['name'] ) {
+		if ( 0 === $results->total && ! empty( $args['name'] ) ) {
 			$args['s'] = $args['name'];
 			unset( $args['name'] );
 			$results = wc_get_products( $args );
@@ -274,6 +283,9 @@ class Product_Editor_Admin {
 		$product_categories = get_terms( array( 'taxonomy' => 'product_cat' ) );
         // Get last reverse_step
         $reverse_step = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' ORDER BY id DESC LIMIT 1', ARRAY_A);
+        $tags_data = $wpdb->get_results( 'SELECT ' . $wpdb->prefix . 'terms.`slug`, ' . $wpdb->prefix . 'terms.`name`, SUM( tax.`count` ) AS product_count
+FROM `' . $wpdb->prefix . 'terms` INNER JOIN ' . $wpdb->prefix . 'term_taxonomy tax ON tax.term_id = ' . $wpdb->prefix . 'terms.term_id AND tax.taxonomy = \'product_tag\'
+GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 
 		include 'partials/product-editor-admin-display.php';
 	}
