@@ -261,8 +261,8 @@ class Product_Editor_Admin {
 		);
 		$args['limit']  = (int) General_Helper::get_var( 'limit', 10 );
 		$args['offset'] = ( General_Helper::get_var( 'paged', 1 ) - 1 ) * $args['limit'];
-		General_Helper::get_var( 'product_cat', false ) && $args['category'] = array( sanitize_title_for_query( General_Helper::get_var( 'product_cat' ) ) );
-		General_Helper::get_var( 's', false ) && $args['name']               = sanitize_title_for_query( General_Helper::get_var( 's' ) );
+		General_Helper::get_var( 'product_cat', false ) && $args['category'] = array( General_Helper::get_var( 'product_cat' ) );
+		General_Helper::get_var( 's', false ) && $args['name']               = General_Helper::get_var( 's' );
         $tags_get_value = preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'tags', '' ) );
         if ( $tags_get_value ) {
             $args['tag'] = explode( ',', $tags_get_value );

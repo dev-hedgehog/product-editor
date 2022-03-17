@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.9
@@ -47,6 +47,9 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 5.
 
 == Changelog ==
+
+= 1.0.6 =
+* bugfix cirilic search
 
 = 1.0.5 =
 * added tag-search
