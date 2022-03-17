@@ -49,7 +49,7 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 == Changelog ==
 
 = 1.0.6 =
-* bugfix cirilic search
+* bugfix cyrillic search
 
 = 1.0.5 =
 * added tag-search
@@ -76,6 +76,9 @@ https://www.youtube.com/watch?v=mSM_ndk2z7A
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+* bugfix cyrillic search
 
 = 1.0.5 =
 * added tag-search
