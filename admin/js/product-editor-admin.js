@@ -40,6 +40,17 @@
 			delay: 0
 		});
 
+		/** Select tags */
+		$('#selectTags').selectPage({
+			showField : 'name',
+			keyField : 'slug',
+			data : window.pe_tags_object,
+			multiple : true,
+			formatItem : function(data){
+				return data.name + ' (' + product_editor_object.str_items_count + data.product_count + ')';
+			}
+		});
+
 		/** Show round inputs */
 		$('.change_regular_price').on('change', function () {
 			if (['2','3','4'].includes($(this).val())) {
