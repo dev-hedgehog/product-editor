@@ -346,7 +346,7 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 		}
         $wpdb->delete( $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE, [ 'id' => $reverse_step['id'] ] );
 		$wpdb->query( 'COMMIT' );
-
+        WC_Cache_Helper::get_transient_version( 'product', true );
 		self::send_response( 'ok', 200, 'raw' );
 	}
 
@@ -428,6 +428,7 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 			);
 		}
 		$wpdb->query( 'COMMIT' );
+        WC_Cache_Helper::get_transient_version( 'product', true );
         if ( ! empty ( $this->reverse_steps ) ) {
             $reverse_step = $wpdb->get_row('SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' ORDER BY id DESC LIMIT 1', ARRAY_A);
         }
@@ -779,6 +780,7 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 	    update_option( 'pe_dynamic_is_add', (bool) General_Helper::post_var( 'is_add' ) );
 	    update_option( 'pe_dynamic_multiply_value', $multiply_value );
 	    update_option( 'pe_dynamic_add_value', $add_value );
+        WC_Cache_Helper::get_transient_version( 'product', true );
     }
 
     /**
