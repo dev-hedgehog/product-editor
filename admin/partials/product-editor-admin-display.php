@@ -220,7 +220,12 @@
                 </select>
 				<input type="text" class="date-picker" name="_sale_date_to" value="" placeholder="<?php esc_html_e( 'To&hellip;', 'product-editor' ); ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">
 			</div>
-
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="not_processing_zero_price_products">
+                    <span class="title"><?php esc_html_e( 'Do not change products with zero price', 'product-editor' ); ?></span>&nbsp;
+                </label>
+            </div>
 			<br>
 			<div class="form-group">
 				<input type="submit" class="button" value="<?php esc_html_e( 'Change Selected', 'product-editor' ); ?>">&nbsp;&nbsp;

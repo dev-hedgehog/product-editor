@@ -454,7 +454,9 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 		// self::$change_actions - an array of mappings of action requests and functions that perform them.
 		foreach ( self::$change_actions as $action_name => $func_name ) {
 			if ( General_Helper::post_var( $action_name ) ) {
-				$this->$func_name( $product );
+                if ( !General_Helper::post_var( 'not_processing_zero_price_products' ) || $product->get_regular_price( 'edit' ) ) {
+                    $this->$func_name( $product );
+                }
 			}
 		}
 		// Save model after all changes.
@@ -572,7 +574,11 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 		switch ( (int) $action ) {
 			case 1:
 				// Change to.
-				$new_regular_price = $number;
+                if ( $_POST['_regular_price'] === '' ) {
+                    $new_regular_price = '';
+                } else {
+                    $new_regular_price = $number;
+                }
 				break;
 			case 2:
 				// Increase existing price by (fixed amount or %).
@@ -589,21 +595,20 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 		};
 
 		$new_regular_price = self::round_price( $new_regular_price, $round_precision, $round_type);
-
-		if ( $new_regular_price <= 0 || '' == $new_regular_price ) {
-			self::send_response(
-				array(
-					'message' =>
-						sprintf(
-						/* translators: 1: Name of a product 2: New regular price */
-							__( 'Invalid price computed for product "%1$s": "%2$s". Operations canceled.', 'product-editor' ),
-							$product->get_name(),
-							$new_regular_price
-						),
-				),
-				409
-			);
-		}
+        if ( $new_regular_price < 0 ) {
+            self::send_response(
+                array(
+                    'message' =>
+                        sprintf(
+                        /* translators: 1: Name of a product 2: New regular price */
+                            __( 'Invalid price computed for product "%1$s": "%2$s". Operations canceled.', 'product-editor' ),
+                            $product->get_name(),
+                            $new_regular_price
+                        ),
+                ),
+                409
+            );
+        }
 		$product->set_regular_price( $new_regular_price );
 	}
 
@@ -672,7 +677,7 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 	 * @since    1.0.0
 	 */
 	private function change_date_on_sale_from( $product ) {
-		 $arg_date = wc_clean( General_Helper::post_var( '_sale_date_from' ) );
+		$arg_date = wc_clean( General_Helper::post_var( '_sale_date_from' ) );
 		$action    = General_Helper::post_var( 'change_date_on_sale_from' );
 		if ( empty( $action ) || is_a( $product, 'WC_Product_Variable' ) ) {
 			return;
