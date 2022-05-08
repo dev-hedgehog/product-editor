@@ -595,7 +595,7 @@ GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 		};
 
 		$new_regular_price = self::round_price( $new_regular_price, $round_precision, $round_type);
-        if ( $new_regular_price < 0 ) {
+        if ( (float) $new_regular_price < 0 ) {
             self::send_response(
                 array(
                     'message' =>
