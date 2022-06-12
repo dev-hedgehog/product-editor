@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-03-16 20:03+0500\n"
-"PO-Revision-Date: 2022-03-16 20:04+0500\n"
+"POT-Creation-Date: 2022-05-08 23:20+0500\n"
+"PO-Revision-Date: 2022-05-08 23:20+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: en\n"
@@ -107,125 +107,103 @@ msgstr ""
 msgid "Product with id:%s not found. Operations canceled."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:438
+#: admin/class-product-editor-admin.php:439
 #, php-format
 msgid "Operations applied: %s"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:598
-#, php-format
-msgid ""
-"Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
-msgstr ""
-
-#: admin/class-product-editor-admin.php:740
+#: admin/class-product-editor-admin.php:733
 msgid "You do not have permission to edit products"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:745
+#: admin/class-product-editor-admin.php:738
 msgid "The link you followed has expired."
 msgstr ""
 
 #: admin/libs/selectPage/selectpage-js-localize.php:11
-msgid "Add button "
-msgstr ""
-
-#: admin/libs/selectPage/selectpage-js-localize.php:12
-msgid "add a box "
-msgstr ""
-
-#: admin/libs/selectPage/selectpage-js-localize.php:13
-msgid "Del button "
-msgstr ""
-
-#: admin/libs/selectPage/selectpage-js-localize.php:14
-msgid "delete a box "
-msgstr ""
-
-#: admin/libs/selectPage/selectpage-js-localize.php:15
 msgid "Next "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:17
+#: admin/libs/selectPage/selectpage-js-localize.php:13
 #, php-format
 msgid "Next %s (Right key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:18
+#: admin/libs/selectPage/selectpage-js-localize.php:14
 msgid "Prev "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:20
+#: admin/libs/selectPage/selectpage-js-localize.php:16
 #, php-format
 msgid "Prev %s (Left key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:21
+#: admin/libs/selectPage/selectpage-js-localize.php:17
 msgid "First (Shift + Left key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:22
+#: admin/libs/selectPage/selectpage-js-localize.php:18
 msgid "Last (Shift + Right key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:23
+#: admin/libs/selectPage/selectpage-js-localize.php:19
 msgid "Get All (Down key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:24
-#: admin/libs/selectPage/selectpage-js-localize.php:26
+#: admin/libs/selectPage/selectpage-js-localize.php:20
+#: admin/libs/selectPage/selectpage-js-localize.php:22
 msgid "(button) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:25
+#: admin/libs/selectPage/selectpage-js-localize.php:21
 msgid "Close (Tab key) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:27
+#: admin/libs/selectPage/selectpage-js-localize.php:23
 msgid "loading... "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:28
+#: admin/libs/selectPage/selectpage-js-localize.php:24
 msgid "(loading) "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:29
+#: admin/libs/selectPage/selectpage-js-localize.php:25
 msgid "Page page_num of page_count "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:30
+#: admin/libs/selectPage/selectpage-js-localize.php:26
 msgid "Attention : Please choose from among the list."
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:31
+#: admin/libs/selectPage/selectpage-js-localize.php:27
 msgid "OK : Correctly selected."
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:32
+#: admin/libs/selectPage/selectpage-js-localize.php:28
 msgid "not found "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:33
+#: admin/libs/selectPage/selectpage-js-localize.php:29
 msgid "An error occurred while connecting to server. "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:34
+#: admin/libs/selectPage/selectpage-js-localize.php:30
 msgid "Clear content "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:35
+#: admin/libs/selectPage/selectpage-js-localize.php:31
 msgid "Select current page "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:36
+#: admin/libs/selectPage/selectpage-js-localize.php:32
 msgid "Clear current page "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:37
+#: admin/libs/selectPage/selectpage-js-localize.php:33
 msgid "Clear all selected "
 msgstr ""
 
-#: admin/libs/selectPage/selectpage-js-localize.php:38
+#: admin/libs/selectPage/selectpage-js-localize.php:34
 msgid "You can only select up to max_selected_limit items"
 msgstr ""
 
@@ -387,62 +365,66 @@ msgid "To&hellip;"
 msgstr ""
 
 #: admin/partials/product-editor-admin-display.php:226
+msgid "Do not change products with zero price"
+msgstr ""
+
+#: admin/partials/product-editor-admin-display.php:231
 msgid "Change Selected"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:245
+#: admin/partials/product-editor-admin-display.php:250
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:246
+#: admin/partials/product-editor-admin-display.php:251
 msgid "&raquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:260
+#: admin/partials/product-editor-admin-display.php:265
 msgid "Total found:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:262
+#: admin/partials/product-editor-admin-display.php:267
 msgid "Items on page:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:271
+#: admin/partials/product-editor-admin-display.php:276
 msgid "Base"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:274
+#: admin/partials/product-editor-admin-display.php:279
 msgid "Variations"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:280
+#: admin/partials/product-editor-admin-display.php:285
 msgid "Name"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:283
+#: admin/partials/product-editor-admin-display.php:288
 msgid "Status"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:286
+#: admin/partials/product-editor-admin-display.php:291
 msgid "Type"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:289
+#: admin/partials/product-editor-admin-display.php:294
 msgid "Displayed price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:292
+#: admin/partials/product-editor-admin-display.php:297
 msgid "Regular price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:295
+#: admin/partials/product-editor-admin-display.php:300
 msgid "Sale price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:298
+#: admin/partials/product-editor-admin-display.php:303
 msgid "Sale date"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:301
+#: admin/partials/product-editor-admin-display.php:306
 msgid "Sale end date"
 msgstr ""
 

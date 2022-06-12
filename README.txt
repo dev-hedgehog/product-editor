@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 5.9
@@ -54,6 +54,9 @@ The most likely reason is that the execution process is taking longer than allow
 5.
 
 == Changelog ==
+= 1.0.8 =
+* added the ability to set a zero price.
+* added the ability to not change products with a zero price in bulk editing.
 
 = 1.0.7 =
 * added cache reset after product changes
@@ -86,6 +89,10 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.8 =
+* added the ability to set a zero price.
+* added the ability to not change products with a zero price in bulk editing.
 
 = 1.0.7 =
 * added cache reset after product changes
