@@ -199,7 +199,7 @@ class Product_Editor_Admin {
 			'edit.php?post_type=product',
 			__( 'Product Editor', 'product-editor' ),
 			__( 'Product Editor', 'product-editor' ),
-			'manage_options',
+			'manage_woocommerce',
 			'product-editor',
 			array( $this, 'main_page' )
 		);

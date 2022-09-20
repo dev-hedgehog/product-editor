@@ -2,10 +2,10 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 6.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,10 @@ The most likely reason is that the execution process is taking longer than allow
 5.
 
 == Changelog ==
+= 1.0.9 =
+* bugfix: menu item was not shown for shop manager role
+* added Portuguese - BRAZIL translate
+
 = 1.0.8 =
 * added the ability to set a zero price.
 * added the ability to not change products with a zero price in bulk editing.
@@ -89,6 +93,10 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.9 =
+* bugfix: menu item was not shown for shop manager role
+* added Portuguese - BRAZIL translate
 
 = 1.0.8 =
 * added the ability to set a zero price.
