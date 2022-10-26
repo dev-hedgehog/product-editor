@@ -241,6 +241,32 @@ class Product_Editor_Admin {
 		);
 	}
 
+    /**
+     * Filtering by taxonomy
+     *
+     * @since    1.0.0
+     */
+    public function taxonomy_query($query, $query_vars) {
+        $fields = [
+            ['name' => 'in_tags', 'operator' => 'IN', 'taxonomy' => 'product_tag'],
+            ['name' => 'in_product_cats', 'operator' => 'IN', 'taxonomy' => 'product_cat'],
+            ['name' => 'exclude_tags', 'operator' => 'NOT IN', 'taxonomy' => 'product_tag'],
+            ['name' => 'exclude_product_cats', 'operator' => 'NOT IN', 'taxonomy' => 'product_cat'],
+        ];
+
+        foreach ($fields as $field)
+            if (!empty($query_vars[$field['name']])) {
+                $r = array(
+                    'taxonomy' => $field['taxonomy'],
+                    'field'    => 'slug',
+                    'terms'    => $query_vars[$field['name']], // Use the value of previous block of code
+                    'operator' => $field['operator'],
+                );
+                $query['tax_query'][] = $r;
+            }
+        return $query;
+    }
+
 	/**
 	 * Home page handler in admin area
 	 *
@@ -261,12 +287,23 @@ class Product_Editor_Admin {
 		);
 		$args['limit']  = (int) General_Helper::get_var( 'limit', 10 );
 		$args['offset'] = ( General_Helper::get_var( 'paged', 1 ) - 1 ) * $args['limit'];
-		General_Helper::get_var( 'product_cat', false ) && $args['category'] = array( General_Helper::get_var( 'product_cat' ) );
-		General_Helper::get_var( 's', false ) && $args['name']               = General_Helper::get_var( 's' );
-        $tags_get_value = preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'tags', '' ) );
-        if ( $tags_get_value ) {
-            $args['tag'] = explode( ',', $tags_get_value );
+		General_Helper::get_var( 's', false ) && $args['name'] = General_Helper::get_var( 's' );
+		$search_select_args = [
+            'in_tags' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'tags', '' ) ),
+            'in_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'product_cats', '' ) ),
+            'status' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'statuses', '' ) ),
+            'exclude_tags' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'exclude_tags', '' ) ),
+            'exclude_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'exclude_product_cats', '' ) )
+        ];
+		foreach ($search_select_args as $name => $val) {
+            if ( $val ) {
+                $args[$name] = explode( ',', $val );
+            }
         }
+
+        add_filter('woocommerce_product_data_store_cpt_get_products_query', [$this, 'taxonomy_query'], 10, 2);
+
+
 		$results = wc_get_products( $args );
 		// if the search for an exact match of the name did not give any results, we are looking for an inaccurate.
 		if ( 0 === $results->total && ! empty( $args['name'] ) ) {
@@ -280,12 +317,9 @@ class Product_Editor_Admin {
 		$products           = $results->products;
 		$num_on_page        = count( $products );
 		$show_variations    = (int) General_Helper::get_var( 'show_variations' );
-		$product_categories = get_terms( array( 'taxonomy' => 'product_cat' ) );
+
         // Get last reverse_step
         $reverse_step = $wpdb->get_row( 'SELECT * FROM ' . $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE . ' ORDER BY id DESC LIMIT 1', ARRAY_A);
-        $tags_data = $wpdb->get_results( 'SELECT ' . $wpdb->prefix . 'terms.`slug`, ' . $wpdb->prefix . 'terms.`name`, SUM( tax.`count` ) AS product_count
-FROM `' . $wpdb->prefix . 'terms` INNER JOIN ' . $wpdb->prefix . 'term_taxonomy tax ON tax.term_id = ' . $wpdb->prefix . 'terms.term_id AND tax.taxonomy = \'product_tag\'
-GROUP BY ' . $wpdb->prefix . 'terms.`term_id`', ARRAY_A );
 
 		include 'partials/product-editor-admin-display.php';
 	}

@@ -15,9 +15,7 @@
 /** @var int $total count of base products */
 /** @var int $num_on_page count products on page */
 /** @var int $num_of_pages count of pages */
-/** @var array $tags_data associative array tags data */
-/** @var string $tags_get_value tags values from GET request */
-/** @var WP_Term[] $product_categories categories */
+/** @var string[] $search_select_args values from GET request */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
 
 ?>
@@ -42,7 +40,8 @@
 </template>
 <script>
 	var pe_nonce = '<?php echo $nonce; ?>';
-	var pe_tags_object = <?php echo json_encode($tags_data); ?>
+	var pe_taxonomies_object = <?php echo json_encode(General_Helper::getTaxAndTerms(['product_cat', 'product_tag'])); ?>;
+	var pe_statuses_object = <?php echo json_encode(General_Helper::get_product_statuses()); ?>;
 </script>
 <div class="wrap product-editor">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Product Editor', 'product-editor' ); ?></h1>
@@ -96,7 +95,8 @@
             <input type="submit" value="<?php esc_html_e( 'Save', 'product-editor' ); ?>" class="button">
         </form>
     </fieldset>
-	<fieldset>
+	<hr/>
+    <fieldset>
 		<h2><?php esc_html_e( 'Search options', 'product-editor' ); ?></h2>
 		<form method="get">
 			<input type="hidden" name="post_type" value="product"/>
@@ -116,24 +116,34 @@
 			<div class="form-group">
 
 			</div>
+            <fieldset class="search-fieldset">
+                <legend><?php esc_html_e( 'Products must have:', 'product-editor' ); ?></legend>
 			<div class="form-group">
 				<label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
-					<select name="product_cat">
-						<option value=""><?php esc_html_e( 'All', 'product-editor' ); ?></option>
-						<?php
-						foreach ( $product_categories as $category ) {
-							echo '<option value="' . esc_attr( $category->slug ) . '" '
-											. ( General_Helper::get_var( 'product_cat' ) == $category->slug ? 'selected' : '' )
-											. '>' . esc_html( $category->name ) . '</option>';
-						}
-						?>
-					</select>
+                    <input type="text" name="product_cats" class="form-control selectCats" value="<?php echo esc_attr( $search_select_args['in_product_cats'] ); ?>" >
 				</label>
 				&nbsp;&nbsp;
                 <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
-                    <input type="text" id="selectTags" name="tags" class="form-control" value="<?php echo esc_attr( $tags_get_value ); ?>" >
+                    <input type="text" name="tags" class="form-control selectTags" value="<?php echo esc_attr( $search_select_args['in_tags'] ); ?>" >
+                </label>
+                &nbsp;&nbsp;
+                <label><?php esc_html_e( 'Statuses:', 'product-editor' ); ?>&nbsp;
+                    <input type="text" name="statuses" class="form-control selectStatuses" value="<?php echo esc_attr( $search_select_args['status'] ); ?>" >
                 </label>
 			</div>
+            </fieldset><br/>
+            <fieldset class="search-fieldset">
+                <legend><?php esc_html_e( 'Products must have no:', 'product-editor' ); ?></legend>
+                <div class="form-group">
+                    <label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" name="exclude_product_cats" class="form-control selectCats" value="<?php echo esc_attr( $search_select_args['exclude_product_cats'] ); ?>" >
+                    </label>
+                    &nbsp;&nbsp;
+                    <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" name="exclude_tags" class="form-control selectTags" value="<?php echo esc_attr( $search_select_args['exclude_tags'] ); ?>" >
+                    </label>
+                </div>
+            </fieldset>
             <div class="form-group">
                 <label><?php esc_html_e( 'Name:', 'product-editor' ); ?>&nbsp;
                     <input type="search"

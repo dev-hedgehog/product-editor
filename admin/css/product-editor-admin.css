@@ -8,6 +8,13 @@
     transform: translateY(-3px);
 }
 
+.product-editor .search-fieldset {
+    border: 1px groove;
+    min-inline-size: min-content;
+    display: inline-block;
+    margin: 2px 0 10px;
+    padding: 11px;
+}
 .product-editor .pe-help-tip {
     color: #666;
     display: inline-block;
@@ -313,4 +320,15 @@
     100% {
         transform: scale(1);
     }
+}
+
+/** Custom select */
+.sp_control_box {
+    min-height: 2em;
+    height: auto;
+}
+
+.sp_control_box p {
+    line-height: 1;
+    font-size: 1em;
 }

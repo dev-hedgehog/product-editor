@@ -40,16 +40,34 @@
 			delay: 0
 		});
 
-		/** Select tags */
-		$('#selectTags').selectPage({
-			showField : 'name',
-			keyField : 'slug',
-			data : window.pe_tags_object,
-			multiple : true,
-			formatItem : function(data){
-				return data.name + ' (' + product_editor_object.str_items_count + data.product_count + ')';
-			}
-		});
+		/** Selects */
+		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_tag'])
+			$('.selectTags').selectPage({
+				showField : 'name',
+				keyField : 'slug',
+				data : window.pe_taxonomies_object['product_tag']['terms'],
+				multiple : true,
+				formatItem : function(data){
+					return data.name;
+				}
+			});
+		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_cat'])
+			$('.selectCats').selectPage({
+				showField : 'name',
+				keyField : 'slug',
+				data : window.pe_taxonomies_object['product_cat']['terms'],
+				multiple : true,
+				formatItem : function(data){
+					return data.name;
+				}
+			});
+		if (typeof window.pe_statuses_object !== 'undefined')
+			$('.selectStatuses').selectPage({
+				data : window.pe_statuses_object,
+				keyField: 'key',
+				showField : 'key',
+				multiple : true,
+			});
 
 		/** Show round inputs */
 		$('.change_regular_price').on('change', function () {

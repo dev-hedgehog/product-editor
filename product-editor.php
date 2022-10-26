@@ -9,7 +9,7 @@
  * Plugin Name:       Product Editor
  * Plugin URI:        https://github.com/dev-hedgehog/product-editor
  * Description:       Bulk\individual editing of prices, sale prices and sale dates of woocommerce variable, simple and external products.
- * Version:           1.0.9
+ * Version:           1.0.10
  * Author:            dev-hedgehog
  * Author URI:        https://github.com/dev-hedgehog
  * License:           GPL-2.0+

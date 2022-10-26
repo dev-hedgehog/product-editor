@@ -81,4 +81,54 @@ class General_Helper {
             floor($value / $mult) * $mult :
             floor($value * $mult) / $mult;
     }
+
+    /**
+     * Get existing product statuses
+     *
+     * @return array
+     */
+    public static function get_product_statuses()
+    {
+        global $wpdb;
+        $result = array();
+        $data = $wpdb->get_results( 'select distinct post_status from ' . $wpdb->prefix . 'posts where post_type = "product"', ARRAY_A );
+        if ( !empty( $data ) ) {
+            foreach ($data as $row)
+                $result[] = ['key' => $row['post_status']];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return array of taxonomies and their terms of product post type
+     *
+     * return []
+     */
+    public static function getTaxAndTerms( $taxonomy_names = [] )
+    {
+        $result = array();
+        $taxonomies = get_object_taxonomies( 'product', 'objects' );
+        foreach ( $taxonomies as $taxonomy ) {
+            if ( !empty( $taxonomy_names ) && !in_array($taxonomy->name, $taxonomy_names) ) {
+                continue;
+            }
+            $terms = get_terms( array( 'taxonomy' => $taxonomy->name ) );
+            if ( $terms && !is_wp_error( $terms ) ) {
+                $terms = array_map( function ( $data ) {
+                    return [
+                        'name' => $data->name,
+                        'slug' => $data->slug,
+                        'product_count' => $data->count
+                    ];
+                }, $terms);
+                $result[$taxonomy->name] = [
+                    'name' =>  $taxonomy->name,
+                    'label' =>  $taxonomy->label,
+                    'terms' => $terms,
+                ];
+            }
+        }
+        return $result;
+    }
 }
