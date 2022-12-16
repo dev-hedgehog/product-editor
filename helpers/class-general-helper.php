@@ -115,19 +115,21 @@ class General_Helper {
             }
             $terms = get_terms( array( 'taxonomy' => $taxonomy->name ) );
             if ( $terms && !is_wp_error( $terms ) ) {
-                $terms = array_map( function ( $data ) {
+                $terms = array_values(array_map( function ( $data ) {
                     return [
                         'name' => $data->name,
                         'slug' => $data->slug,
                         'product_count' => $data->count
                     ];
-                }, $terms);
-                $result[$taxonomy->name] = [
-                    'name' =>  $taxonomy->name,
-                    'label' =>  $taxonomy->label,
-                    'terms' => $terms,
-                ];
+                }, $terms));
+            } else {
+                $terms = array();
             }
+            $result[$taxonomy->name] = [
+                'name' =>  $taxonomy->name,
+                'label' =>  $taxonomy->label,
+                'terms' => $terms,
+            ];
         }
         return $result;
     }

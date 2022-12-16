@@ -1,3 +1,7 @@
+.product-editor fieldset {
+    width: fit-content;
+}
+
 .product-editor .dynamic_prices__h2 {
     display: inline-block;
     cursor: pointer;
@@ -15,6 +19,11 @@
     margin: 2px 0 10px;
     padding: 11px;
 }
+
+.product-editor .reset_form {
+    float: right;
+}
+
 .product-editor .pe-help-tip {
     color: #666;
     display: inline-block;

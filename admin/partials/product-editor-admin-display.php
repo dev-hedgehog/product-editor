@@ -154,6 +154,7 @@
             </div>
             <br/>
 			<input type="submit" value="<?php esc_html_e( 'Search', 'product-editor' ); ?>" class="button">
+            <a href="javascript://" class="reset_form button button-link-delete"><?php esc_html_e( 'Reset', 'product-editor' ); ?></a>
 		</form>
 
 	</fieldset>

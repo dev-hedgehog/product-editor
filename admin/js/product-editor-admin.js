@@ -69,6 +69,13 @@
 				multiple : true,
 			});
 
+		/** Reset form button */
+		$('.reset_form').on('click', function () {
+			let $form = $(this).parent('form');
+			$form.trigger("reset");
+			$form.find('.selectCats, .selectStatuses, .selectTags').selectPageClear();
+		});
+
 		/** Show round inputs */
 		$('.change_regular_price').on('change', function () {
 			if (['2','3','4'].includes($(this).val())) {

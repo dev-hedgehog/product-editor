@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2022-10-27 01:00+0500\n"
-"PO-Revision-Date: 2022-10-27 01:02+0500\n"
+"POT-Creation-Date: 2022-12-16 18:03+0500\n"
+"PO-Revision-Date: 2022-12-16 18:04+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: ru\n"
@@ -313,7 +313,11 @@ msgstr "Название:"
 msgid "Search"
 msgstr "Поиск"
 
-#: admin/partials/product-editor-admin-display.php:164
+#: admin/partials/product-editor-admin-display.php:157
+msgid "Reset"
+msgstr "Сбросить"
+
+#: admin/partials/product-editor-admin-display.php:165
 msgid ""
 "Examples of rounding up:<br/>precision -2 price 21856.234 = 21900<br/"
 ">precision -1 price 21856.234 = 21860<br/>precision 0 price 21856.234 = "
@@ -325,150 +329,150 @@ msgstr ""
 "21857<br/>точность 1 цена 21856,234 = 21856,3<br/>точность 2 цена 21856,234 "
 "= 21856,24<br/>"
 
-#: admin/partials/product-editor-admin-display.php:171
+#: admin/partials/product-editor-admin-display.php:172
 msgid "Bulk change"
 msgstr "Массовое изменение"
 
-#: admin/partials/product-editor-admin-display.php:174
+#: admin/partials/product-editor-admin-display.php:175
 msgid "Price:"
 msgstr "Цена:"
-
-#: admin/partials/product-editor-admin-display.php:177
-#: admin/partials/product-editor-admin-display.php:198
-#: admin/partials/product-editor-admin-display.php:218
-#: admin/partials/product-editor-admin-display.php:228
-msgid "— No change —"
-msgstr "— Без изменений —"
 
 #: admin/partials/product-editor-admin-display.php:178
 #: admin/partials/product-editor-admin-display.php:199
 #: admin/partials/product-editor-admin-display.php:219
 #: admin/partials/product-editor-admin-display.php:229
+msgid "— No change —"
+msgstr "— Без изменений —"
+
+#: admin/partials/product-editor-admin-display.php:179
+#: admin/partials/product-editor-admin-display.php:200
+#: admin/partials/product-editor-admin-display.php:220
+#: admin/partials/product-editor-admin-display.php:230
 msgid "Change to:"
 msgstr "Установить на:"
 
-#: admin/partials/product-editor-admin-display.php:179
+#: admin/partials/product-editor-admin-display.php:180
 msgid "Increase existing price by (fixed amount or %):"
 msgstr "Увеличить существующие цены на (фиксированную величину или %):"
 
-#: admin/partials/product-editor-admin-display.php:180
+#: admin/partials/product-editor-admin-display.php:181
 msgid "Decrease existing price by (fixed amount or %):"
 msgstr "Уменьшить существующие цены на (фиксированное значение или %):"
 
-#: admin/partials/product-editor-admin-display.php:181
+#: admin/partials/product-editor-admin-display.php:182
 msgid "Multiply existing price by a value"
 msgstr "Умножить существующую цену на значение"
 
-#: admin/partials/product-editor-admin-display.php:185
-#: admin/partials/product-editor-admin-display.php:206
+#: admin/partials/product-editor-admin-display.php:186
+#: admin/partials/product-editor-admin-display.php:207
 msgid "— Without rounding —"
 msgstr "— Не округлять —"
 
-#: admin/partials/product-editor-admin-display.php:186
-#: admin/partials/product-editor-admin-display.php:207
+#: admin/partials/product-editor-admin-display.php:187
+#: admin/partials/product-editor-admin-display.php:208
 msgid "Round up, with the number of decimal places:"
 msgstr "Округлять в большую сторону, с кол-вом знаков после запятой:"
 
-#: admin/partials/product-editor-admin-display.php:187
-#: admin/partials/product-editor-admin-display.php:208
+#: admin/partials/product-editor-admin-display.php:188
+#: admin/partials/product-editor-admin-display.php:209
 msgid "Round down, with the number of decimal places:"
 msgstr "Округлять в меньшую сторону, с кол-вом знаков после запятой:"
 
-#: admin/partials/product-editor-admin-display.php:195
+#: admin/partials/product-editor-admin-display.php:196
 msgid "Sale price:"
 msgstr "Цена распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:200
+#: admin/partials/product-editor-admin-display.php:201
 msgid "Increase existing sale price by (fixed amount or %):"
 msgstr "Увеличить текущую цену распродажи на (фиксированную сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:201
+#: admin/partials/product-editor-admin-display.php:202
 msgid "Decrease existing sale price by (fixed amount or %):"
 msgstr "Уменьшить текущую цену распродажи на (фиксированную сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:202
+#: admin/partials/product-editor-admin-display.php:203
 msgid "Set to regular price decreased by (fixed amount or %):"
 msgstr ""
 "Задать цену распродажи на уровне обычной цены, пониженной на (фиксированную "
 "сумму или %):"
 
-#: admin/partials/product-editor-admin-display.php:215
+#: admin/partials/product-editor-admin-display.php:216
 msgid "Sale date:"
 msgstr "Дата начала распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:221
+#: admin/partials/product-editor-admin-display.php:222
 msgid "From&hellip;"
 msgstr "С&hellip;"
 
-#: admin/partials/product-editor-admin-display.php:225
+#: admin/partials/product-editor-admin-display.php:226
 msgid "Sale end date:"
 msgstr "Дата конца распродажи:"
 
-#: admin/partials/product-editor-admin-display.php:231
+#: admin/partials/product-editor-admin-display.php:232
 msgid "To&hellip;"
 msgstr "До&hellip;"
 
-#: admin/partials/product-editor-admin-display.php:236
+#: admin/partials/product-editor-admin-display.php:237
 msgid "Do not change products with zero price"
 msgstr "Не изменять товары с нулевой ценой"
 
-#: admin/partials/product-editor-admin-display.php:241
+#: admin/partials/product-editor-admin-display.php:242
 msgid "Change Selected"
 msgstr "Изменить выбранное"
 
-#: admin/partials/product-editor-admin-display.php:260
+#: admin/partials/product-editor-admin-display.php:261
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:261
+#: admin/partials/product-editor-admin-display.php:262
 msgid "&raquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:275
+#: admin/partials/product-editor-admin-display.php:276
 msgid "Total found:"
 msgstr "Всего найдено:"
 
-#: admin/partials/product-editor-admin-display.php:277
+#: admin/partials/product-editor-admin-display.php:278
 msgid "Items on page:"
 msgstr "Записей на странице:"
 
-#: admin/partials/product-editor-admin-display.php:286
+#: admin/partials/product-editor-admin-display.php:287
 msgid "Base"
 msgstr "Основные"
 
-#: admin/partials/product-editor-admin-display.php:289
+#: admin/partials/product-editor-admin-display.php:290
 msgid "Variations"
 msgstr "Вариации"
 
-#: admin/partials/product-editor-admin-display.php:295
+#: admin/partials/product-editor-admin-display.php:296
 msgid "Name"
 msgstr "Название"
 
-#: admin/partials/product-editor-admin-display.php:298
+#: admin/partials/product-editor-admin-display.php:299
 msgid "Status"
 msgstr "Статус"
 
-#: admin/partials/product-editor-admin-display.php:301
+#: admin/partials/product-editor-admin-display.php:302
 msgid "Type"
 msgstr "Тип"
 
-#: admin/partials/product-editor-admin-display.php:304
+#: admin/partials/product-editor-admin-display.php:305
 msgid "Displayed price"
 msgstr "Отображаемая цена"
 
-#: admin/partials/product-editor-admin-display.php:307
+#: admin/partials/product-editor-admin-display.php:308
 msgid "Regular price"
 msgstr "Цена"
 
-#: admin/partials/product-editor-admin-display.php:310
+#: admin/partials/product-editor-admin-display.php:311
 msgid "Sale price"
 msgstr "Цена распродажи"
 
-#: admin/partials/product-editor-admin-display.php:313
+#: admin/partials/product-editor-admin-display.php:314
 msgid "Sale date"
 msgstr "Начало распродажи"
 
-#: admin/partials/product-editor-admin-display.php:316
+#: admin/partials/product-editor-admin-display.php:317
 msgid "Sale end date"
 msgstr "Конец распродажи"
 
