@@ -206,6 +206,18 @@ class Product_Editor_Admin {
 
 		add_action( 'load-' . $hookname, array( $this, 'add_screen_help' ) );
 		add_action( "admin_print_scripts-$hookname", array( $this, 'enqueue_assets' ) );
+
+        if ( get_option( 'woocommerce_navigation_enabled', 'no' ) === 'yes' && function_exists( 'wc_admin_connect_page' ) ) {
+            wc_admin_connect_page(
+                array(
+                    'id'        => $this->plugin_name,
+                    'parent'    => 'woocommerce-products',
+                    'screen_id' => 'product_page_product-editor',
+                    'title'     => __( 'Product Editor', 'product-editor' ),
+                )
+            );
+        }
+
 	}
 
 	/**

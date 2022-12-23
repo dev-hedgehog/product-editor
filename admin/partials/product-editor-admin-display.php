@@ -98,8 +98,10 @@
 	<hr/>
     <fieldset>
 		<h2><?php esc_html_e( 'Search options', 'product-editor' ); ?></h2>
-		<form method="get">
+		<form method="get" action="<?= get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ? admin_url('edit.php') : admin_url('admin.php')?>">
+            <?php if ( get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ):?>
 			<input type="hidden" name="post_type" value="product"/>
+            <?php endif; ?>
 			<input type="hidden" name="page" value="product-editor"/>
 			<div class="form-group">
 				<label><?php esc_html_e( 'Number of items per page:', 'product-editor' ); ?></label>&nbsp;

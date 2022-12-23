@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 6.0.2
@@ -55,6 +55,9 @@ The most likely reason is that the execution process is taking longer than allow
 
 == Changelog ==
 
+= 1.0.12 =
+* bugfix: search did not work when the new woocommerce navigation interface option was enabled
+
 = 1.0.11 =
 * bugfix: categories are not shown in some cases
 * added: search form reset button
@@ -101,6 +104,9 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.12 =
+* bugfix: search did not work when the new woocommerce navigation interface option was enabled
 
 = 1.0.11 =
 * bugfix: categories are not shown in some cases
