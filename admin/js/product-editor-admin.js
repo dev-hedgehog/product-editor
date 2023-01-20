@@ -120,17 +120,18 @@
 			let form = $(this);
 			let data = new FormData(this);
 			let process_id = Date.now();
+			let ids = [];
 			data.append('nonce', window.pe_nonce);
 			data.append('process_id', process_id);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
-				data.append("ids[]", $(this).val());
+				ids.push($(this).val());
 			});
 			$('.cb-vr-all-parent.collapse:checked').map(function () {
 				$(this).data('children_ids').forEach((el) =>
-					data.append("ids[]", el)
+					ids.push(el)
 				)
 			});
-
+			data.append("ids", ids.join('|'));
 			form.find('input[type="submit"]').prop('disabled', true);
 			hideInfo();
 			$('.lds-dual-ring').show();
@@ -291,7 +292,7 @@
 				id = $el.parent().data('id'),
 				old_value = $el.html(),
 				tmplNode = document.getElementById("tmp-edit-single").content.cloneNode(true);
-			$(tmplNode).find('input[name="ids[]"]').val(id);
+			$(tmplNode).find('input[name="ids"]').val(id);
 			$(tmplNode).find('.pe-edit-box').data('old_value', old_value);
 			$(tmplNode).find('form').submit(onSubmitSingleValue);
 			$(tmplNode).find('.discard').on('click', (e) => {
@@ -310,13 +311,13 @@
 				$el.html(tmplNode);
 			} else if ($el.hasClass('td-date-on-sale-from')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="text" class="date-picker" name="_sale_date_from" value="' + old_value + '" placeholder="From&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
+					.prepend('<input type="text" class="date-picker focus" name="_sale_date_from" value="' + old_value + '" placeholder="From&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_date_on_sale_from').val(1);
 				$el.html(tmplNode);
 				$el.find('.date-picker').datepicker(datepicker_options);
 			} else if ($el.hasClass('td-date-on-sale-to')) {
 				$(tmplNode).find('.pe-edit-box')
-					.prepend('<input type="text" class="date-picker" name="_sale_date_to" value="' + old_value + '" placeholder="To&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
+					.prepend('<input type="text" class="date-picker focus" name="_sale_date_to" value="' + old_value + '" placeholder="To&hellip; YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" autocomplete="off">');
 				$(tmplNode).find('input#change_action').prop('name', 'change_date_on_sale_to').val(1);
 				$el.html(tmplNode);
 				$el.find('.date-picker').datepicker(datepicker_options);

@@ -28,7 +28,7 @@
 	<form method="post" action="/wp-admin/admin-post.php">
 		<input type="hidden" name="action" value="bulk_changes">
 		<input type="hidden" id="change_action" name="" value="">
-		<input type="hidden" name="ids[]" value="">
+		<input type="hidden" name="ids" value="">
 		<div class="pe-edit-box" data-old_value="">
 
 			<div class="btn-container">

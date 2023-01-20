@@ -342,6 +342,7 @@ class Product_Editor_Admin {
 	 * @since    1.0.0
 	 */
 	public function action_reverse_products_data() {
+        $this->set_die_handler();
 		self::security_check( true, true );
 		$reverse_id = sanitize_key( General_Helper::get_or_post_var( 'reverse_id' ) );
 		if ( empty( $reverse_id ) ) {
@@ -410,16 +411,19 @@ class Product_Editor_Admin {
 		self::send_response( include 'partials/product-editor-admin-table-variations-rows.php', 200, 'raw' );
 	}
 
-	/**
+
+    /**
 	 * Product Change Request Handler
 	 *
 	 * @since    1.0.0
 	 */
 	public function action_bulk_changes() {
+        $this->set_die_handler();
 		self::security_check( true, true );
 		// Check input data.
 		$is_empty = true;
-		$ids      = (array) General_Helper::post_var( 'ids' );
+		$ids      = (string) General_Helper::post_var( 'ids' );
+        $ids      = explode('|', $ids);
 		foreach ( self::$change_actions as $action_name => $func_name ) {
 			if ( General_Helper::post_var( $action_name ) ) {
 				$is_empty = false;
@@ -848,5 +852,63 @@ class Product_Editor_Admin {
         } else {
             self::send_response('error', 520, 'raw');
         }
+    }
+
+    /**
+     * Custom wp_die_handler
+     *
+     * @param $message
+     * @param string $title
+     * @param array $args
+     */
+    public function die_handler($message, $title = '', $args = array())
+    {
+        // Set default 'response' to 200 for Ajax requests.
+        $args = wp_parse_args(
+            $args,
+            array('response' => 200)
+        );
+
+        list($message, $title, $parsed_args) = _wp_die_process_input($message, $title, $args);
+
+        if (!headers_sent()) {
+            // This is intentional. For backward-compatibility, support passing null here.
+            if (null !== $args['response']) {
+                status_header($parsed_args['response']);
+            }
+            nocache_headers();
+        }
+
+        if (is_scalar($message)) {
+            $message = (string)$message;
+        } else {
+            $message = '0';
+        }
+
+        if (!is_null($error = error_get_last())) {
+            if (strpos($error['message'], 'Maximum execution time') !== false) {
+                $message = __('The operation could not be executed because the execution time limit was exceeded. Set the max_execution_time in the php.ini settings to a larger value, or change fewer products at a time.', 'product-editor');
+            } else {
+                $message = $error['message'];
+            }
+        }
+        die(wp_json_encode(
+            array(
+                'message' => $error['message'],
+            )
+        ));
+    }
+
+    /**
+     * Setup wp_die_handler
+     */
+    public function set_die_handler()
+    {
+        add_filter(
+            'wp_die_handler',
+            function () {
+                return [$this, 'die_handler'];
+            }
+        );
     }
 }
