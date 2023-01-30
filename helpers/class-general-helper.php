@@ -105,7 +105,7 @@ class General_Helper {
      *
      * return []
      */
-    public static function getTaxAndTerms( $taxonomy_names = [] )
+    public static function get_tax_and_terms($taxonomy_names = [], $hide_empty = true )
     {
         $result = array();
         $taxonomies = get_object_taxonomies( 'product', 'objects' );
@@ -113,13 +113,14 @@ class General_Helper {
             if ( !empty( $taxonomy_names ) && !in_array($taxonomy->name, $taxonomy_names) ) {
                 continue;
             }
-            $terms = get_terms( array( 'taxonomy' => $taxonomy->name ) );
+            $terms = get_terms( array( 'taxonomy' => $taxonomy->name, 'hide_empty' => $hide_empty ) );
             if ( $terms && !is_wp_error( $terms ) ) {
                 $terms = array_values(array_map( function ( $data ) {
                     return [
                         'name' => $data->name,
                         'slug' => $data->slug,
-                        'product_count' => $data->count
+                        'product_count' => $data->count,
+                        'id' => $data->term_id
                     ];
                 }, $terms));
             } else {
@@ -131,6 +132,30 @@ class General_Helper {
                 'terms' => $terms,
             ];
         }
+        return $result;
+    }
+
+    /**
+     * Return array of tag names for the product
+     * @param WC_Product $product
+     * @return array
+     */
+    public static function get_the_tags( $product )
+    {
+        static $tag_terms = [];
+        $result = [];
+        $tag_ids = $product->get_tag_ids();
+        foreach($tag_ids as $id) {
+            if (empty($tag_terms[$id])) {
+                if (($term = get_term($id)) instanceof WP_Term) {
+                    $tag_terms[$id] = $term->name;
+                } else {
+                    $tag_terms[$id] = '';
+                }
+            }
+            $result[] = $tag_terms[$id];
+        }
+
         return $result;
     }
 }

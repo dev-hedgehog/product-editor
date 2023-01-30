@@ -40,7 +40,7 @@
 </template>
 <script>
 	var pe_nonce = '<?php echo $nonce; ?>';
-	var pe_taxonomies_object = <?php echo json_encode(General_Helper::getTaxAndTerms(['product_cat', 'product_tag'])); ?>;
+	var pe_taxonomies_object = <?php echo json_encode(General_Helper::get_tax_and_terms(['product_cat', 'product_tag'], false)); ?>;
 	var pe_statuses_object = <?php echo json_encode(General_Helper::get_product_statuses()); ?>;
 </script>
 <div class="wrap product-editor">
@@ -235,6 +235,18 @@
 			</div>
             <div class="form-group">
                 <label>
+                    <span class="title"><?php esc_html_e( 'Tags:', 'product-editor' ); ?></span>&nbsp;
+                </label>
+                <select class="" name="change_tags">
+                    <option value=""><?php esc_html_e( '— No change —', 'product-editor' ); ?></option>
+                    <option value="1"><?php esc_html_e( 'Set:', 'product-editor' ); ?></option>
+                    <option value="2"><?php esc_html_e( 'Add:', 'product-editor' ); ?></option>
+                    <option value="3"><?php esc_html_e( 'Remove:', 'product-editor' ); ?></option>
+                </select>
+                <input type="text" name="_tags" class="selectTagsEdit" />
+            </div>
+            <div class="form-group">
+                <label>
                     <input type="checkbox" name="not_processing_zero_price_products">
                     <span class="title"><?php esc_html_e( 'Do not change products with zero price', 'product-editor' ); ?></span>&nbsp;
                 </label>
@@ -291,32 +303,35 @@
 			<th class="check-column-t">
 				<label><?php esc_html_e( 'Variations', 'product-editor' ); ?><br/><input class="cb-vr-all" type="checkbox"></label>
 			</th>
-			<th scope="col" class="manage-column col-id">
+			<th scope="col" class="td-id manage-column col-id">
 				<span>ID</span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-name manage-column">
 				<span><?php esc_html_e( 'Name', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column col-status">
+			<th scope="col" class="td-status manage-column col-status">
 				<span><?php esc_html_e( 'Status', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-type manage-column">
 				<span><?php esc_html_e( 'Type', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-price manage-column">
 				<span><?php esc_html_e( 'Displayed price', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-regular-price manage-column">
 				<span><?php esc_html_e( 'Regular price', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-sale-price manage-column">
 				<span><?php esc_html_e( 'Sale price', 'product-editor' ); ?></span>
 			</th>
-			<th>
+			<th scope="col" class="td-date-on-sale-from manage-column">
 				<span><?php esc_html_e( 'Sale date', 'product-editor' ); ?></span>
 			</th>
-			<th scope="col" class="manage-column">
+			<th scope="col" class="td-date-on-sale-to manage-column">
 				<span><?php esc_html_e( 'Sale end date', 'product-editor' ); ?></span>
+			</th>
+            <th scope="col" class="td-tags manage-column">
+				<span><?php esc_html_e( 'Tags', 'product-editor' ); ?></span>
 			</th>
 
 		</tr>

@@ -20,6 +20,12 @@
 		if (!$('.product-editor').length) {
 			return;
 		}
+
+		/** Stick Table header */
+		if ($('#wpadminbar').length) {
+			$('.product-editor .pe-product-table thead').css('top', $('#wpadminbar').height());
+		}
+
 		/** Pulse help button */
 		$('#contextual-help-link-wrap').addClass('btn--shockwave');
 
@@ -61,6 +67,17 @@
 					return data.name;
 				}
 			});
+		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_tag'])
+			$('.selectTagsEdit').selectPage({
+				showField : 'name',
+				keyField : 'id',
+				data : window.pe_taxonomies_object['product_tag']['terms'],
+				multiple : true,
+				formatItem : function(data){
+					return data.name;
+				}
+			});
+
 		if (typeof window.pe_statuses_object !== 'undefined')
 			$('.selectStatuses').selectPage({
 				data : window.pe_statuses_object,
@@ -156,10 +173,12 @@
 					$tr.find('.td-sale-price').html(el.sale_price);
 					$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
 					$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
+					$tr.find('.td-tags').html(el.tags);
 				});
 				form.find('input[type="submit"]').prop('disabled', false);
 				$('.lds-dual-ring').hide();
 				form[0].reset();
+				form.find('.selectTagsEdit').selectPageClear();
 				// Reset round inputs
 				$('.change_to').trigger('change');
 				if (data.reverse) {
@@ -455,6 +474,7 @@
 				$tr.find('.td-sale-price').html(el.sale_price);
 				$tr.find('.td-date-on-sale-from').html(el.date_on_sale_from);
 				$tr.find('.td-date-on-sale-to').html(el.date_on_sale_to);
+				$tr.find('.td-tags').html(el.tags);
 			});
 			form.find('input[type="submit"]').prop('disabled', false);
 			$('.lds-dual-ring').hide();

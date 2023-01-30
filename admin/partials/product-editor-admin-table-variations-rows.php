@@ -38,15 +38,16 @@ foreach ( $variation_ids as $variation_id ) {
 							 data-parent="<?php echo esc_attr( $product->get_id() ); ?>"
 							 value="<?php echo esc_attr( $variation_id ); ?>"
 							 type="checkbox"></td>
-		<td><?php echo esc_html( $variation_id ); ?></td>
+		<td class="td-id"><?php echo esc_html( $variation_id ); ?></td>
 		<td class="td-name"><?php echo esc_html( $var->get_name() ); ?></td>
-		<td></td>
-		<td><?php esc_html_e( 'Variation:', 'product-editor' ); ?> <?php echo esc_html( $var_atts ); ?></td>
+		<td class="td-status"></td>
+		<td class="td-type"><?php esc_html_e( 'Variation:', 'product-editor' ); ?> <?php echo esc_html( $var_atts ); ?></td>
 		<td class="td-price"><?php echo $var->get_price_html(); ?></td>
 		<td class="td-regular-price editable"><?php echo esc_html( $var->get_regular_price( 'edit' ) ); ?></td>
 		<td class="td-sale-price editable"><?php echo esc_html( $var->get_sale_price( 'edit' ) ); ?></td>
 		<td class="td-date-on-sale-from editable"><?php echo esc_html( $date_on_sale_from ); ?></td>
 		<td class="td-date-on-sale-to editable"><?php echo esc_html( $date_on_sale_to ); ?></td>
+        <td class="td-tags"></td>
 	</tr>
 
 	<?php

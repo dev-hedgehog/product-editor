@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 6.0.2
@@ -55,6 +55,11 @@ The most likely reason is that the execution process is taking longer than allow
 
 == Changelog ==
 
+= 1.0.13 =
+* bugfix: implicit limit on the number of products that can be changed at a time
+* added: sticky table header
+* added: the ability to change product tags
+
 = 1.0.12 =
 * bugfix: search did not work when the new woocommerce navigation interface option was enabled
 
@@ -104,6 +109,11 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.13 =
+* bugfix: implicit limit on the number of products that can be changed at a time
+* added: sticky table header
+* added: the ability to change product tags
 
 = 1.0.12 =
 * bugfix: search did not work when the new woocommerce navigation interface option was enabled

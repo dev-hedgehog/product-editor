@@ -63,6 +63,7 @@ class Product_Editor_Admin {
 		'change_sale_price'        => 'change_sale_price',
 		'change_date_on_sale_from' => 'change_date_on_sale_from',
 		'change_date_on_sale_to'   => 'change_date_on_sale_to',
+		'change_tags'              => 'change_tags',
 	);
 
 	/**
@@ -384,6 +385,9 @@ class Product_Editor_Admin {
 				case 'change_date_on_sale_to':
 					$product->set_date_on_sale_to( $record['value'] );
 					break;
+                case 'change_tags':
+                    $product->set_tag_ids( $record['value'] );
+                    break;
 			}
 			$product->save();
             if ( $i % $items_for_one_percentage === 0 ) {
@@ -566,6 +570,7 @@ class Product_Editor_Admin {
 			'sale_price'        => $product->get_sale_price( 'edit' ),
 			'date_on_sale_from' => $date_on_sale_from,
 			'date_on_sale_to'   => $date_on_sale_to,
+            'tags'              => implode(', ', General_Helper::get_the_tags( $product ) )
 		);
 	}
 
@@ -767,6 +772,49 @@ class Product_Editor_Admin {
 		);
 		$product->set_date_on_sale_to( $arg_date );
 	}
+
+    /**
+     * Handler function for the action to change tags. Data for the operation is taken from POST request
+     * The handler is registered with self::$changeActions
+     *
+     * @param WC_Product $product Object of WC_Product for change.
+     *
+     * @since    1.0.13
+     */
+	private function change_tags( $product ) {
+        $arg_tags = array_map( 'intval', explode( ',', General_Helper::post_var( '_tags', '' ) ) );
+        $action   = General_Helper::post_var( 'change_tags' );
+        if ( empty( $action ) || is_a( $product, 'WC_Product_Variation' ) ) {
+            return;
+        }
+
+        // Save the value before the changes, to be able to roll back the changes.
+        $old_tag_ids = $product->get_tag_ids();
+        $new_tag_ids = $old_tag_ids;
+
+        $this->reverse_steps[] = array(
+            'id'     => $product->get_id(),
+            'action' => 'change_tags',
+            'value'  => $old_tag_ids,
+        );
+
+        switch ( (int) $action ) {
+            case 1:
+                // Change to(set).
+                $new_tag_ids = $arg_tags;
+                break;
+            case 2:
+                // Add.
+                $new_tag_ids = array_merge( $old_tag_ids, $arg_tags );
+                break;
+            case 3:
+                // Remove.
+                $new_tag_ids = array_diff( $old_tag_ids, $arg_tags );
+                break;
+        }
+
+        $product->set_tag_ids($new_tag_ids);
+    }
 
 	/**
 	 * Common function for send response
