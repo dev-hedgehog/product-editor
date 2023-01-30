@@ -21,6 +21,7 @@ It is possible to change the price, sale price and sale dates.
 * increase / decrease prices by a fixed value or percentage
 * multiplying existing prices by a value
 * change sale prices relative to regular prices
+* change tags
 * rounding prices with a required precision
 * dynamic price changes
 * ability to undo changes
