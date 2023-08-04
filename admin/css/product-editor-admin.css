@@ -13,7 +13,8 @@
 }
 
 .product-editor .search-fieldset {
-    border: 1px groove;
+    border: 1px silver groove;
+    border-radius: 3px;
     min-inline-size: min-content;
     display: inline-block;
     margin: 2px 0 10px;

@@ -5,7 +5,7 @@ Tags:  woocommerce, product, products, variable product, price, sale price, edit
 Stable tag: 1.0.13
 Requires PHP: 5.6
 Requires at least: 5.0
-Tested up to: 6.0.2
+Tested up to: 6.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
