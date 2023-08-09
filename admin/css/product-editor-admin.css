@@ -21,6 +21,28 @@
     padding: 11px;
 }
 
+.selectTaxonomy {
+    width: 250px;
+}
+
+.product-editor .button--plus,
+.product-editor .button--minus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+.product-editor .button--plus  img,
+.product-editor .button--minus  img {
+    width: 18px;
+    height: 18px;
+}
+
+.product-editor .button--minus {
+
+}
+
 .product-editor .reset_form {
     float: right;
 }
@@ -360,4 +382,9 @@
 
 .product-editor .sp_container {
     margin: 0 1px;
+}
+
+.product-editor .sp_input {
+    border-radius: 3px;
+    height: 30px;
 }

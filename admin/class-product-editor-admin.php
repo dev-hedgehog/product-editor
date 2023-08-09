@@ -902,6 +902,14 @@ class Product_Editor_Admin {
         }
     }
 
+    public function action_get_terms() {
+        self::security_check( true, true );
+        self::send_response([
+            'data' => General_Helper::get_terms(General_Helper::post_var( 'taxonomy' ))
+            ]
+        );
+    }
+
     /**
      * Custom wp_die_handler
      *

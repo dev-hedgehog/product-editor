@@ -136,6 +136,51 @@ class General_Helper {
     }
 
     /**
+     * Return array of taxonomies of product post type
+     *
+     * return []
+     */
+    public static function get_all_taxonomies()
+    {
+        $result = array();
+        $taxonomies = get_object_taxonomies( 'product', 'objects' );
+        foreach ( $taxonomies as $taxonomy ) {
+            $result[] = [
+                'name' =>  $taxonomy->name,
+                'label' =>  $taxonomy->label,
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * Return array of terms of taxonomy for product post type
+     *
+     * return []
+     */
+    public static function get_terms($taxonomy) {
+        $taxonomy = get_taxonomy($taxonomy);
+        if (!in_array('product', $taxonomy->object_type)) {
+            return [];
+        }
+        $terms = get_terms( array( 'taxonomy' => $taxonomy->name, 'hide_empty' => true ) );
+        if ( $terms && !is_wp_error( $terms ) ) {
+            $terms = array_values(array_map( function ( $data ) {
+                return [
+                    'name' => $data->name,
+                    'slug' => $data->slug,
+                    'product_count' => $data->count,
+                    'id' => $data->term_id
+                ];
+            }, $terms));
+        } else {
+            $terms = array();
+        }
+
+        return $terms;
+    }
+
+    /**
      * Return array of tag names for the product
      * @param WC_Product $product
      * @return array

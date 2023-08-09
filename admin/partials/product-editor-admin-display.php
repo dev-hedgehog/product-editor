@@ -24,6 +24,13 @@
     // Show welcome notice
     include "product-editor-admin-notice.php";
 ?>
+<style>
+    .product-editor .button--plus  img,
+    .product-editor .button--minus  img {
+        width: 18px;
+        height: 18px;
+    }
+</style>
 <template id="tmp-edit-single">
 	<form method="post" action="/wp-admin/admin-post.php">
 		<input type="hidden" name="action" value="bulk_changes">
@@ -38,10 +45,21 @@
 		</div>
 	</form>
 </template>
+<template id="tmp-add-search-taxonomy">
+    <div class="form-group">
+        <label><span class="label"></span>&nbsp;
+            <input type="hidden" name="search_with_taxonomies" />
+            <input type="text" name="" class="form-control taxonomy_selected_terms" />
+        </label>
+        <button class="button button--minus"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/minus-icon.svg"/></button>
+    </div>
+</template>
 <script>
 	var pe_nonce = '<?php echo $nonce; ?>';
 	var pe_taxonomies_object = <?php echo json_encode(General_Helper::get_tax_and_terms(['product_cat', 'product_tag'], false)); ?>;
 	var pe_statuses_object = <?php echo json_encode(General_Helper::get_product_statuses()); ?>;
+	var pe_taxonomies_list = <?php echo json_encode(General_Helper::get_all_taxonomies()); ?>;
+	var pe_search_with_taxonomies = [ 'product_tag', 'statuses'];
 </script>
 <div class="wrap product-editor">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Product Editor', 'product-editor' ); ?></h1>
@@ -120,19 +138,25 @@
 			</div>
             <fieldset class="search-fieldset">
                 <legend><?php esc_html_e( 'Products must have:', 'product-editor' ); ?></legend>
-			<div class="form-group">
-				<label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
-                    <input type="text" name="product_cats" class="form-control selectCats" value="<?php echo esc_attr( $search_select_args['in_product_cats'] ); ?>" >
-				</label>
-				&nbsp;&nbsp;
-                <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
-                    <input type="text" name="tags" class="form-control selectTags" value="<?php echo esc_attr( $search_select_args['in_tags'] ); ?>" >
-                </label>
-                &nbsp;&nbsp;
-                <label><?php esc_html_e( 'Statuses:', 'product-editor' ); ?>&nbsp;
-                    <input type="text" name="statuses" class="form-control selectStatuses" value="<?php echo esc_attr( $search_select_args['status'] ); ?>" >
-                </label>
-			</div>
+                <div class="form-group">
+                    <label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" name="product_cats" class="form-control selectCats" value="<?php echo esc_attr( $search_select_args['in_product_cats'] ); ?>" >
+                    </label>
+                    &nbsp;&nbsp;
+                    <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" name="tags" class="form-control selectTags" value="<?php echo esc_attr( $search_select_args['in_tags'] ); ?>" >
+                    </label>
+                    &nbsp;&nbsp;
+                    <label><?php esc_html_e( 'Statuses:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" name="statuses" class="form-control selectStatuses" value="<?php echo esc_attr( $search_select_args['status'] ); ?>" >
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label><?php esc_html_e( 'Искать также по таксономии:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" class="form-control selectTaxonomy" />
+                    </label>
+                    <button class="button button--plus"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/plus-icon.svg"/></button>
+                </div>
             </fieldset><br/>
             <fieldset class="search-fieldset">
                 <legend><?php esc_html_e( 'Products must have no:', 'product-editor' ); ?></legend>

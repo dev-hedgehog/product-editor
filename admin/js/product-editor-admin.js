@@ -46,7 +46,76 @@
 			delay: 0
 		});
 
+		let not_selected_taxonomies_with = () =>
+			window.pe_taxonomies_list.filter((el) => !pe_search_with_taxonomies.find(taxName => taxName === el.name));
+
+		/** Btn search tax add */
+		$('.search-fieldset .button--plus').on('click', function (e) {
+			e.preventDefault();
+			if ( !$('.selectTaxonomy').selectPageSelectedData().length
+				|| pe_search_with_taxonomies.find((el) => el === $('.selectTaxonomy').selectPageSelectedData()[0].name) ) {
+				return;
+			}
+			let taxonomy = $('.selectTaxonomy').selectPageSelectedData()[0];
+			let $fieldset = $('.search-fieldset');
+			let groupId = 'search-add-tax-' + Date.now();
+			let $tmplNode = $(document.getElementById("tmp-add-search-taxonomy").content.cloneNode(true));
+
+			$tmplNode.find('.form-group').attr('id', groupId);
+			$tmplNode.find('.button--minus').data('id', groupId).on('click', function () {
+				$('#' + $(this).data('id')).remove();
+				pe_search_with_taxonomies = pe_search_with_taxonomies.filter(el => el !== taxonomy.name);
+				$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
+			});
+			$tmplNode.find('.label').html(taxonomy.label);
+			$tmplNode.find('.taxonomy_selected_terms').attr('name', 'terms_with_tax_' + taxonomy.name);
+			let form_data = new FormData();
+			form_data.append('nonce', pe_nonce);
+			form_data.append('action', 'pe_get_terms');
+			form_data.append('taxonomy', taxonomy.name);
+			$tmplNode.find('[name="search_with_taxonomies"]').val(taxonomy.name)
+			let $node = $(this).parent().before($tmplNode);
+			pe_search_with_taxonomies.push(taxonomy.name);
+			$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
+			fetch(ajaxurl, {
+				method: 'POST',
+				body: form_data,
+			}).then(function (response) {
+				if (response.ok) {
+					return response.json();
+				}
+				return Promise.reject(response);
+			}).then(function (data) {
+				console.log(data);
+				$fieldset.find('.taxonomy_selected_terms[name="'+'terms_with_tax_' + taxonomy.name+'"]').selectPage({
+					multiple : true,
+					data: data.data,
+					showField : 'name',
+					keyField : 'slug',
+					formatItem : function(data){
+						return data.name;
+					}
+				});
+			}).catch(function (error) {
+				showInfo('An error occurred while retrieving taxonomy data', 3000);
+				$('#' + groupId).remove();
+				pe_search_with_taxonomies = pe_search_with_taxonomies.filter(el => el !== taxonomy.name);
+				$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
+			});
+		});
+
 		/** Selects */
+		if (typeof window.pe_taxonomies_list !== 'undefined') {
+			$('.selectTaxonomy').selectPage({
+				showField: 'label',
+				keyField: 'name',
+				data: not_selected_taxonomies_with(),
+				multiple: false,
+				formatItem: function (data) {
+					return data.label;
+				}
+			});
+		}
 		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_tag'])
 			$('.selectTags').selectPage({
 				showField : 'name',

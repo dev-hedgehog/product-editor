@@ -149,6 +149,8 @@ class Product_Editor {
         $this->loader->add_action( 'admin_post_expand_product_variable', $plugin_admin, 'action_expand_product_variable' );
         $this->loader->add_action( 'admin_post_reverse_products_data', $plugin_admin, 'action_reverse_products_data' );
         $this->loader->add_action( 'admin_post_pe_get_progress', $plugin_admin, 'action_get_progress' );
+        $this->loader->add_action( 'wp_ajax_pe_get_terms', $plugin_admin, 'action_get_terms' );
+
 
 	}
 
