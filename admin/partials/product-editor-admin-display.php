@@ -48,18 +48,41 @@
 <template id="tmp-add-search-taxonomy">
     <div class="form-group">
         <label><span class="label"></span>&nbsp;
-            <input type="hidden" name="search_with_taxonomies" />
+            <input type="hidden" name="" class="taxonomy_selected_name" />
             <input type="text" name="" class="form-control taxonomy_selected_terms" />
         </label>
-        <button class="button button--minus"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/minus-icon.svg"/></button>
+        <button type="button" class="button button--minus"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/minus-icon.svg"/></button>
     </div>
 </template>
+<?php
+$terms_for_taxonomies = [
+    'product_cat' => General_Helper::get_terms('product_cat', true),
+    'product_tag' => General_Helper::get_terms('product_tag', false),
+    'product_visibility' => General_Helper::get_terms('product_visibility', true)
+];
+foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY ) as $tax ) {
+    if ( !isset($terms_for_taxonomies[$tax]) )
+        $terms_for_taxonomies[$tax] = General_Helper::get_terms($tax, true);
+}
+?>
 <script>
-	var pe_nonce = '<?php echo $nonce; ?>';
-	var pe_taxonomies_object = <?php echo json_encode(General_Helper::get_tax_and_terms(['product_cat', 'product_tag'], false)); ?>;
-	var pe_statuses_object = <?php echo json_encode(General_Helper::get_product_statuses()); ?>;
-	var pe_taxonomies_list = <?php echo json_encode(General_Helper::get_all_taxonomies()); ?>;
-	var pe_search_with_taxonomies = [ 'product_tag', 'statuses'];
+    var pe_data = {
+        'nonce': '<?php echo $nonce; ?>',
+        'product_statuses': <?php echo json_encode(General_Helper::get_product_statuses()); ?>,
+        'search_taxonomies': {
+            list: <?php echo json_encode(General_Helper::get_all_taxonomies()); ?>,
+            terms: <?php echo json_encode($terms_for_taxonomies);?>,
+            include: [ 'statuses', 'product_tag', 'product_cat'],
+            include_from_server: <?php echo json_encode(
+                General_Helper::get_var('search_include_taxonomies', [], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY)
+            ) ?>,
+            exclude: ['product_tag', 'product_cat'],
+            exclude_from_server: <?php echo json_encode(
+                General_Helper::get_var('search_exclude_taxonomies', [], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY)
+            ) ?>
+        }
+    };
+
 </script>
 <div class="wrap product-editor">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Product Editor', 'product-editor' ); ?></h1>
@@ -114,8 +137,15 @@
         </form>
     </fieldset>
 	<hr/>
+    <?php
+    $search_tooltip_text = wp_kses(
+        __('For variable products, search conditions apply only to their main products, their variations do not participate in search.<br/>For example, there are 2 variable products with color attributes red and blue. In one product, a variation with the attribute red has been created, while the other such variation is not available.<br/>When searching by the taxonomy with the value red, both products with all their variations will be displayed.', 'product-editor' ),
+        array( 'br' => array() )
+    );
+    ?>
     <fieldset>
-		<h2><?php esc_html_e( 'Search options', 'product-editor' ); ?></h2>
+		<h2 class="search__h2"><?php esc_html_e( 'Search options', 'product-editor' ); ?></h2>
+        <span class="pe-help-tip" data-tooltip="<?php echo $search_tooltip_text; ?>"></span>
 		<form method="get" action="<?= get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ? admin_url('edit.php') : admin_url('admin.php')?>">
             <?php if ( get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ):?>
 			<input type="hidden" name="post_type" value="product"/>
@@ -136,7 +166,7 @@
 			<div class="form-group">
 
 			</div>
-            <fieldset class="search-fieldset">
+            <fieldset class="search-fieldset include">
                 <legend><?php esc_html_e( 'Products must have:', 'product-editor' ); ?></legend>
                 <div class="form-group">
                     <label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
@@ -151,14 +181,14 @@
                         <input type="text" name="statuses" class="form-control selectStatuses" value="<?php echo esc_attr( $search_select_args['status'] ); ?>" >
                     </label>
                 </div>
-                <div class="form-group">
-                    <label><?php esc_html_e( 'Искать также по таксономии:', 'product-editor' ); ?>&nbsp;
-                        <input type="text" class="form-control selectTaxonomy" />
+                <div class="form-group" >
+                    <label><?php esc_html_e( 'Enable search by taxonomy:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" class="form-control selectTaxonomy" data-type="include"/>
                     </label>
-                    <button class="button button--plus"><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/plus-icon.svg"/></button>
+                    <button class="button button--plus" type="button" data-type="include" ><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/plus-icon.svg"/></button>
                 </div>
             </fieldset><br/>
-            <fieldset class="search-fieldset">
+            <fieldset class="search-fieldset exclude">
                 <legend><?php esc_html_e( 'Products must have no:', 'product-editor' ); ?></legend>
                 <div class="form-group">
                     <label><?php esc_html_e( 'Category:', 'product-editor' ); ?>&nbsp;
@@ -168,6 +198,12 @@
                     <label><?php esc_html_e( 'Tags:', 'product-editor' ); ?>&nbsp;
                         <input type="text" name="exclude_tags" class="form-control selectTags" value="<?php echo esc_attr( $search_select_args['exclude_tags'] ); ?>" >
                     </label>
+                </div>
+                <div class="form-group" >
+                    <label><?php esc_html_e( 'Enable search by taxonomy:', 'product-editor' ); ?>&nbsp;
+                        <input type="text" class="form-control selectTaxonomy" data-type="exclude" />
+                    </label>
+                    <button class="button button--plus" type="button" data-type="exclude" ><img src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/plus-icon.svg"/></button>
                 </div>
             </fieldset>
             <div class="form-group">

@@ -21,6 +21,10 @@
     padding: 11px;
 }
 
+.product-editor .search__h2 {
+    display: inline-block;
+}
+
 .selectTaxonomy {
     width: 250px;
 }

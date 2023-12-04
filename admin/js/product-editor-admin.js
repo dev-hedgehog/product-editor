@@ -46,120 +46,175 @@
 			delay: 0
 		});
 
-		let not_selected_taxonomies_with = () =>
-			window.pe_taxonomies_list.filter((el) => !pe_search_with_taxonomies.find(taxName => taxName === el.name));
+		/**
+		 * Returns taxonomies that are not yet used for searching.
+		 * There are 2 types of taxonomies, those that should be present in the products and those that should not be there.
+		 * @param type 'include' | 'exclude'
+		 */
+		let not_selected_taxonomies = (type) =>
+			pe_data.search_taxonomies.list.filter((el) => !pe_data.search_taxonomies[type].find(taxName => taxName === el.name));
 
-		/** Btn search tax add */
-		$('.search-fieldset .button--plus').on('click', function (e) {
-			e.preventDefault();
-			if ( !$('.selectTaxonomy').selectPageSelectedData().length
-				|| pe_search_with_taxonomies.find((el) => el === $('.selectTaxonomy').selectPageSelectedData()[0].name) ) {
+		/**
+		 * Adds a selection item to the search interface for the specified taxonomy.
+         * @param name
+		 * @param label
+		 * @param type 'include' | 'exclude'
+		 */
+		function addSearchTaxonomy (name, label, type = 'include') {
+			let taxonomy = {name, label};
+			const searchParams = new URLSearchParams(location.search);
+			if ( pe_data.search_taxonomies[type].find((el) => el === taxonomy.name) ) {
 				return;
 			}
-			let taxonomy = $('.selectTaxonomy').selectPageSelectedData()[0];
-			let $fieldset = $('.search-fieldset');
+
+			let $fieldset = $('.search-fieldset.'+type);
 			let groupId = 'search-add-tax-' + Date.now();
 			let $tmplNode = $(document.getElementById("tmp-add-search-taxonomy").content.cloneNode(true));
 
 			$tmplNode.find('.form-group').attr('id', groupId);
 			$tmplNode.find('.button--minus').data('id', groupId).on('click', function () {
 				$('#' + $(this).data('id')).remove();
-				pe_search_with_taxonomies = pe_search_with_taxonomies.filter(el => el !== taxonomy.name);
-				$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
+				pe_data.search_taxonomies[type] = pe_data.search_taxonomies[type].filter(el => el !== taxonomy.name);
+				$('.selectTaxonomy[data-type="'+type+'"]').selectPageData(not_selected_taxonomies(type));
 			});
 			$tmplNode.find('.label').html(taxonomy.label);
-			$tmplNode.find('.taxonomy_selected_terms').attr('name', 'terms_with_tax_' + taxonomy.name);
+			$tmplNode.find('.taxonomy_selected_terms').attr('name', 'terms_'+type+'_tax_' + taxonomy.name)
+
+				.attr('value', searchParams.get('terms_'+type+'_tax_' + taxonomy.name));
+			$tmplNode.find('.taxonomy_selected_name').attr('name', 'search_'+type+'_taxonomies[]')
 			let form_data = new FormData();
-			form_data.append('nonce', pe_nonce);
+			form_data.append('nonce', pe_data.nonce);
 			form_data.append('action', 'pe_get_terms');
 			form_data.append('taxonomy', taxonomy.name);
-			$tmplNode.find('[name="search_with_taxonomies"]').val(taxonomy.name)
-			let $node = $(this).parent().before($tmplNode);
-			pe_search_with_taxonomies.push(taxonomy.name);
-			$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
-			fetch(ajaxurl, {
-				method: 'POST',
-				body: form_data,
-			}).then(function (response) {
-				if (response.ok) {
-					return response.json();
-				}
-				return Promise.reject(response);
-			}).then(function (data) {
-				console.log(data);
-				$fieldset.find('.taxonomy_selected_terms[name="'+'terms_with_tax_' + taxonomy.name+'"]').selectPage({
+			$tmplNode.find('[name="search_'+type+'_taxonomies[]"]').val(taxonomy.name)
+			let $node = $fieldset.find('.form-group').last().before($tmplNode);
+			pe_data.search_taxonomies[type].push(taxonomy.name);
+			$('.selectTaxonomy[data-type="'+type+'"]').selectPageData(not_selected_taxonomies(type));
+
+			let init_select = () => {
+				$fieldset.find('.taxonomy_selected_terms[name="'+'terms_'+type+'_tax_' + taxonomy.name+'"]').selectPage({
 					multiple : true,
-					data: data.data,
+					data: pe_data.search_taxonomies.terms[taxonomy.name],
 					showField : 'name',
 					keyField : 'slug',
 					formatItem : function(data){
 						return data.name;
 					}
 				});
-			}).catch(function (error) {
-				showInfo('An error occurred while retrieving taxonomy data', 3000);
-				$('#' + groupId).remove();
-				pe_search_with_taxonomies = pe_search_with_taxonomies.filter(el => el !== taxonomy.name);
-				$('.selectTaxonomy').selectPageData(not_selected_taxonomies_with());
-			});
+			};
+
+			if (typeof pe_data.search_taxonomies.terms[taxonomy.name] !== 'undefined') {
+				init_select();
+			} else {
+				$('.lds-dual-ring').show();
+				fetch(ajaxurl, {
+					method: 'POST',
+					body: form_data,
+				}).then(function (response) {
+					if (response.ok) {
+						return response.json();
+					}
+					return Promise.reject(response);
+				}).then(function (data) {
+					$('.lds-dual-ring').hide();
+					console.log(data);
+					pe_data.search_taxonomies.terms[taxonomy.name] = data.data;
+					init_select();
+				}).catch(function (error) {
+					$('.lds-dual-ring').hide();
+					showInfo('An error occurred while retrieving taxonomy data', 3000);
+					$('#' + groupId).remove();
+					pe_data.search_taxonomies[type].filter(el => el !== taxonomy.name);
+					$('.selectTaxonomy[data-type="' + type + '"]').selectPageData(not_selected_taxonomies(type));
+				});
+			}
+		}
+
+		/**
+		 * Initialization of selects lists of additional taxonomies received from the server
+		 */
+		(function() {
+			for(let tax_name of pe_data.search_taxonomies.include_from_server) {
+				let tax = pe_data.search_taxonomies.list.find(tax => tax.name === tax_name);
+				addSearchTaxonomy(tax.name, tax.label, 'include');
+			}
+			for(let tax_name of pe_data.search_taxonomies.exclude_from_server) {
+				let tax = pe_data.search_taxonomies.list.find(tax => tax.name === tax_name);
+				addSearchTaxonomy(tax.name, tax.label, 'exclude');
+			}
+		})();
+
+		/** Btn search taxonomy add */
+		$('.search-fieldset .button--plus').on('click', function (e) {
+			e.preventDefault();
+			let type = $(this).data('type');
+			let taxonomy = $(this).parent().find('[data-type="'+type+'"]').selectPageSelectedData();
+			if ( !taxonomy.length ) {
+				return;
+			}
+			taxonomy = taxonomy[0];
+			addSearchTaxonomy(taxonomy.name, taxonomy.label, type);
 		});
 
 		/** Selects */
-		if (typeof window.pe_taxonomies_list !== 'undefined') {
-			$('.selectTaxonomy').selectPage({
-				showField: 'label',
-				keyField: 'name',
-				data: not_selected_taxonomies_with(),
-				multiple: false,
-				formatItem: function (data) {
-					return data.label;
-				}
-			});
-		}
-		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_tag'])
-			$('.selectTags').selectPage({
-				showField : 'name',
-				keyField : 'slug',
-				data : window.pe_taxonomies_object['product_tag']['terms'],
-				multiple : true,
-				formatItem : function(data){
-					return data.name;
-				}
-			});
-		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_cat'])
-			$('.selectCats').selectPage({
-				showField : 'name',
-				keyField : 'slug',
-				data : window.pe_taxonomies_object['product_cat']['terms'],
-				multiple : true,
-				formatItem : function(data){
-					return data.name;
-				}
-			});
-		if (typeof window.pe_taxonomies_object !== 'undefined' && window.pe_taxonomies_object['product_tag'])
-			$('.selectTagsEdit').selectPage({
-				showField : 'name',
-				keyField : 'id',
-				data : window.pe_taxonomies_object['product_tag']['terms'],
-				multiple : true,
-				formatItem : function(data){
-					return data.name;
-				}
-			});
-
-		if (typeof window.pe_statuses_object !== 'undefined')
-			$('.selectStatuses').selectPage({
-				data : window.pe_statuses_object,
-				keyField: 'key',
-				showField : 'key',
-				multiple : true,
-			});
+		$('.selectTaxonomy[data-type="include"]').selectPage({
+			showField: 'label',
+			keyField: 'name',
+			data: not_selected_taxonomies('include'),
+			multiple: false,
+			formatItem: function (data) {
+				return data.label;
+			}
+		});
+		$('.selectTaxonomy[data-type="exclude"]').selectPage({
+			showField: 'label',
+			keyField: 'name',
+			data: not_selected_taxonomies('exclude'),
+			multiple: false,
+			formatItem: function (data) {
+				return data.label;
+			}
+		});
+		$('.selectTags').selectPage({
+			showField : 'name',
+			keyField : 'slug',
+			data : pe_data.search_taxonomies.terms['product_tag'],
+			multiple : true,
+			formatItem : function(data){
+				return data.name;
+			}
+		});
+		$('.selectCats').selectPage({
+			showField : 'name',
+			keyField : 'slug',
+			data : pe_data.search_taxonomies.terms['product_cat'],
+			multiple : true,
+			formatItem : function(data){
+				return data.name;
+			}
+		});
+		$('.selectTagsEdit').selectPage({
+			showField : 'name',
+			keyField : 'id',
+			data : pe_data.search_taxonomies.terms['product_tag'],
+			multiple : true,
+			formatItem : function(data){
+				return data.name;
+			}
+		});
+		$('.selectStatuses').selectPage({
+			data : pe_data.product_statuses,
+			keyField: 'key',
+			showField : 'key',
+			multiple : true,
+		});
 
 		/** Reset form button */
 		$('.reset_form').on('click', function () {
 			let $form = $(this).parent('form');
-			$form.trigger("reset");
-			$form.find('.selectCats, .selectStatuses, .selectTags').selectPageClear();
+			$form.trigger('reset');
+			$form.find('[type="search"]').val('');
+			$form.find('.selectCats, .selectStatuses, .selectTags, .taxonomy_selected_terms').selectPageClear();
 		});
 
 		/** Show round inputs */
@@ -207,7 +262,7 @@
 			let data = new FormData(this);
 			let process_id = Date.now();
 			let ids = [];
-			data.append('nonce', window.pe_nonce);
+			data.append('nonce', pe_data.nonce);
 			data.append('process_id', process_id);
 			$('input[type="checkbox"][name="ids[]"]:checked').map(function () {
 				ids.push($(this).val());
@@ -456,7 +511,7 @@
 			$('.lds-dual-ring').show();
 			$.get('/wp-admin/admin-post.php', {
 				action: 'reverse_products_data',
-				nonce: window.pe_nonce,
+				nonce: pe_data.nonce,
 				reverse_id: reverse_id,
 				process_id: process_id
 			})
@@ -519,7 +574,7 @@
 		isRequested = true;
 		let form = $(this),
 			data = new FormData(this);
-		data.append('nonce', window.pe_nonce);
+		data.append('nonce', pe_data.nonce);
 		form.find('input[type="submit"]').prop('disabled', true);
 		hideInfo();
 		$('.lds-dual-ring').show();

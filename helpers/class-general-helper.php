@@ -18,8 +18,8 @@ class General_Helper {
 	 * @param string $default Default value if key isn't set.
 	 * @return mixed|string
 	 */
-	public static function get_var( $key, $default = '' ) {
-		$value = filter_input( INPUT_GET, $key );
+	public static function get_var( $key, $default = '', $filter = FILTER_DEFAULT, $opts = 0) {
+		$value = filter_input( INPUT_GET, $key, $filter, $opts );
 		return $value ? $value : $default;
 	}
 
@@ -158,12 +158,12 @@ class General_Helper {
      *
      * return []
      */
-    public static function get_terms($taxonomy) {
+    public static function get_terms($taxonomy, $hide_empty = true) {
         $taxonomy = get_taxonomy($taxonomy);
         if (!in_array('product', $taxonomy->object_type)) {
             return [];
         }
-        $terms = get_terms( array( 'taxonomy' => $taxonomy->name, 'hide_empty' => true ) );
+        $terms = get_terms( array( 'taxonomy' => $taxonomy->name, 'hide_empty' => $hide_empty ) );
         if ( $terms && !is_wp_error( $terms ) ) {
             $terms = array_values(array_map( function ( $data ) {
                 return [

@@ -277,6 +277,30 @@ class Product_Editor_Admin {
                 );
                 $query['tax_query'][] = $r;
             }
+
+        foreach ($query_vars['custom_include_taxonomies']['taxonomies'] as $val) {
+            if ($val && $query_vars['custom_include_taxonomies']['selected_terms'][$val]) {
+                $r = array(
+                    'taxonomy' => $val,
+                    'field'    => 'slug',
+                    'terms'    => $query_vars['custom_include_taxonomies']['selected_terms'][$val], // Use the value of previous block of code
+                    'operator' => 'IN',
+                );
+                $query['tax_query'][] = $r;
+            }
+        }
+        foreach ($query_vars['custom_exclude_taxonomies']['taxonomies'] as $val) {
+            if ($val && $query_vars['custom_exclude_taxonomies']['selected_terms'][$val]) {
+                $r = array(
+                    'taxonomy' => $val,
+                    'field'    => 'slug',
+                    'terms'    => $query_vars['custom_exclude_taxonomies']['selected_terms'][$val], // Use the value of previous block of code
+                    'operator' => 'NOT IN',
+                );
+                $query['tax_query'][] = $r;
+            }
+        }
+
         return $query;
     }
 
@@ -306,11 +330,32 @@ class Product_Editor_Admin {
             'in_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'product_cats', '' ) ),
             'status' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'statuses', '' ) ),
             'exclude_tags' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'exclude_tags', '' ) ),
-            'exclude_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'exclude_product_cats', '' ) )
+            'exclude_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'exclude_product_cats', '' ) ),
+            'custom_include_taxonomies' => [
+                'taxonomies' => General_Helper::get_var('search_include_taxonomies', [], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY),
+                'selected_terms' => []
+            ],
+            'custom_exclude_taxonomies' => [
+                'taxonomies' => General_Helper::get_var('search_exclude_taxonomies', [], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY),
+                'selected_terms' => []
+            ]
         ];
+        foreach ($search_select_args['custom_include_taxonomies']['taxonomies'] as $val) {
+            if (General_Helper::get_var('terms_include_tax_'.$val, '')) {
+                $search_select_args['custom_include_taxonomies']['selected_terms'][$val] = explode( ',', preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var('terms_include_tax_' . $val, '')));
+            }
+        }
+        foreach ($search_select_args['custom_exclude_taxonomies']['taxonomies'] as $val) {
+            if (General_Helper::get_var('terms_exclude_tax_'.$val, '')) {
+                $search_select_args['custom_exclude_taxonomies']['selected_terms'][$val] = explode( ',', preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var('terms_exclude_tax_' . $val, '')));
+            }
+        }
+
 		foreach ($search_select_args as $name => $val) {
-            if ( $val ) {
+            if ( $val && $name !== 'custom_include_taxonomies' && $name !== 'custom_exclude_taxonomies') {
                 $args[$name] = explode( ',', $val );
+            } elseif ($name === 'custom_include_taxonomies' || $name === 'custom_exclude_taxonomies') {
+                $args[$name] = $val;
             }
         }
 

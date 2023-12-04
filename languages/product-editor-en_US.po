@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Product Editor\n"
-"POT-Creation-Date: 2023-01-30 21:14+0500\n"
-"PO-Revision-Date: 2023-01-30 21:14+0500\n"
+"POT-Creation-Date: 2023-12-04 12:46+0500\n"
+"PO-Revision-Date: 2023-12-04 13:07+0500\n"
 "Last-Translator: \n"
 "Language-Team: dev.hedgehog.core@gmail.com\n"
 "Language: en\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: admin/class-product-editor-admin.php:201
 #: admin/class-product-editor-admin.php:202
 #: admin/class-product-editor-admin.php:217
-#: admin/partials/product-editor-admin-display.php:48 product-editor.php:60
+#: admin/partials/product-editor-admin-display.php:88 product-editor.php:60
 msgid "Product Editor"
 msgstr ""
 
@@ -94,40 +94,40 @@ msgid ""
 "will be active only during this period."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:350
-#: admin/class-product-editor-admin.php:355
+#: admin/class-product-editor-admin.php:395
+#: admin/class-product-editor-admin.php:400
 msgid "No data to recover"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:439
+#: admin/class-product-editor-admin.php:484
 msgid "Nothing to change"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:462
+#: admin/class-product-editor-admin.php:507
 #, php-format
 msgid "Product with id:%s not found. Operations canceled."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:493
+#: admin/class-product-editor-admin.php:538
 #, php-format
 msgid "Operations applied: %s"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:659
+#: admin/class-product-editor-admin.php:704
 #, php-format
 msgid ""
 "Invalid price computed for product \"%1$s\": \"%2$s\". Operations canceled."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:844
+#: admin/class-product-editor-admin.php:889
 msgid "You do not have permission to edit products"
 msgstr ""
 
-#: admin/class-product-editor-admin.php:849
+#: admin/class-product-editor-admin.php:894
 msgid "The link you followed has expired."
 msgstr ""
 
-#: admin/class-product-editor-admin.php:938
+#: admin/class-product-editor-admin.php:991
 msgid ""
 "The operation could not be executed because the execution time limit was "
 "exceeded. Set the max_execution_time in the php.ini settings to a larger "
@@ -221,90 +221,105 @@ msgstr ""
 msgid "You can only select up to max_selected_limit items"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:35
-#: admin/partials/product-editor-admin-display.php:96
+#: admin/partials/product-editor-admin-display.php:42
+#: admin/partials/product-editor-admin-display.php:136
 msgid "Save"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:36
+#: admin/partials/product-editor-admin-display.php:43
 msgid "Cancel"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:60
+#: admin/partials/product-editor-admin-display.php:100
 msgid ""
 "Instantly applies change rules to all prices without changing the original "
 "price values.<br/>For example, it can be used to change prices relative to "
 "the exchange rate."
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:65
+#: admin/partials/product-editor-admin-display.php:105
 msgid "Dynamic price changes (beta)"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:74
+#: admin/partials/product-editor-admin-display.php:114
 msgid "Multiply prices by value:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:80
+#: admin/partials/product-editor-admin-display.php:120
 msgid "Number from 0 to +&#8734;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:86
+#: admin/partials/product-editor-admin-display.php:126
 msgid "Add a value to prices:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:91
+#: admin/partials/product-editor-admin-display.php:131
 msgid "Number from -&#8734; to +&#8734;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:101
+#: admin/partials/product-editor-admin-display.php:142
+msgid ""
+"For variable products, search conditions apply only to their main products, "
+"their variations do not participate in search.<br/>For example, there are 2 "
+"variable products with color attributes red and blue. In one product, a "
+"variation with the attribute red has been created, while the other such "
+"variation is not available.<br/>When searching by the taxonomy with the "
+"value red, both products with all their variations will be displayed."
+msgstr ""
+
+#: admin/partials/product-editor-admin-display.php:147
 msgid "Search options"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:108
+#: admin/partials/product-editor-admin-display.php:155
 msgid "Number of items per page:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:116
+#: admin/partials/product-editor-admin-display.php:163
 msgid "Show variations"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:123
+#: admin/partials/product-editor-admin-display.php:170
 msgid "Products must have:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:125
-#: admin/partials/product-editor-admin-display.php:141
+#: admin/partials/product-editor-admin-display.php:172
+#: admin/partials/product-editor-admin-display.php:194
 msgid "Category:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:129
-#: admin/partials/product-editor-admin-display.php:145
-#: admin/partials/product-editor-admin-display.php:239
+#: admin/partials/product-editor-admin-display.php:176
+#: admin/partials/product-editor-admin-display.php:198
+#: admin/partials/product-editor-admin-display.php:298
 msgid "Tags:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:133
+#: admin/partials/product-editor-admin-display.php:180
 msgid "Statuses:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:139
+#: admin/partials/product-editor-admin-display.php:185
+#: admin/partials/product-editor-admin-display.php:203
+msgid "Enable search by taxonomy:"
+msgstr ""
+
+#: admin/partials/product-editor-admin-display.php:192
 msgid "Products must have no:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:151
+#: admin/partials/product-editor-admin-display.php:210
 msgid "Name:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:159
+#: admin/partials/product-editor-admin-display.php:218
 msgid "Search"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:160
+#: admin/partials/product-editor-admin-display.php:219
 msgid "Reset"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:168
+#: admin/partials/product-editor-admin-display.php:227
 msgid ""
 "Examples of rounding up:<br/>precision -2 price 21856.234 = 21900<br/"
 ">precision -1 price 21856.234 = 21860<br/>precision 0 price 21856.234 = "
@@ -312,165 +327,165 @@ msgid ""
 "21856.234 = 21856.24"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:175
+#: admin/partials/product-editor-admin-display.php:234
 msgid "Bulk change"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:178
+#: admin/partials/product-editor-admin-display.php:237
 msgid "Price:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:181
-#: admin/partials/product-editor-admin-display.php:202
-#: admin/partials/product-editor-admin-display.php:222
-#: admin/partials/product-editor-admin-display.php:232
-#: admin/partials/product-editor-admin-display.php:242
+#: admin/partials/product-editor-admin-display.php:240
+#: admin/partials/product-editor-admin-display.php:261
+#: admin/partials/product-editor-admin-display.php:281
+#: admin/partials/product-editor-admin-display.php:291
+#: admin/partials/product-editor-admin-display.php:301
 msgid "— No change —"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:182
-#: admin/partials/product-editor-admin-display.php:203
-#: admin/partials/product-editor-admin-display.php:223
-#: admin/partials/product-editor-admin-display.php:233
+#: admin/partials/product-editor-admin-display.php:241
+#: admin/partials/product-editor-admin-display.php:262
+#: admin/partials/product-editor-admin-display.php:282
+#: admin/partials/product-editor-admin-display.php:292
 msgid "Change to:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:183
+#: admin/partials/product-editor-admin-display.php:242
 msgid "Increase existing price by (fixed amount or %):"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:184
+#: admin/partials/product-editor-admin-display.php:243
 msgid "Decrease existing price by (fixed amount or %):"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:185
+#: admin/partials/product-editor-admin-display.php:244
 msgid "Multiply existing price by a value"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:189
-#: admin/partials/product-editor-admin-display.php:210
+#: admin/partials/product-editor-admin-display.php:248
+#: admin/partials/product-editor-admin-display.php:269
 msgid "— Without rounding —"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:190
-#: admin/partials/product-editor-admin-display.php:211
+#: admin/partials/product-editor-admin-display.php:249
+#: admin/partials/product-editor-admin-display.php:270
 msgid "Round up, with the number of decimal places:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:191
-#: admin/partials/product-editor-admin-display.php:212
+#: admin/partials/product-editor-admin-display.php:250
+#: admin/partials/product-editor-admin-display.php:271
 msgid "Round down, with the number of decimal places:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:199
+#: admin/partials/product-editor-admin-display.php:258
 msgid "Sale price:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:204
+#: admin/partials/product-editor-admin-display.php:263
 msgid "Increase existing sale price by (fixed amount or %):"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:205
+#: admin/partials/product-editor-admin-display.php:264
 msgid "Decrease existing sale price by (fixed amount or %):"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:206
+#: admin/partials/product-editor-admin-display.php:265
 msgid "Set to regular price decreased by (fixed amount or %):"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:219
+#: admin/partials/product-editor-admin-display.php:278
 msgid "Sale date:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:225
+#: admin/partials/product-editor-admin-display.php:284
 msgid "From&hellip;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:229
+#: admin/partials/product-editor-admin-display.php:288
 msgid "Sale end date:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:235
+#: admin/partials/product-editor-admin-display.php:294
 msgid "To&hellip;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:243
+#: admin/partials/product-editor-admin-display.php:302
 msgid "Set:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:244
+#: admin/partials/product-editor-admin-display.php:303
 msgid "Add:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:245
+#: admin/partials/product-editor-admin-display.php:304
 msgid "Remove:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:252
+#: admin/partials/product-editor-admin-display.php:311
 msgid "Do not change products with zero price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:257
+#: admin/partials/product-editor-admin-display.php:316
 msgid "Change Selected"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:276
+#: admin/partials/product-editor-admin-display.php:335
 msgid "&laquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:277
+#: admin/partials/product-editor-admin-display.php:336
 msgid "&raquo;"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:291
+#: admin/partials/product-editor-admin-display.php:350
 msgid "Total found:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:293
+#: admin/partials/product-editor-admin-display.php:352
 msgid "Items on page:"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:302
+#: admin/partials/product-editor-admin-display.php:361
 msgid "Base"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:305
+#: admin/partials/product-editor-admin-display.php:364
 msgid "Variations"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:311
+#: admin/partials/product-editor-admin-display.php:370
 msgid "Name"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:314
+#: admin/partials/product-editor-admin-display.php:373
 msgid "Status"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:317
+#: admin/partials/product-editor-admin-display.php:376
 msgid "Type"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:320
+#: admin/partials/product-editor-admin-display.php:379
 msgid "Displayed price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:323
+#: admin/partials/product-editor-admin-display.php:382
 msgid "Regular price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:326
+#: admin/partials/product-editor-admin-display.php:385
 msgid "Sale price"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:329
+#: admin/partials/product-editor-admin-display.php:388
 msgid "Sale date"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:332
+#: admin/partials/product-editor-admin-display.php:391
 msgid "Sale end date"
 msgstr ""
 
-#: admin/partials/product-editor-admin-display.php:335
+#: admin/partials/product-editor-admin-display.php:394
 msgid "Tags"
 msgstr ""
 
