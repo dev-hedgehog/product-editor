@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 Requires PHP: 5.6
 Requires at least: 5.0
 Tested up to: 6.2.2
@@ -25,16 +25,16 @@ It is possible to change the price, sale price and sale dates.
 * rounding prices with a required precision
 * dynamic price changes
 * ability to undo changes
-* tag-search
+* search by standard (category, tags, status) and custom taxonomies
 
-I would be grateful if you leave a review about the plugin.
+I would appreciate it if you leave a review of the plugin.
 
 If you need additional functionality or just want to financially support the development of the plugin - write to dev.hedgehog.core@gmail.com
 
 https://www.youtube.com/watch?v=mSM_ndk2z7A
 
 == Frequently Asked Questions ==
-= If an error occurs while changing products or I reload the page, how do I know which products have been changed and which have not? =
+= If I refresh the page or an error occurs while changing items, how do I know which products have been changed and which have not? =
 The plugin makes all changes transactionally. This means that either the operation will be performed completely for all goods, or it will not be performed at all.
 
 = Why does a bulk change fail with an error after a long timeout? =
@@ -55,6 +55,9 @@ The most likely reason is that the execution process is taking longer than allow
 5.
 
 == Changelog ==
+
+= 1.0.14 =
+* added: custom taxonomy search feature
 
 = 1.0.13 =
 * bugfix: implicit limit on the number of products that can be changed at a time
@@ -110,6 +113,9 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.14 =
+* added: custom taxonomy search feature
 
 = 1.0.13 =
 * bugfix: implicit limit on the number of products that can be changed at a time
