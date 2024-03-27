@@ -17,6 +17,8 @@
 /** @var int $num_of_pages count of pages */
 /** @var string[] $search_select_args values from GET request */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
+/** @var array $visible_columns Lists of table columns */
+/** @var string $style_visible_columns style for visibility table columns */
 
 ?>
 <?php
@@ -30,7 +32,17 @@
         width: 18px;
         height: 18px;
     }
+    .product-editor .show-cols__list {
+        display: none;
+    }
 </style>
+
+<style id="table_columns_visibility">
+    <?php
+    echo $style_visible_columns;
+    ?>
+</style>
+
 <template id="tmp-edit-single">
 	<form method="post" action="/wp-admin/admin-post.php">
 		<input type="hidden" name="action" value="bulk_changes">
@@ -67,6 +79,7 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
 ?>
 <script>
     var pe_data = {
+        'ajax_url' : '<?php echo admin_url('admin-ajax.php'); ?>',
         'nonce': '<?php echo $nonce; ?>',
         'product_statuses': <?php echo json_encode(General_Helper::get_product_statuses()); ?>,
         'search_taxonomies': {
@@ -351,6 +364,19 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
 			</li>
 			<li><b><?php esc_html_e( 'Items on page:', 'product-editor' ); ?> <?php echo esc_html( $num_on_page ); ?></b></li>
 		</ul>
+        <div class="show-cols">
+            <span class="show-cols__link"><?php esc_html_e( 'Columns', 'product-editor' ); ?></span>
+            <ul class="show-cols__list" >
+                <?php foreach ($visible_columns as $column_name => $val):?>
+                    <li>
+                        <label>
+                            <input type="checkbox" data-name="<?=$column_name?>" data-class="<?= $val['class'] ?>" <?= $val['visible'] ? 'checked': ''?> />
+                            <?= esc_html_e($val['caption']) ?>
+                        </label>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
 		<div class="tablenav-pages"><?php echo $page_links; ?></div>
 	</div>
 
@@ -366,6 +392,9 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
 			<th scope="col" class="td-id manage-column col-id">
 				<span>ID</span>
 			</th>
+            <th scope="col" class="td-sku manage-column">
+                <span>SKU</span>
+            </th>
 			<th scope="col" class="td-name manage-column">
 				<span><?php esc_html_e( 'Name', 'product-editor' ); ?></span>
 			</th>

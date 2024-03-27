@@ -45,6 +45,7 @@ foreach ( $products as $product ) {
 		?>
 							</td>
 		<td class="td-id"><a href="<?php echo get_edit_post_link( $product->get_id() ); ?>" target="_blank" title="<?php esc_html_e( 'Open for edit', 'product-editor' ); ?>"><?php echo esc_html( $product->get_id() ); ?><br/><img class="product-link" width="16px" height="16px" src="<?php echo plugin_dir_url( dirname( __FILE__ ) )?>img/link-icon.png"/></a> </td>
+        <td class="td-sku"><?php echo esc_html( $product->get_sku() ); ?></td>
 		<td class="td-name"><?php echo esc_html( $product->get_name() ); ?></td>
 		<td class="td-status"><?php echo esc_html( $product->get_status() ); ?></td>
 		<td class="td-type"><?php echo $product_type_text; ?></td>

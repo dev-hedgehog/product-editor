@@ -227,6 +227,34 @@
     min-width: 165px;
 }
 
+.product-editor .show-cols {
+    float: left;
+    margin: 8px 0 0 30px;
+    user-select: none;
+}
+
+.product-editor .show-cols__link {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    font-size: 1.1em;
+    cursor: pointer;
+
+}
+.product-editor .show-cols__link.active {
+    background: #7ea2e3;
+    border-left: 1px solid #4677ff;
+    text-decoration-style: solid;
+    color: white;
+    padding: 2px 1em;
+}
+
+
+.product-editor .show-cols__link.active + .show-cols__list {
+    display: block;
+    border-left: 1px solid #4677ff;
+    padding-left: 1em;
+}
+
 /** loader */
 .lds-dual-ring {
 

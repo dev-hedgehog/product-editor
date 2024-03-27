@@ -53,6 +53,68 @@ class Product_Editor_Admin {
      */
 	private $progress_tmp_handle = null;
 
+    /**
+     * An array of table columns. Which ones to show, which ones not to show.
+     * @var array
+     */
+    public $visible_columns = array(
+        'id' => array(
+            'caption' => 'ID',
+            'class' => 'td-id',
+            'visible' => true,
+        ),
+        'sku' => array(
+            'caption' => 'SKU',
+            'class' => 'td-sku',
+            'visible' => true,
+        ),
+        'name' => array(
+            'caption' => 'Name',
+            'class' => 'td-name',
+            'visible' => true,
+        ),
+        'status' => array(
+            'caption' => 'Status',
+            'class' => 'td-status',
+            'visible' => true,
+        ),
+        'type' => array(
+            'caption' => 'Type',
+            'class' => 'td-type',
+            'visible' => true,
+        ),
+        'displayed_price' => array(
+            'caption' => 'Displayed price',
+            'class' => 'td-price',
+            'visible' => true,
+        ),
+        'regular_price' => array(
+            'caption' => 'Regular price',
+            'class' => 'td-regular-price',
+            'visible' => true,
+        ),
+        'sale_price' => array(
+            'caption' => 'Sale price',
+            'class' => 'td-sale-price',
+            'visible' => true,
+        ),
+        'sale_date_from' => array(
+            'caption' => 'Sale date',
+            'class' => 'td-date-on-sale-from',
+            'visible' => true,
+        ),
+        'sale_date_to' => array(
+            'caption' => 'Sale end date',
+            'class' => 'td-date-on-sale-to',
+            'visible' => true,
+        ),
+        'tags' => array(
+            'caption' => 'Tags',
+            'class' => 'td-tags',
+            'visible' => true,
+        )
+    );
+
 	/**
 	 * An array of mappings of action requests and functions that perform them
 	 *
@@ -370,6 +432,8 @@ class Product_Editor_Admin {
 			$results = wc_get_products( $args );
 		}
 		// Variables for template.
+        $visible_columns = $this->get_visible_columns();
+		$style_visible_columns = $this->style_visible_columns();
 		$total              = $results->total;
 		$num_of_pages       = $results->max_num_pages;
 		$products           = $results->products;
@@ -954,6 +1018,69 @@ class Product_Editor_Admin {
             ]
         );
     }
+
+    /**
+     * Returns the visibility settings for the table columns
+     *
+     * @return array|bool[]|mixed
+     */
+    public function get_visible_columns() {
+        $saved_columns = get_user_meta(get_current_user_id(), 'pe_visible_columns', true);
+        $columns = $this->visible_columns;
+        if (!$saved_columns) {
+            return $columns;
+        }
+
+        foreach ($columns as $column_name => $val) {
+            $columns[$column_name]['visible'] = isset($saved_columns[$column_name]['visible']) ? $saved_columns[$column_name]['visible'] : true;
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Ajax handler sets the visibility settings for the table columns
+     */
+    public function action_set_visible_column() {
+        if (
+            General_Helper::post_var('action') !== 'pe_set_visible_column'
+            || ! wp_verify_nonce( General_Helper::post_var( 'nonce' ), 'pe_changes' )
+        )
+            return;
+
+        $this->set_visible_column(General_Helper::post_var('column_name', ''), General_Helper::post_var('visible', false));
+        self::send_response(['status' => 'ok', 'style' => $this->style_visible_columns()], 200);
+    }
+
+
+    /**
+     * Sets the visibility settings for the table columns
+     */
+    public function set_visible_column($column_name, $visible) {
+        $columns = $this->get_visible_columns();
+        if ( isset($columns[$column_name]) ) {
+            $columns[$column_name]['visible'] = (bool) $visible;
+            update_user_meta(get_current_user_id(), 'pe_visible_columns', $columns);
+        }
+    }
+
+
+    /**
+     * Returns the css styles for the visibility of the table columns
+     *
+     * @return false|string
+     */
+    public function style_visible_columns() {
+        ob_start();
+        foreach ($this->get_visible_columns() as $column_name => $val): ?>
+            .pe-product-table td.<?=$val['class']?>,
+            .pe-product-table th.<?=$val['class']?> {
+            display: <?= $val['visible'] ? 'table-cell' : 'none' ?>;
+            }
+        <?php endforeach;
+        return ob_get_clean();
+    }
+
 
     /**
      * Custom wp_die_handler

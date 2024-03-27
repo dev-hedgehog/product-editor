@@ -529,6 +529,45 @@
 			observe_progress_status(process_id);
 		});
 
+		/** Show\hide columns visibility list */
+		$('.show-cols__link').on('click', function () {
+			$(this).toggleClass('active');
+		});
+
+		/** Handler for clicking on the column visibility checkbox */
+		$('.show-cols__list').on('click', 'input[type="checkbox"]', function() {
+			let $this = $(this),
+				column_name = $this.data('name'),
+				visible = $(this).prop('checked') ? '1' : '',
+				error_func = () => {$this.prop('checked', !$this.prop('checked')); alert('Failed to execute a request to the server')};
+
+			$('.show-cols__list input[type="checkbox"]').attr('disabled', true);
+
+			$.post(pe_data.ajax_url, {
+				nonce: pe_data.nonce,
+				action: 'pe_set_visible_column',
+				column_name, visible
+			})
+				.done(function (data) {
+					try {
+						let jdata = JSON.parse(data);
+						if (jdata['status'] == 'ok')
+							$('#table_columns_visibility').html(jdata['style']);
+					} catch (e) {
+						console.log(data);
+						error_func();
+					}
+				})
+				.fail(function (error) {
+					error_func();
+					console.log(error);
+				})
+				.always(function () {
+					$('.show-cols__list input[type="checkbox"]').attr('disabled', false);
+				});
+
+		});
+
 
 	});
 
