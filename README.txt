@@ -2,10 +2,10 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.14
-Requires PHP: 5.6
+Stable tag: 1.0.15
+Requires PHP: 7.0
 Requires at least: 5.0
-Tested up to: 6.2.2
+Tested up to: 6.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ The most likely reason is that the execution process is taking longer than allow
 5.
 
 == Changelog ==
+
+= 1.0.15 =
+* added: sku column and functionality of hiding/displaying table columns
+* added: the number of change records that can be rolled back does not exceed 50
 
 = 1.0.14 =
 * added: custom taxonomy search feature
@@ -113,6 +117,10 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.15 =
+* added: sku column and functionality of hiding/displaying table columns
+* added: the number of change records that can be rolled back does not exceed 50
 
 = 1.0.14 =
 * added: custom taxonomy search feature

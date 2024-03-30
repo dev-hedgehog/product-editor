@@ -55,6 +55,8 @@ class Product_Editor_Admin {
 
     /**
      * An array of table columns. Which ones to show, which ones not to show.
+     *
+     * @since    1.0.15
      * @var array
      */
     public $visible_columns = array(
@@ -1024,6 +1026,7 @@ class Product_Editor_Admin {
      * Returns the visibility settings for the table columns
      *
      * @return array|bool[]|mixed
+     * @since    1.0.15
      */
     public function get_visible_columns() {
         $saved_columns = get_user_meta(get_current_user_id(), 'pe_visible_columns', true);
@@ -1041,6 +1044,8 @@ class Product_Editor_Admin {
 
     /**
      * Ajax handler sets the visibility settings for the table columns
+     *
+     * @since    1.0.15
      */
     public function action_set_visible_column() {
         if (
@@ -1056,6 +1061,8 @@ class Product_Editor_Admin {
 
     /**
      * Sets the visibility settings for the table columns
+     *
+     * @since    1.0.15
      */
     public function set_visible_column($column_name, $visible) {
         $columns = $this->get_visible_columns();
@@ -1070,6 +1077,7 @@ class Product_Editor_Admin {
      * Returns the css styles for the visibility of the table columns
      *
      * @return false|string
+     * @since    1.0.15
      */
     public function style_visible_columns() {
         ob_start();
@@ -1084,6 +1092,8 @@ class Product_Editor_Admin {
 
     /**
      * Deletes all records of past changes except the last $keep_count records
+     *
+     * @since    1.0.15
      */
     private static function clearOldReverseSteps($keep_count) {
         global $wpdb;
