@@ -533,6 +533,7 @@ class Product_Editor_Admin {
 	public function action_bulk_changes() {
         $this->set_die_handler();
 		self::security_check( true, true );
+		self::clearOldReverseSteps(50);
 		// Check input data.
 		$is_empty = true;
 		$ids      = (string) General_Helper::post_var( 'ids' );
@@ -1079,6 +1080,17 @@ class Product_Editor_Admin {
             }
         <?php endforeach;
         return ob_get_clean();
+    }
+
+    /**
+     * Deletes all records of past changes except the last $keep_count records
+     */
+    private static function clearOldReverseSteps($keep_count) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . PRODUCT_EDITOR_REVERSE_TABLE;
+
+        $wpdb->query("DELETE FROM $table_name WHERE id NOT IN (SELECT id FROM (SELECT id FROM $table_name ORDER BY id DESC LIMIT $keep_count) as sub);");
+
     }
 
 
