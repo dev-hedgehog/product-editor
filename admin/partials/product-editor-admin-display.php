@@ -11,13 +11,14 @@
  * @subpackage Productesc_html_editor/admin/partials
  */
 
-/** @var int $show_variations Should show variations in variable products. */
+/** @var int $show_variations should show variations in variable products. */
+/** @var bool $is_exact_match whether you need to look for an exact match of the search string. */
 /** @var int $total count of base products */
 /** @var int $num_on_page count products on page */
 /** @var int $num_of_pages count of pages */
 /** @var string[] $search_select_args values from GET request */
 /** @var WC_Product_Simple[]|WC_Product_Variable[]|WC_Product_Grouped[] $products */
-/** @var array $visible_columns Lists of table columns */
+/** @var array $visible_columns lists of table columns */
 /** @var string $style_visible_columns style for visibility table columns */
 
 ?>
@@ -224,6 +225,12 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
                     <input type="search"
                            name="s"
                            value="<?php echo esc_attr( General_Helper::get_var( 's', '' ) ); ?>"
+                    />
+                </label>
+                &nbsp;&nbsp;
+                <label><?php esc_html_e( 'Exact match:', 'product-editor' ); ?>&nbsp;
+                    <input type="checkbox"
+                           name="exact_match" <?php echo ( $is_exact_match ? 'checked' : '' ); ?>
                     />
                 </label>
             </div>

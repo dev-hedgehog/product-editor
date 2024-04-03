@@ -2,7 +2,7 @@
 Contributors: @devhedgehog
 Donate link: https://yoomoney.ru/to/4100117683416192
 Tags:  woocommerce, product, products, variable product, price, sale price, edit, editor, bulk, product bulk, products bulk, bulk product, bulk edit
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 Requires PHP: 7.0
 Requires at least: 5.0
 Tested up to: 6.4.3
@@ -55,6 +55,9 @@ The most likely reason is that the execution process is taking longer than allow
 5.
 
 == Changelog ==
+
+= 1.0.16 =
+* added: sku search
 
 = 1.0.15 =
 * added: sku column and functionality of hiding/displaying table columns
@@ -117,6 +120,9 @@ The most likely reason is that the execution process is taking longer than allow
 * extra spaces at dates columns issue fixed
 
 == Upgrade Notice ==
+
+= 1.0.16 =
+* added: sku search
 
 = 1.0.15 =
 * added: sku column and functionality of hiding/displaying table columns

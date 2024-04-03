@@ -368,6 +368,46 @@ class Product_Editor_Admin {
         return $query;
     }
 
+    /**
+     * changing the query for product search
+     *
+     * @param $clauses
+     * @param $wp_query
+     * @return mixed
+     * @since   1.0.16
+     */
+    public function custom_posts_clauses($clauses, $wp_query) {
+        global $wpdb;
+
+        // if the search string is passed, search in product names in sku of regular products and in sku of variations.
+        if (!empty($wp_query->query['post_type']) && $wp_query->query['post_type'] === 'product' && !empty($wp_query->query_vars['search'])) {
+            $search_phrase = $wp_query->query_vars['exact_match'] ? $wpdb->esc_like($wp_query->query_vars['search'])
+                : '%' . $wpdb->esc_like($wp_query->query_vars['search']) . '%';
+
+            $clauses['where'] .= $wpdb->prepare("
+                AND (
+                    {$wpdb->postmeta}.meta_key = '_sku' AND {$wpdb->postmeta}.meta_value LIKE %s
+                    OR {$wpdb->posts}.post_title LIKE %s
+                    OR {$wpdb->posts}.ID IN (SELECT distinct p.post_parent FROM {$wpdb->posts} p LEFT JOIN {$wpdb->postmeta} ON p.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_sku' WHERE p.post_type = 'product_variation' AND {$wpdb->postmeta}.meta_value LIKE %s )
+                )",
+                $search_phrase, $search_phrase, $search_phrase
+            );
+            $clauses['join'] .= "LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id";
+
+            // Avoid duplication of products in the sample
+            if (empty($clauses['groupby'])) {
+                $clauses['groupby'] = "{$wpdb->posts}.ID";
+            } else {
+                $clauses['groupby'] .= ", {$wpdb->posts}.ID";
+            }
+
+        }
+
+        remove_filter('posts_clauses', [$this, 'custom_posts_clauses']);
+
+        return $clauses;
+    }
+
 	/**
 	 * Home page handler in admin area
 	 *
@@ -388,7 +428,9 @@ class Product_Editor_Admin {
 		);
 		$args['limit']  = (int) General_Helper::get_var( 'limit', 10 );
 		$args['offset'] = ( General_Helper::get_var( 'paged', 1 ) - 1 ) * $args['limit'];
-		General_Helper::get_var( 's', false ) && $args['name'] = General_Helper::get_var( 's' );
+		General_Helper::get_var( 's', false ) && $args['search'] = trim(General_Helper::get_var( 's' ));
+        $args['exact_match'] = (bool) General_Helper::get_var( 'exact_match' );
+
 		$search_select_args = [
             'in_tags' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'tags', '' ) ),
             'in_product_cats' => preg_replace( '|[&<>\'\`\"\\\.]|', '', General_Helper::get_var( 'product_cats', '' ) ),
@@ -424,16 +466,12 @@ class Product_Editor_Admin {
         }
 
         add_filter('woocommerce_product_data_store_cpt_get_products_query', [$this, 'taxonomy_query'], 10, 2);
-
+        add_filter('posts_clauses', [$this, 'custom_posts_clauses'], 10, 2);
 
 		$results = wc_get_products( $args );
-		// if the search for an exact match of the name did not give any results, we are looking for an inaccurate.
-		if ( 0 === $results->total && ! empty( $args['name'] ) ) {
-			$args['s'] = $args['name'];
-			unset( $args['name'] );
-			$results = wc_get_products( $args );
-		}
+
 		// Variables for template.
+        $is_exact_match = (bool) General_Helper::get_var('exact_match');
         $visible_columns = $this->get_visible_columns();
 		$style_visible_columns = $this->style_visible_columns();
 		$total              = $results->total;

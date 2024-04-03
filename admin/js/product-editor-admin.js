@@ -214,6 +214,7 @@
 			let $form = $(this).parent('form');
 			$form.trigger('reset');
 			$form.find('[type="search"]').val('');
+			$form.find('[name="exact_match"]').prop('checked', false);
 			$form.find('.selectCats, .selectStatuses, .selectTags, .taxonomy_selected_terms').selectPageClear();
 		});
 
