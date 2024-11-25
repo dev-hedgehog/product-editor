@@ -24,7 +24,7 @@ if (! defined('WPINC')) {
     die;
 }
 
-define('PRODUCT_EDITOR_VERSION', '1.0.16');
+define('PRODUCT_EDITOR_VERSION', '1.0.17');
 // table for storing old values of changed attributes.
 define('PRODUCT_EDITOR_REVERSE_TABLE', 'pe_reverse_steps');
 

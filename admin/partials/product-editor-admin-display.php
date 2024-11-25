@@ -28,6 +28,27 @@
     include "product-editor-admin-notice.php";
 ?>
 <style>
+    .product-editor-loading {
+        position: fixed;
+        top: 40%;
+        z-index: 1000;
+        background: white;
+        padding: 0 20px;
+        border: 1px solid silver;
+    }
+    .product-editor-loading__loader {
+        width: fit-content;
+        font-weight: bold;
+        font-family: monospace;
+        line-height: 2em;
+        font-size: 30px;
+        clip-path: inset(0 3ch 0 0);
+        animation: l4 1s steps(4) infinite;
+    }
+    .product-editor-loading__loader:before {
+        content:"Loading..."
+    }
+    @keyframes l4 {to{clip-path: inset(0 -1ch 0 0)}}
     .product-editor .button--plus  img,
     .product-editor .button--minus  img {
         width: 18px;
@@ -45,7 +66,7 @@
 </style>
 
 <template id="tmp-edit-single">
-	<form method="post" action="/wp-admin/admin-post.php">
+	<form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
 		<input type="hidden" name="action" value="bulk_changes">
 		<input type="hidden" id="change_action" name="" value="">
 		<input type="hidden" name="ids" value="">
@@ -81,6 +102,7 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
 <script>
     var pe_data = {
         'ajax_url' : '<?php echo admin_url('admin-ajax.php'); ?>',
+        'admin_post_url': '<?php echo admin_url('admin-post.php'); ?>',
         'nonce': '<?php echo $nonce; ?>',
         'product_statuses': <?php echo json_encode(General_Helper::get_product_statuses()); ?>,
         'search_taxonomies': {
@@ -98,6 +120,9 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
     };
 
 </script>
+<div class="wrap product-editor-loading">
+    <div class="product-editor-loading__loader"></div>
+</div>
 <div class="wrap product-editor">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Product Editor', 'product-editor' ); ?></h1>
 	<div class="ajax-info">
@@ -160,7 +185,7 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
     <fieldset>
 		<h2 class="search__h2"><?php esc_html_e( 'Search options', 'product-editor' ); ?></h2>
         <span class="pe-help-tip" data-tooltip="<?php echo $search_tooltip_text; ?>"></span>
-		<form method="get" action="<?= get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ? admin_url('edit.php') : admin_url('admin.php')?>">
+		<form method="get" action="<?php echo get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ? admin_url('edit.php') : admin_url('admin.php')?>">
             <?php if ( get_option( 'woocommerce_navigation_enabled', 'no' ) === 'no' ):?>
 			<input type="hidden" name="post_type" value="product"/>
             <?php endif; ?>
@@ -248,7 +273,7 @@ foreach ( General_Helper::get_var( 'search_include_taxonomies', [], FILTER_SANIT
             array( 'br' => array() )
     );
 	?>
-	<form method="post" action="/wp-admin/admin-post.php" id="bulk-changes">
+	<form method="post" action="<?php echo admin_url('admin-post.php'); ?>" id="bulk-changes">
 		<input type="hidden" name="action" value="bulk_changes">
 		<fieldset>
 			<h2><?php esc_html_e( 'Bulk change', 'product-editor' ); ?></h2>

@@ -20,6 +20,7 @@
 		if (!$('.product-editor').length) {
 			return;
 		}
+		$('.product-editor-loading').hide();
 
 		/** Stick Table header */
 		if ($('#wpadminbar').length) {
@@ -343,7 +344,7 @@
 			progressIntervalHandle = setInterval(function () {
 				if (!isProgressRequested && progressIntervalHandle) {
 					isProgressRequested = true;
-					$.get('/wp-admin/admin-post.php', {action: 'pe_get_progress', process_id: process_id})
+					$.get(pe_data.admin_post_url, {action: 'pe_get_progress', process_id: process_id})
 						.done(function (data) {
 							console.log('Progress: ', data, '%');
 							data = parseInt(data);
@@ -478,7 +479,7 @@
 			if ($sib_input.hasClass('collapse')) {
 				isRequested = true;
 				$('.lds-dual-ring').show();
-				$.get('/wp-admin/admin-post.php', {action: 'expand_product_variable', id: id})
+				$.get(pe_data.admin_post_url, {action: 'expand_product_variable', id: id})
 					.done(function (data) {
 						$sib_input.parents('tr').after(data);
 						$sib_input.addClass('expand').removeClass('collapse');
@@ -510,7 +511,7 @@
 			let process_id = Date.now();
 			isRequested = true;
 			$('.lds-dual-ring').show();
-			$.get('/wp-admin/admin-post.php', {
+			$.get(pe_data.admin_post_url, {
 				action: 'reverse_products_data',
 				nonce: pe_data.nonce,
 				reverse_id: reverse_id,
